@@ -1,0 +1,6 @@
+###########################
+# OmniROM e7 common sepolicy
+#
+
+type sysfs_touchscreen, fs_type, sysfs_type;
+type nv_data_file, file_type, data_file_type;
