@@ -112,7 +112,7 @@ TARGET_RECOVERY_FSTAB := device/iuni/u2/rootdir/fstab.qcom
 TARGET_RELEASETOOLS_EXTENSIONS := device/iuni/u2
 
 # inherit from the proprietary version
--include vendor/iuni/u2/BoardConfigVendor.mk
+-include vendor/gm/e7/BoardConfigVendor.mk
 
 # Include an expanded selection of fonts
 EXTENDED_FONT_FOOTPRINT := true
