@@ -801,8 +801,8 @@
         <ctl name="RX3 MIX1 INP1" value="RX1" />
         <ctl name="SLIM_0_RX Channels" value="One" />
         <ctl name="RDAC5 MUX" value="DEM3_INV" />
-        <ctl name="LINEOUT1 Volume" value="20" />
-        <ctl name="LINEOUT3 Volume" value="20" />
+        <ctl name="RX3 Digital Volume" value="84" />
+        <ctl name="SPK DRV Volume" value="10" />
     </path>
     <!-- Gionee Huangzhuolin 20140815 @ add for CR01358136 End -->
 
@@ -822,8 +822,8 @@
         <ctl name="SLIM_0_RX Channels" value="Two" />
         <ctl name="RX3 MIX1 INP1" value="RX1" />
         <ctl name="RX5 MIX1 INP1" value="RX2" />
-        <ctl name="LINEOUT1 Volume" value="20" />
-        <ctl name="LINEOUT2 Volume" value="20" />
+        <ctl name="LINEOUT1 Volume" value="22" />
+        <ctl name="LINEOUT2 Volume" value="22" />
     </path>
 
     <path name="speaker-liquid">
@@ -831,8 +831,8 @@
         <ctl name="RDAC5 MUX" value="DEM3_INV" />
         <ctl name="RDAC7 MUX" value="DEM5_INV" />
         <ctl name="COMP2 Switch" value="1" />
-        <ctl name="LINEOUT3 Volume" value="20" />
-        <ctl name="LINEOUT4 Volume" value="20" />
+        <ctl name="LINEOUT3 Volume" value="22" />
+        <ctl name="LINEOUT4 Volume" value="22" />
     </path>
 
     <path name="sidetone-iir">
@@ -881,6 +881,7 @@
         <ctl name="SLIM_0_RX Channels" value="One" />
         <ctl name="RX7 MIX1 INP1" value="RX1" />
         <ctl name="COMP0 Switch" value="1" />
+        <ctl name="SPK DRV Volume" value="10" />
     </path>
 
     <path name="vi-feedback">
@@ -892,6 +893,7 @@
         <ctl name="RX1 MIX1 INP1" value="RX1" />
         <ctl name="CLASS_H_DSM MUX" value="DSM_HPHL_RX1" />
         <ctl name="DAC1 Switch" value="1" />
+        <ctl name="RX1 Digital Volume" value="81" />
     </path>
 
     <path name="handset-mic">
@@ -1057,8 +1059,8 @@
         <ctl name="HPHL DAC Switch" value="1" />
         <ctl name="HPHL Volume" value="14" />
         <ctl name="HPHR Volume" value="14" />
-        <ctl name="RX1 Digital Volume" value="81" />
-        <ctl name="RX2 Digital Volume" value="81" />
+        <ctl name="RX1 Digital Volume" value="84" />
+        <ctl name="RX2 Digital Volume" value="84" />
         <ctl name="ANC Slot" value="0" />
         <ctl name="ANC1 FB MUX" value="EAR_HPH_L" />
         <ctl name="ANC1 MUX" value="ADC3" />
