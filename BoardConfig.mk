@@ -20,15 +20,12 @@ TARGET_ARCH := arm
 TARGET_ARCH_VARIANT := armv7-a-neon
 TARGET_CPU_VARIANT := krait
 
-# Krait optimizations
-TARGET_USE_KRAIT_BIONIC_OPTIMIZATION := true
-
 TARGET_BOOTLOADER_BOARD_NAME := u2
 TARGET_BOARD_PLATFORM := msm8974
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno330
 
 BOARD_KERNEL_SEPARATED_DT := true
-BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.selinux=disabled androidboot.hardware=qcom user_debug=22 msm_rtb.filter=0x37 ehci-hcd.park=3
+BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.selinux=permissive androidboot.hardware=qcom user_debug=22 msm_rtb.filter=0x37 ehci-hcd.park=3 androidboot.bootdevice=msm_sdcc.1
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_CUSTOM_BOOTIMG_MK := device/iuni/u2/mkbootimg.mk
@@ -37,10 +34,9 @@ BOARD_CUSTOM_BOOTIMG_MK := device/iuni/u2/mkbootimg.mk
 TARGET_SPECIFIC_HEADER_PATH := device/iuni/u2/include
 BOARD_USES_QCOM_HARDWARE := true
 TARGET_USES_QCOM_BSP := true
-COMMON_GLOBAL_CFLAGS += -DQCOM_HARDWARE -DQCOM_BSP -DQCOM_MEDIA_DISABLE_BUFFER_SIZE_CHECK
 
 # Display
-TARGET_QCOM_DISPLAY_VARIANT := caf-bfam
+TARGET_QCOM_DISPLAY_VARIANT := caf-msm8974
 USE_OPENGL_RENDERER := true
 TARGET_USES_ION := true
 TARGET_USES_C2D_COMPOSITION := true
@@ -50,28 +46,30 @@ OVERRIDE_RS_DRIVER := libRSDriver_adreno.so
 BOARD_USES_QC_TIME_SERVICES := true
 
 # Media
-TARGET_QCOM_MEDIA_VARIANT := caf-bfam
+TARGET_QCOM_MEDIA_VARIANT := caf-msm8974
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
 
 # audio
 BOARD_USES_ALSA_AUDIO := true
-TARGET_QCOM_AUDIO_VARIANT := caf-bfam
+TARGET_QCOM_AUDIO_VARIANT := caf-msm8974
 AUDIO_FEATURE_DISABLED_HWDEP_CAL := true
-AUDIO_FEATURE_ENABLED_MULTI_VOICE_SESSIONS := true
 AUDIO_FEATURE_ENABLED_COMPRESS_VOIP := true
 AUDIO_FEATURE_ENABLED_EXTN_FORMATS := true
 AUDIO_FEATURE_ENABLED_EXTN_POST_PROC := true
 AUDIO_FEATURE_ENABLED_FLUENCE := true
 AUDIO_FEATURE_ENABLED_HFP := true
-AUDIO_FEATURE_ENABLED_PCM_OFFLOAD := true
-AUDIO_FEATURE_ENABLED_FLAC_OFFLOAD := true
+#AUDIO_FEATURE_ENABLED_PCM_OFFLOAD := true
+#AUDIO_FEATURE_ENABLED_FLAC_OFFLOAD := true
 AUDIO_FEATURE_ENABLED_PROXY_DEVICE := true
 AUDIO_FEATURE_ENABLED_USBAUDIO := true
 AUDIO_FEATURE_ENABLED_COMPRESS_CAPTURE := true
 AUDIO_FEATURE_ENABLED_INCALL_MUSIC := true
 
 # Camera
-USE_DEVICE_SPECIFIC_CAMERA := true
+USE_CAMERA_STUB := true
+
+TARGET_RIL_VARIANT := caf
+COMMON_GLOBAL_CFLAGS += -DUSE_RIL_VERSION_10
 
 # Bluetooth
 BOARD_HAVE_BLUETOOTH := true
@@ -97,14 +95,23 @@ WIFI_DRIVER_FW_PATH_STA := "sta"
 WIFI_DRIVER_FW_PATH_AP := "ap"
 WIFI_DRIVER_MODULE_PATH := "/system/lib/modules/wlan.ko"
 WIFI_DRIVER_MODULE_NAME := "wlan"
+TARGET_USES_QCOM_WCNSS_QMI       := true
+TARGET_PROVIDES_WCNSS_QMI        := true
+TARGET_USES_WCNSS_MAC_ADDR_REV   := true
 
-BOARD_EGL_CFG := device/iuni/u2/egl.cfg
-BOARD_USES_MULTIPLE_SDCARD_FS := true
+MAX_EGL_CACHE_KEY_SIZE := 12*1024
+MAX_EGL_CACHE_SIZE := 2048*1024
 
 # fix this up by examining /proc/mtd on a running device
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x02000000 --kernel_offset 0x00008000
-BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1073741824
-BOARD_USERDATAIMAGE_PARTITION_SIZE := 3221225472
+
+BOARD_BOOTIMAGE_PARTITION_SIZE     := 16777216
+BOARD_CACHEIMAGE_PARTITION_SIZE    := 536870912
+BOARD_PERSISTIMAGE_PARTITION_SIZE  := 33554432
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 16777216
+BOARD_SYSTEMIMAGE_PARTITION_SIZE   := 1073741824
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 13747929088 # 13747945472 - 16384 for crypto footer
+#BOARD_USERDATAIMAGE_PARTITION_SIZE := 3221225472
 BOARD_FLASH_BLOCK_SIZE := 131072
 
 TARGET_RECOVERY_FSTAB := device/iuni/u2/rootdir/fstab.qcom
@@ -114,41 +121,22 @@ TARGET_RELEASETOOLS_EXTENSIONS := device/iuni/u2
 # inherit from the proprietary version
 -include vendor/gm/e7/BoardConfigVendor.mk
 
-# Include an expanded selection of fonts
-EXTENDED_FONT_FOOTPRINT := true
-
 # charger
 BOARD_CHARGER_DISABLE_INIT_BLANK := true
 HEALTHD_FORCE_BACKLIGHT_CONTROL := true
 HEALTHD_BACKLIGHT_ON_LEVEL := 125
-HEALTHD_ENABLE_TRICOLOR_LED := true
 
 # power hal
 TARGET_PROVIDES_POWERHAL := true
 
+# keymaster
+TARGET_KEYMASTER_WAIT_FOR_QSEE := true
+
 # selinux
-#include device/qcom/sepolicy/sepolicy.mk
+include device/qcom/sepolicy/sepolicy.mk
 
-#BOARD_SEPOLICY_DIRS += \
+BOARD_SEPOLICY_DIRS += \
     device/iuni/u2/sepolicy
-
-#BOARD_SEPOLICY_UNION += \
-    device.te \
-    file_contexts \
-    file.te \
-    init_shell.te \
-    mediaserver.te \
-    mm-qcamerad.te \
-    qseecomd.te \
-    rmt_storage.te \
-    sensors.te \
-    system_app.te \
-    system_server.te \
-    time_daemon.te \
-    thermal-engine.te \
-    vold.te \
-    property_contexts \
-    property.te
     
 #TWRP
 TW_THEME := portrait_hdpi
