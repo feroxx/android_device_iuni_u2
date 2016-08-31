@@ -54,7 +54,7 @@ camera_module_t HAL_MODULE_INFO_SYM = {
          .module_api_version = CAMERA_MODULE_API_VERSION_1_0,
          .hal_api_version = HARDWARE_HAL_API_VERSION,
          .id = CAMERA_HARDWARE_MODULE_ID,
-         .name = "E7 Camera Wrapper",
+         .name = "u2 Camera Wrapper",
          .author = "The CyanogenMod Project",
          .methods = &camera_module_methods,
          .dso = NULL, /* remove compilation warnings */
@@ -65,6 +65,8 @@ camera_module_t HAL_MODULE_INFO_SYM = {
     .set_callbacks = NULL, /* remove compilation warnings */
     .get_vendor_tag_ops = NULL, /* remove compilation warnings */
     .open_legacy = NULL, /* remove compilation warnings */
+    .set_torch_mode = NULL, /* remove compilation warnings */
+    .init = NULL,
     .reserved = {0}, /* remove compilation warnings */
 };
 
@@ -98,11 +100,13 @@ static int check_vendor_module()
 
 static const char *KEY_EXPOSURE_TIME = "exposure-time";
 static const char *KEY_EXPOSURE_TIME_VALUES = "exposure-time-values";
+static const char *KEY_SHUTTER_SPEED_VALUES = "shutter-speed-values";
+static const char *KEY_SHUTTER_SPEED = "shutter-speed";
 
 static char *camera_fixup_getparams(int id, const char *settings)
 {
     bool videoMode = false;
-    const char *exposureTimeValues = "0,1,500000,1000000,2000000,4000000,8000000,16000000,32000000,64000000";
+    const char *exposureTimeValues = "0,200,400,667,1000,2000,4000,8000,15625,31250,62500,125000,250000,500000,1000000,2000000,4000000,8000000,16000000,32000000,64000000";
     const char *supportedSceneModes = "auto,asd,landscape,snow,beach,sunset,night,portrait,backlight,sports,steadyphoto,flowers,candlelight,fireworks,party,night-portrait,theatre,action,AR";
 
     android::CameraParameters params;
@@ -118,11 +122,31 @@ static char *camera_fixup_getparams(int id, const char *settings)
                 android::CameraParameters::KEY_RECORDING_HINT), "true"));
     }
 
+    /* Remove unsupported features */
+    params.remove("af-bracket");
+    params.remove("af-bracket-values");
+    params.remove("chroma-flash");
+    params.remove("chroma-flash-values");
+    params.remove("dis");
+    params.remove("dis-values");
+    params.remove("opti-zoom");
+    params.remove("opti-zoom-values");
+    params.remove("see-more");
+    params.remove("see-more-values");
+    params.remove("still-more");
+    params.remove("still-more-values");
+    params.remove("hfr-size-values");
+    params.remove("video-hfr-values");
+ 
+    params.set(android::CameraParameters::SCENE_MODE_GESTURE, "gesture");
+    params.set(android::CameraParameters::SCENE_MODE_FOOD, "food");
+
     if (!videoMode) {
         /* Back camera */
         if (id == 0) {
             /* Set supported exposure time values */
             params.set(KEY_EXPOSURE_TIME_VALUES, exposureTimeValues);
+            params.set(KEY_SHUTTER_SPEED_VALUES, exposureTimeValues);
         }
 
         /* Front camera */
@@ -162,10 +186,12 @@ static char *camera_fixup_setparams(int id, const char *settings)
                 android::CameraParameters::KEY_RECORDING_HINT), "true"));
     }
 
+    if (params.get(KEY_SHUTTER_SPEED)) {
+    	params.set(KEY_EXPOSURE_TIME, params.get(KEY_SHUTTER_SPEED));
+    }
     if (params.get(KEY_EXPOSURE_TIME)) {
         slowShutterMode = (strcmp(params.get(KEY_EXPOSURE_TIME), "0"));
     }
-
     /* Disable flash if slow shutter is enabled */
     if (!videoMode) {
         if (id == 0) {
@@ -185,7 +211,9 @@ static char *camera_fixup_setparams(int id, const char *settings)
         // preview size same as video-size
         params.set("preview-size", video_size);
     }
-    params.set("oppo-app", "1");
+ 
+    params.set(android::CameraParameters::SCENE_MODE_GESTURE, "gesture");
+    params.set(android::CameraParameters::SCENE_MODE_FOOD, "food");
 
 #ifdef LOG_PARAMETERS
     ALOGI("%s: fixed parameters:", __FUNCTION__);
