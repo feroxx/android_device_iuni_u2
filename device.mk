@@ -18,26 +18,20 @@ PRODUCT_COPY_FILES += \
     device/iuni/u2/rootdir/init.qcom.usb.rc:recovery/root/init.usb.rc \
     device/iuni/u2/rootdir/twrp.fstab:recovery/root/etc/twrp.fstab 
 
-# E7 Init files
+$(call inherit-product, frameworks/native-caf/build/phone-xxxhdpi-3072-dalvik-heap.mk)
+$(call inherit-product, frameworks/native-caf/build/phone-xxhdpi-2048-hwui-memory.mk)
+
+# u2 Init files
 PRODUCT_COPY_FILES += \
     device/iuni/u2/rootdir/init.qcom.rc:root/init.qcom.rc \
-    device/iuni/u2/rootdir/init.qcom.class_core.sh:root/init.qcom.class_core.sh \
-    device/iuni/u2/rootdir/init.qcom.class_main.sh:root/init.qcom.class_main.sh \
-    device/iuni/u2/rootdir/init.qcom.early_boot.sh:root/init.qcom.early_boot.sh \
-    device/iuni/u2/rootdir/init.qcom.factory.sh:root/init.qcom.factory.sh \
-    device/iuni/u2/rootdir/init.qcom.sh:root/init.qcom.sh \
-    device/iuni/u2/rootdir/init.qcom.ssr.sh:root/init.qcom.ssr.sh \
     device/iuni/u2/rootdir/init.qcom.syspart_fixup.sh:root/init.qcom.syspart_fixup.sh \
     device/iuni/u2/rootdir/init.qcom.usb.rc:root/init.qcom.usb.rc \
-    device/iuni/u2/rootdir/init.target.rc:root/init.target.rc \
     device/iuni/u2/rootdir/fstab.qcom:root/fstab.qcom \
     device/iuni/u2/rootdir/ueventd.qcom.rc:root/ueventd.qcom.rc
 
 # system/etc files
 PRODUCT_COPY_FILES += \
-    device/iuni/u2/rootdir/etc/hsic.control.bt.sh:system/etc/hsic.control.bt.sh \
     device/iuni/u2/rootdir/etc/init.qcom.bt.sh:system/etc/init.qcom.bt.sh \
-    device/iuni/u2/rootdir/etc/usf_post_boot.sh:system/etc/usf_post_boot.sh \
     device/iuni/u2/rootdir/etc/init.qcom.modem_links.sh:system/etc/init.qcom.modem_links.sh
 
 PRODUCT_COPY_FILES += \
@@ -45,7 +39,8 @@ PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml \
     device/iuni/u2/media_codecs.xml:system/etc/media_codecs.xml \
-    device/iuni/u2/media_profiles.xml:system/etc/media_profiles.xml
+    device/iuni/u2/media_profiles.xml:system/etc/media_profiles.xml \
+    device/gionee/e7/media_codecs_performance.xml:system/etc/media_codecs_performance.xml
 
 # Config files for touch and input
 PRODUCT_COPY_FILES += \
@@ -80,8 +75,7 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.ethernet.xml:system/etc/permissions/android.hardware.ethernet.xml
 
 PRODUCT_COPY_FILES += \
-    device/iuni/u2/thermal-engine-8974.conf:system/etc/thermal-engine-8974.conf \
-    device/iuni/u2/rootdir/etc/power_profiles.xml:system/etc/power_profiles.xml
+    device/iuni/u2/thermal-engine-8974.conf:system/etc/thermal-engine-8974.conf
 
 # Wifi config
 PRODUCT_COPY_FILES += \
@@ -112,11 +106,8 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     nfc_nci.bcm2079x.default \
     NfcNci \
-    Tag
- 
- # E7Parts
- PRODUCT_PACKAGES += \
-    E7Parts
+    Tag \
+    SnapdragonCamera
  
  PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.nfc.hce.xml:system/etc/permissions/android.hardware.nfc.hce.xml \
@@ -207,7 +198,8 @@ PRODUCT_PACKAGES += \
 
 #Default USB mount
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mtp
+    persist.sys.usb.config=mtp \
+    ro.vold.primary_physical=1
 
 # for off charging mode
 PRODUCT_PACKAGES += \
@@ -220,8 +212,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Graphics
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=196608 \
-    persist.hwc.mdpcomp.enable=true \
-    mm.enable.qcom_parser=37491
+    persist.hwc.mdpcomp.enable=true
 
 # Ril sends only one RIL_UNSOL_CALL_RING, so set call_ring.multiple to false
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -230,13 +221,14 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Ril
 PRODUCT_PROPERTY_OVERRIDES += \
     rild.libpath=/system/vendor/lib/libril-qc-qmi-1.so \
+    rild.libargs=-d /dev/smd0 \
     telephony.lteOnGSMDevice=1 \
     ro.nfc.port=I2C \
+    persist.radio.add_power_save=1 \
     ro.qualcomm.cabl=1 \
     hw.cabl.level=Auto \
+    ril.subscription.types=RUIM \
     ro.use_data_netmgrd=true \
-    persist.fuse_sdcard=true \
-    persist.cne.feature=1 \
     persist.data.netmgrd.qos.enable=true \
     ra.data.large_tcp_window_size=true
 
@@ -245,8 +237,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.cellbroadcast.emergencyids=0-65534
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.telephony.default_network=0 \
-    persist.radio.rat_on=combine
+    ro.telephony.default_network=9
 
 PRODUCT_PROPERTY_OVERRIDES += \
     drm.service.enabled=true
@@ -258,22 +249,14 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     media.aac_51_output_enabled=true
 
-PRODUCT_PROPERTY_OVERRIDES += \
-    debug.egl.recordable.rgba8888=1
-
 # qcom
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.qc.sdk.audio.ssr=false \
-    ro.qc.sdk.sensors.gestures=true \
-    ro.qc.sdk.camera.facialproc=false \
-    ro.qc.sdk.gestures.camera=false \
-    camera2.portability.force_api=1
+    camera2.portability.force_api=11
 
 # Audio Configuration
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.qc.sdk.audio.fluencetype=fluence \
+    ro.qc.sdk.audio.audience=true \
     persist.audio.fluence.voicecall=true \
-    af.resampler.quality=4 \
     audio.offload.buffer.size.kb=32 \
     audio.offload.gapless.enabled=true \
     use.voice.path.for.pcm.voip=true \
@@ -281,10 +264,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     av.streaming.offload.enable=false \
     audio.offload.pcm.16bit.enable=true \
     audio.offload.multiple.enabled=false
-
-# QCOM
-PRODUCT_PROPERTY_OVERRIDES += \
-    com.qc.hardware=true
 
 # QC Perf
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -298,6 +277,3 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.build.selinux=1 \
     ro.sf.lcd_density=480
-
-$(call inherit-product, frameworks/native/build/phone-xxhdpi-2048-dalvik-heap.mk)
-$(call inherit-product, frameworks/native/build/phone-xxhdpi-2048-hwui-memory.mk)
