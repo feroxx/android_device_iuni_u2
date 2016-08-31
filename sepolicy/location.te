@@ -2,4 +2,4 @@
 # OmniROM e7 sepolicy
 #
 
-allow mm-qcamerad system_file:file execmod;
+allow location location_data_file:sock_file unlink;

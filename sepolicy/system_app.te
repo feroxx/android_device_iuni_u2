@@ -1,9 +1,11 @@
 ###########################
-# OmniROM oppo common sepolicy
+# OmniROM e7 sepolicy
 #
 
 allow system_app system_app_data_file:file x_file_perms;
 allow system_app shell_data_file:dir search;
 allow system_app sysfs_touchscreen:file rw_file_perms;
 allow system_app sysfs_touchscreen:dir search;
+allow system_app sysfs_vibrator:file rw_file_perms;
+allow system_app sysfs_vibrator:dir search;
 
