@@ -47,7 +47,7 @@ PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml \
     device/iuni/u2/media_codecs.xml:system/etc/media_codecs.xml \
     device/iuni/u2/media_profiles.xml:system/etc/media_profiles.xml \
-    device/gionee/e7/media_codecs_performance.xml:system/etc/media_codecs_performance.xml
+    device/iuni/u2/media_codecs_performance.xml:system/etc/media_codecs_performance.xml
 
 # Config files for touch and input
 PRODUCT_COPY_FILES += \
