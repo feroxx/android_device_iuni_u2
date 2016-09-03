@@ -17,23 +17,19 @@
 # Sample: This is where we'd set a backup provider if we had one
 # $(call inherit-product, device/sample/products/backup_overlay.mk)
 
-# Inherit APNs list
-$(call inherit-product, vendor/omni/config/gsm.mk)
+# Boot animation
+TARGET_SCREEN_HEIGHT := 1920
+TARGET_SCREEN_WIDTH := 1080
+TARGET_CONTINUOUS_SPLASH_ENABLED := true
 
-# Inherit from the common Open Source product configuration
-$(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base_telephony.mk)
+# Inherit from those products. Most specific first
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
-# must be before including omni part
-TARGET_BOOTANIMATION_SIZE := 1080x608
-
-# Inherit from our custom product configuration
-$(call inherit-product, vendor/omni/config/common.mk)
+# Inherit some common CM stuff.
+$(call inherit-product, vendor/cm/config/common_mini_phone.mk)
 
 # Inherit from hardware-specific part of the product configuration
-$(call inherit-product, device/iuni/u2/device.mk)
-
-# no DSPManager for us
-TARGET_NO_DSPMANAGER := true
+$(call inherit-product, device/iuni/u2/u2.mk)
 
 PRODUCT_NAME := omni_u2
 PRODUCT_DEVICE := u2
