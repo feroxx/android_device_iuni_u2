@@ -197,10 +197,6 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     persist.sys.usb.config=mtp \
     ro.vold.primary_physical=1
 
-# for off charging mode
-PRODUCT_PACKAGES += \
-    charger_res_images
-
 # bluetooth
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.qualcomm.bt.hci_transport=smd
@@ -247,7 +243,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # qcom
 PRODUCT_PROPERTY_OVERRIDES += \
-    camera2.portability.force_api=11
+    camera2.portability.force_api=1
 
 # Audio Configuration
 PRODUCT_PROPERTY_OVERRIDES += \
