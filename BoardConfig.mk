@@ -121,16 +121,13 @@ TARGET_RELEASETOOLS_EXTENSIONS := device/iuni/u2
 # Charger
 BOARD_CHARGER_ENABLE_SUSPEND := true
 
-# power hal
-TARGET_PROVIDES_POWERHAL := true
-
 # keymaster
 TARGET_KEYMASTER_WAIT_FOR_QSEE := true
 
 # selinux
-include device/qcom/sepolicy/sepolicy.mk
+# include device/qcom/sepolicy/sepolicy.mk
 
-BOARD_SEPOLICY_DIRS += \
+#BOARD_SEPOLICY_DIRS += \
     device/iuni/u2/sepolicy
     
 #TWRP
