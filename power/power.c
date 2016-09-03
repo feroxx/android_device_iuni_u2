@@ -179,7 +179,7 @@ static void power_hint(struct power_module __unused *module, power_hint_t hint,
             break;
         case POWER_HINT_VIDEO_ENCODE:
             break;
-        case POWER_HINT_POWER_PROFILE:
+        case POWER_HINT_SET_PROFILE:
             ALOGV("POWER_HINT_POWER_PROFILE %s", (char*)data);
             // profile is contributed as string with key value
             // pairs separated with ":"
