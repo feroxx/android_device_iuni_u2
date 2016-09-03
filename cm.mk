@@ -22,16 +22,19 @@ TARGET_SCREEN_HEIGHT := 1920
 TARGET_SCREEN_WIDTH := 1080
 TARGET_CONTINUOUS_SPLASH_ENABLED := true
 
-# Inherit from those products. Most specific first
+# Inherit from those products. Most specific first.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
 # Inherit some common CM stuff.
-$(call inherit-product, vendor/cm/config/common_mini_phone.mk)
+$(call inherit-product, vendor/cm/config/common_full_phone.mk)
+
+# Enhanced NFC
+$(call inherit-product, vendor/cm/config/nfc_enhanced.mk)
 
 # Inherit from hardware-specific part of the product configuration
 $(call inherit-product, device/iuni/u2/u2.mk)
 
-PRODUCT_NAME := omni_u2
+PRODUCT_NAME := cm_u2
 PRODUCT_DEVICE := u2
 PRODUCT_BRAND := IUNI
 PRODUCT_MODEL := U810
