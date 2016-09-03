@@ -15,4 +15,4 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/omni_u2.mk \
+    $(LOCAL_DIR)/u2.mk \
