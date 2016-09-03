@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Copyright (C) 2012 The Android Open Source Project
+                   2015 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,9 +15,13 @@
      limitations under the License.
 -->
 
+<!-- Camera app resources that may need to be customized
+     for different hardware or product builds. -->
 <resources>
-    <bool name="pref_camera_zsl_disabled">true</bool>
-    <string name="pref_camera_zsl_default" translatable="false">off</string>
-    <bool name="back_camera_open_legacy">true</bool>
-    <bool name="front_camera_open_legacy">true</bool>
+    <!-- Restart preview for back camera onPictureTaken -->
+    <bool name="back_camera_restart_preview_onPictureTaken">true</bool>
+
+    <!-- Restart preview for front camera onPictureTaken -->
+    <bool name="front_camera_restart_preview_onPictureTaken">true</bool>
+
 </resources>
