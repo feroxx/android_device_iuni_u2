@@ -198,8 +198,7 @@ PRODUCT_PACKAGES += \
 
 #Default USB mount
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mtp \
-    ro.vold.primary_physical=1
+    persist.sys.usb.config=mtp
 
 # for off charging mode
 PRODUCT_PACKAGES += \
@@ -251,7 +250,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # qcom
 PRODUCT_PROPERTY_OVERRIDES += \
-    camera2.portability.force_api=11
+    camera2.portability.force_api=1
 
 # Audio Configuration
 PRODUCT_PROPERTY_OVERRIDES += \
