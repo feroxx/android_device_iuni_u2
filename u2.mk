@@ -124,8 +124,7 @@ PRODUCT_PACKAGES += \
     camera-wrapper.msm8974 \
     memtrack.msm8974 \
     lights.msm8974 \
-    keystore.msm8974 \
-    power.msm8974
+    keystore.msm8974
 
 #Audio
 PRODUCT_PACKAGES += \
