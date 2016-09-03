@@ -18,8 +18,11 @@ PRODUCT_COPY_FILES += \
     device/iuni/u2/rootdir/init.qcom.usb.rc:recovery/root/init.usb.rc \
     device/iuni/u2/rootdir/twrp.fstab:recovery/root/etc/twrp.fstab 
 
-$(call inherit-product, frameworks/native-caf/build/phone-xxxhdpi-3072-dalvik-heap.mk)
-$(call inherit-product, frameworks/native-caf/build/phone-xxhdpi-2048-hwui-memory.mk)
+# call dalvik heap config
+$(call inherit-product, frameworks/native/build/phone-xxhdpi-2048-dalvik-heap.mk)
+
+# call hwui memory config
+$(call inherit-product, frameworks/native/build/phone-xxhdpi-2048-hwui-memory.mk)
 
 # u2 Init files
 PRODUCT_COPY_FILES += \
@@ -95,19 +98,12 @@ PRODUCT_PACKAGES := \
     wpa_supplicant \
     wpa_supplicant.conf
 
-# Live Wallpapers
-PRODUCT_PACKAGES += \
-    LiveWallpapers \
-    LiveWallpapersPicker \
-    VisualizationWallpapers \
-    librs_jni
-
 # NFC packages
 PRODUCT_PACKAGES += \
     nfc_nci.bcm2079x.default \
     NfcNci \
     Tag \
-    SnapdragonCamera
+    Snap
  
  PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.nfc.hce.xml:system/etc/permissions/android.hardware.nfc.hce.xml \
