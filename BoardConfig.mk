@@ -27,7 +27,7 @@ TARGET_BOARD_PLATFORM_GPU := qcom-adreno330
 USE_CLANG_PLATFORM_BUILD := true
 
 BOARD_KERNEL_SEPARATED_DT := true
-BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.selinux=permissive androidboot.hardware=qcom user_debug=22 msm_rtb.filter=0x37 ehci-hcd.park=3 androidboot.bootdevice=msm_sdcc.1
+BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.selinux=disabled androidboot.hardware=qcom user_debug=22 msm_rtb.filter=0x37 ehci-hcd.park=3 androidboot.bootdevice=msm_sdcc.1
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_DTBTOOL_ARGS                 := -2
