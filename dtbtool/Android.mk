@@ -9,7 +9,7 @@ LOCAL_SRC_FILES := \
 LOCAL_CFLAGS += \
 	-Wall
 
-LOCAL_MODULE := dtbTool.msm8974
+LOCAL_MODULE := dtbToolU2
 LOCAL_MODULE_TAGS := optional
 
 include $(BUILD_HOST_EXECUTABLE)
