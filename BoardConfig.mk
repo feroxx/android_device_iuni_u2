@@ -30,7 +30,7 @@ BOARD_KERNEL_SEPARATED_DT := true
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.selinux=disabled androidboot.hardware=qcom user_debug=22 msm_rtb.filter=0x37 ehci-hcd.park=3 androidboot.bootdevice=msm_sdcc.1
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 2048
-TARGET_CUSTOM_DTBTOOL := dtbTool.msm8974
+TARGET_CUSTOM_DTBTOOL := dtbToolU2
 BOARD_CUSTOM_BOOTIMG_MK := device/iuni/u2/mkbootimg.mk
 
 # global
