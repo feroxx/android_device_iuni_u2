@@ -24,9 +24,9 @@ $(call inherit-product, frameworks/native-caf/build/phone-xxhdpi-2048-hwui-memor
 # u2 Init files
 PRODUCT_COPY_FILES += \
     device/iuni/u2/rootdir/init.qcom.rc:root/init.qcom.rc \
-    device/iuni/u2/rootdir/init.qcom.syspart_fixup.sh:root/init.qcom.syspart_fixup.sh \
     device/iuni/u2/rootdir/init.qcom.usb.rc:root/init.qcom.usb.rc \
     device/iuni/u2/rootdir/fstab.qcom:root/fstab.qcom \
+    device/iuni/u2/rootdir/init.qcom.syspart_fixup.sh:root/init.qcom.syspart_fixup.sh \
     device/iuni/u2/rootdir/ueventd.qcom.rc:root/ueventd.qcom.rc
 
 # system/etc files
@@ -81,8 +81,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/iuni/u2/wifi/p2p_supplicant_overlay.conf:system/etc/wifi/p2p_supplicant_overlay.conf \
     device/iuni/u2/wifi/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf \
-
-PRODUCT_TAGS += dalvik.gc.type-precise
 
 DEVICE_PACKAGE_OVERLAYS := \
     device/iuni/u2/overlay
@@ -167,7 +165,9 @@ PRODUCT_PACKAGES += \
     libOmxVenc \
     libOmxCore \
     libstagefrighthw \
-    libc2dcolorconvert
+    libc2dcolorconvert \
+    libxml2 \
+    libboringssl-compat
 
 #    libOmxAacEnc \
 #    libOmxAmrEnc \
