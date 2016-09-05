@@ -13,6 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Common QCOM configuration tools
+$(call inherit-product, device/qcom/common/Android.mk)
+
 # TWRP
 PRODUCT_COPY_FILES += \
     device/iuni/u2/rootdir/init.qcom.usb.rc:recovery/root/init.usb.rc \
