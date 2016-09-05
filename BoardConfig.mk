@@ -31,7 +31,7 @@ BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.selinux=disabled a
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 2048
 TARGET_CUSTOM_DTBTOOL := dtbTool.msm8974
-BOARD_CUSTOM_BOOTIMG_MK := device/gionee/e7/mkbootimg.mk
+BOARD_CUSTOM_BOOTIMG_MK := device/iuni/u2/mkbootimg.mk
 
 # global
 TARGET_SPECIFIC_HEADER_PATH := device/iuni/u2/include
