@@ -126,7 +126,6 @@ PRODUCT_PACKAGES += \
     hwcomposer.msm8974 \
     gralloc.msm8974 \
     copybit.msm8974 \
-    camera-wrapper.msm8974 \
     memtrack.msm8974 \
     lights.msm8974 \
     keystore.msm8974 \
@@ -238,6 +237,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.use_data_netmgrd=true \
     persist.data.netmgrd.qos.enable=true \
     ra.data.large_tcp_window_size=true
+
+# Do not power down SIM card when modem is sent to Low Power Mode.
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.radio.apm_sim_not_pwdn=1 \
+    persist.radio.eons.enabled=false
 
 # Cell Broadcasts
 PRODUCT_PROPERTY_OVERRIDES += \
