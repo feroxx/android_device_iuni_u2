@@ -97,13 +97,24 @@ PRODUCT_TAGS += dalvik.gc.type-precise
 DEVICE_PACKAGE_OVERLAYS := \
     device/iuni/u2/overlay
 
-PRODUCT_PACKAGES := \
+PRODUCT_PACKAGES += \
+    dhcpcd.conf \
     libwpa_client \
     hostapd \
-    dhcpcd.conf \
-    wcnss_service \
     wpa_supplicant \
-    wpa_supplicant.conf
+    wpa_supplicant.conf \
+    wpa_supplicant_overlay.conf \
+    p2p_supplicant_overlay.conf \
+    hostapd_default.conf \
+    hostapd.accept \
+    hostapd.deny
+
+# SoftAP
+PRODUCT_PACKAGES += \
+    libqsap_sdk \
+    libQWiFiSoftApCfg \
+    libwcnss_qmi \
+    wcnss_service
 
 # NFC packages
 PRODUCT_PACKAGES += \
@@ -119,30 +130,46 @@ PRODUCT_PACKAGES += \
     device/iuni/u2/nfc/libnfc-brcm-20791b05.conf:system/etc/libnfc-brcm-20791b05.conf \
     device/iuni/u2/nfc/nfcee_access.xml:system/etc/nfcee_access.xml
     
-# Hardware modules to build
+# Graphics
 PRODUCT_PACKAGES += \
-    hwcomposer.msm8974 \
-    gralloc.msm8974 \
     copybit.msm8974 \
-    camera.msm8974 \
+    gralloc.msm8974 \
+    hwcomposer.msm8974 \
     memtrack.msm8974 \
-    lights.msm8974 \
+    liboverlay \
+    libxml2 \
     keystore.msm8974
 
-#Audio
 PRODUCT_PACKAGES += \
     audiod \
-    audio_policy.msm8974 \
     audio.a2dp.default \
+    audio_policy.msm8974 \
     audio.primary.msm8974 \
     audio.r_submix.default \
     audio.usb.default \
     libaudio-resampler \
-    libacdbloader \
-    libacdbmapper \
-    libaudcal \
-    libaudioalsa \
-    libdiag
+    libqcompostprocbundle \
+    libqcomvisualizer \
+    libqcomvoiceprocessing \
+    tinymix
+
+# Filesystem management tools
+PRODUCT_PACKAGES += \
+    make_ext4fs \
+    setup_fs \
+    mkntfs \
+    dumpe2fs \
+    resize2fs \
+    e2fsck_static \
+    mke2fs_static \
+    resize2fs_static
+
+# Misc dependency packages
+PRODUCT_PACKAGES += \
+    ebtables \
+    ethertypes \
+    libnl_2 \
+    libbson
 
 # for audio.primary.msm8974
 PRODUCT_PACKAGES += \
@@ -154,27 +181,19 @@ PRODUCT_PACKAGES += \
     tinypcminfo \
     libtinyxml \
     libtinyxml2
-    
-# Audio effects
-PRODUCT_PACKAGES += \
-    libqcomvisualizer \
-    libqcomvoiceprocessing \
-    libqcomvoiceprocessingdescriptors \
-    libqcompostprocbundle
 
+# Media & Audio
 PRODUCT_PACKAGES += \
-    libmm-omxcore \
+    libc2dcolorconvert \
     libdivxdrmdecrypt \
+    libOmxAacEnc \
+    libOmxAmrEnc \
+    libOmxCore \
+    libOmxEvrcEnc \
+    libOmxQcelp13Enc \
     libOmxVdec \
     libOmxVenc \
-    libOmxCore \
-    libstagefrighthw \
-    libc2dcolorconvert
-
-#    libOmxAacEnc \
-#    libOmxAmrEnc \
-#    libOmxEvrcEnc \
-#    libOmxQcelp13Enc \
+    libstagefrighthw 
 
 # sensors
 PRODUCT_COPY_FILES += \
