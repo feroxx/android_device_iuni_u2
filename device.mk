@@ -34,6 +34,7 @@ PRODUCT_COPY_FILES += \
     device/iuni/u2/rootdir/init.qcom.usb.rc:root/init.qcom.usb.rc \
     device/iuni/u2/rootdir/fstab.qcom:root/fstab.qcom \
     device/iuni/u2/rootdir/init.qcom.syspart_fixup.sh:root/init.qcom.syspart_fixup.sh \
+    device/iuni/u2/rootdir/init.qcom.class_main.sh:root/init.qcom.class_main.sh \
     device/iuni/u2/rootdir/ueventd.qcom.rc:root/ueventd.qcom.rc
 
 # system/etc files
