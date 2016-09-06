@@ -346,6 +346,11 @@ on property:bluetooth.isEnabled=true
 on property:ro.bluetooth.ftm_enabled=true
     start ftmd
 
+service qcom-c_main-sh /system/bin/sh /init.qcom.class_main.sh
+    class main
+    user root
+    oneshot
+
 service irsc_util /system/bin/irsc_util "/etc/sec_config"
     class main
     user root
