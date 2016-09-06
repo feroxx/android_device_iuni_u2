@@ -219,8 +219,7 @@ PRODUCT_PACKAGES += \
 
 #Default USB mount
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mtp \
-    ro.vold.primary_physical=1
+    persist.sys.usb.config=mtp
 
 # bluetooth
 PRODUCT_PROPERTY_OVERRIDES += \
