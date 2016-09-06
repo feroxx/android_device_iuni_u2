@@ -131,6 +131,11 @@ TARGET_RELEASETOOLS_EXTENSIONS := device/iuni/u2
 # Charger
 BOARD_CHARGER_ENABLE_SUSPEND := true
 
+# CM Hardware
+BOARD_USES_CYANOGEN_HARDWARE := true
+BOARD_HARDWARE_CLASS += $(PLATFORM_PATH)/cmhw
+TARGET_TAP_TO_WAKE_NODE := "/sys/devices/platform/tp_wake_switch/double_wake"
+
 # keymaster
 TARGET_KEYMASTER_WAIT_FOR_QSEE := true
 
