@@ -170,6 +170,10 @@ on boot
     # Gionee wanglei, 2013-10-21, add for torch led
     chmod 0666 /sys/class/leds/led:flash_torch/brightness
 
+    # Touchscreen
+    chown system radio /sys/devices/platform/tp_wake_switch/double_wake
+    chmod 0660 /sys/devices/platform/tp_wake_switch/double_wake
+
     #Gionee xuna add for autommitest, 20140724
     chmod 0777 /sys/class/leds/button-backlight/brightness
 
