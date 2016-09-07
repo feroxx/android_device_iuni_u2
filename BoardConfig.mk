@@ -71,7 +71,6 @@ USE_CAMERA_STUB := true
 
 TARGET_RIL_VARIANT := caf
 BOARD_PROVIDES_LIBRIL := true
-BOARD_RIL_CLASS := ../../../device/iuni/u2/ril
 
 # Bluetooth
 BOARD_HAVE_BLUETOOTH := true
