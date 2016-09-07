@@ -32,7 +32,7 @@ BOARD_KERNEL_PAGESIZE := 2048
 BOARD_CUSTOM_BOOTIMG_MK := device/iuni/u2/mkbootimg.mk
 
 # global
-TARGET_SPECIFIC_HEADER_PATH += device/iuni/u2/include
+TARGET_SPECIFIC_HEADER_PATH := device/iuni/u2/include
 BOARD_USES_QCOM_HARDWARE := true
 TARGET_USES_QCOM_BSP := true
 
