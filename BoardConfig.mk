@@ -70,19 +70,13 @@ AUDIO_FEATURE_ENABLED_INCALL_MUSIC := true
 USE_CAMERA_STUB := true
 
 TARGET_RIL_VARIANT := caf
-BOARD_PROVIDES_LIBRIL := true
+COMMON_GLOBAL_CFLAGS += -DUSE_RIL_VERSION_10
 
 # Bluetooth
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_QCOM := true
 BLUETOOTH_HCI_USE_MCT := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/iuni/u2/bluetooth
-
-# WiFi
-WLAN_MODULES:
-	mkdir -p $(KERNEL_MODULES_OUT)/pronto
-	mv $(KERNEL_MODULES_OUT)/wlan.ko $(KERNEL_MODULES_OUT)/pronto/pronto_wlan.ko
-	ln -sf /system/lib/modules/pronto/pronto_wlan.ko $(TARGET_OUT)/lib/modules/wlan.ko
 
 # Wifi
 BOARD_HAS_QCOM_WLAN := true
