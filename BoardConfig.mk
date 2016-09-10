@@ -125,6 +125,11 @@ BOARD_CHARGER_ENABLE_SUSPEND := true
 # CM Hardware
 BOARD_USES_CYANOGEN_HARDWARE := true
 TARGET_TAP_TO_WAKE_NODE := "/sys/devices/platform/tp_wake_switch/double_wake"
+BOARD_HARDWARE_CLASS += \
+    hardware/cyanogen/cmhw
+
+# Lights
+TARGET_PROVIDES_LIBLIGHT := true
 
 # keymaster
 TARGET_KEYMASTER_WAIT_FOR_QSEE := true
