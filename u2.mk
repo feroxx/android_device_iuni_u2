@@ -113,11 +113,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     wcnss_service
 
-# Data
-PRODUCT_PACKAGES += \
-    librmnetctl \
-    rmnetcli
-
 # NFC packages
 PRODUCT_PACKAGES += \
     nfc_nci.bcm2079x.default \
