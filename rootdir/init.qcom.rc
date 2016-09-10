@@ -154,10 +154,6 @@ on boot
     # Set the default message loglevel to KERN_INFO
     write /proc/sys/kernel/printk "6 6 1 7"
 
-    #gionee zhoucs add lcd cabc 20140731 begin
-    chmod 0666 /sys/class/leds/lcd-cabc/brightness
-    #gionee zhoucs add lcd cabc 20140731 end
-
     # NFC local data and nfcee xml storage
     mkdir /data/nfc 0770 nfc nfc
     mkdir /data/nfc/param 0770 nfc nfc
@@ -168,11 +164,8 @@ on boot
     write /sys/bus/msm_subsys/devices/subsys2/restart_level related
     write /sys/bus/msm_subsys/devices/subsys3/restart_level related
 
-    #gionee add for dump switch
-    chown system camera /sys/class/leds/led:flash_torch/brightness
-    chmod 0666 /sys/module/restart/parameters/download_mode
-    
     # Gionee wanglei, 2013-10-21, add for torch led
+    chown system camera /sys/class/leds/led:flash_torch/brightness
     chmod 0666 /sys/class/leds/led:flash_torch/brightness
 
     # Touchscreen
