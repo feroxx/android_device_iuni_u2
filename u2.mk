@@ -137,6 +137,10 @@ PRODUCT_PACKAGES += \
     libxml2 \
     keystore.msm8974
 
+# Lights
+PRODUCT_PACKAGES += \
+    lights.msm8974
+
 PRODUCT_PACKAGES += \
     audiod \
     audio.a2dp.default \
