@@ -454,6 +454,8 @@ service qmuxd /system/bin/qmuxd
     
 service netmgrd /system/bin/netmgrd
     class main
+    user root
+    group radio
 
 service sensors /system/bin/sensors.qcom
     class main
