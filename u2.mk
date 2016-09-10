@@ -142,6 +142,10 @@ PRODUCT_PACKAGES += \
     libboringssl-compat \
     libstlport
 
+# RIL
+PRODUCT_PACKAGES += \
+    libril_shim
+
 # Lights
 PRODUCT_PACKAGES += \
     lights.msm8974
@@ -242,7 +246,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.data.tcpackprio.enable=true \
     persist.radio.add_power_save=1 \
     persist.radio.apm_sim_not_pwdn=1 \
-    rild.libpath=/system/vendor/lib/libril-qc-qmi-1.so \
+    ro.telephony.ril_class=U2RIL \
     ro.data.large_tcp_window_size=true \
     ro.ril.ext.ecclist=112,911,999,110,122,119,120,000,08,118 \
     ro.telephony.call_ring.multiple=0 \
@@ -252,13 +256,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.qualcomm.cabl=1 \
     hw.cabl.level=Auto \
     ro.nfc.port=I2C
-    
-# Cell Broadcasts
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.cellbroadcast.emergencyids=0-65534
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.telephony.default_network=9
 
 PRODUCT_PROPERTY_OVERRIDES += \
     drm.service.enabled=true
