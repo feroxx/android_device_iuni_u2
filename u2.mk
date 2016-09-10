@@ -137,6 +137,11 @@ PRODUCT_PACKAGES += \
     libxml2 \
     keystore.msm8974
 
+# BoringSSL compatability wrapper
+PRODUCT_PACKAGES += \
+    libboringssl-compat \
+    libstlport
+
 # Lights
 PRODUCT_PACKAGES += \
     lights.msm8974
