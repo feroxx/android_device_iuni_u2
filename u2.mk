@@ -111,10 +111,12 @@ PRODUCT_PACKAGES += \
 
 # SoftAP
 PRODUCT_PACKAGES += \
-    libqsap_sdk \
-    libQWiFiSoftApCfg \
-    libwcnss_qmi \
     wcnss_service
+
+# Data
+PRODUCT_PACKAGES += \
+    librmnetctl \
+    rmnetcli
 
 # NFC packages
 PRODUCT_PACKAGES += \
@@ -230,24 +232,24 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=196608 \
     persist.hwc.mdpcomp.enable=true
 
-# Ril sends only one RIL_UNSOL_CALL_RING, so set call_ring.multiple to false
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.telephony.call_ring.multiple=0
-
 # Ril
 PRODUCT_PROPERTY_OVERRIDES += \
-    rild.libpath=/system/vendor/lib/libril-qc-qmi-1.so \
-    rild.libargs=-d /dev/smd0 \
-    telephony.lteOnGSMDevice=1 \
-    ro.nfc.port=I2C \
+    persist.data.netmgrd.qos.enable=true \
+    persist.data.tcpackprio.enable=true \
     persist.radio.add_power_save=1 \
+    persist.radio.apm_sim_not_pwdn=1 \
+    persist.radio.multisim.config=dsds \
+    rild.libpath=/system/vendor/lib/libril-qc-qmi-1.so \
+    ro.data.large_tcp_window_size=true \
+    ro.ril.ext.ecclist=112,911,999,110,122,119,120,000,08,118 \
+    ro.telephony.call_ring.multiple=0 \
+    ro.telephony.default_network=9,9 \
+    ro.use_data_netmgrd=true \
+    telephony.lteOnGsmDevice=1 \
     ro.qualcomm.cabl=1 \
     hw.cabl.level=Auto \
-    ril.subscription.types=RUIM \
-    ro.use_data_netmgrd=true \
-    persist.data.netmgrd.qos.enable=true \
-    ra.data.large_tcp_window_size=true
-
+    ro.nfc.port=I2C
+    
 # Cell Broadcasts
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.cellbroadcast.emergencyids=0-65534
