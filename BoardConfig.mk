@@ -70,8 +70,8 @@ USE_DEVICE_SPECIFIC_CAMERA := true
 # Flags
 COMMON_GLOBAL_CFLAGS   += -D__ARM_USE_PLD -D__ARM_CACHE_LINE_SIZE=64
 
-# Radio
-BOARD_PROVIDES_LIBRIL := true
+# RIL
+TARGET_RIL_VARIANT := caf
 
 # Bluetooth
 BOARD_HAVE_BLUETOOTH := true
@@ -86,20 +86,19 @@ WLAN_MODULES:
 	ln -sf /system/lib/modules/pronto/pronto_wlan.ko $(TARGET_OUT)/lib/modules/wlan.ko
 
 # Wifi
-BOARD_HAS_QCOM_WLAN              := true
-BOARD_HAS_QCOM_WLAN_SDK          := true
-BOARD_WLAN_DEVICE                := qcwcn
-BOARD_WPA_SUPPLICANT_DRIVER      := NL80211
+BOARD_HAS_QCOM_WLAN := true
+BOARD_HAS_QCOM_WLAN_SDK := true
+BOARD_WLAN_DEVICE := qcwcn
+BOARD_WPA_SUPPLICANT_DRIVER := NL80211
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_qcwcn
-BOARD_HOSTAPD_DRIVER             := NL80211
-BOARD_HOSTAPD_PRIVATE_LIB        := lib_driver_cmd_qcwcn
-TARGET_USES_WCNSS_CTRL           := true
-TARGET_USES_QCOM_WCNSS_QMI       := true
-TARGET_USES_WCNSS_MAC_ADDR_REV   := true
-TARGET_WCNSS_MAC_PREFIX          := e8bba8
-WIFI_DRIVER_FW_PATH_STA          := "sta"
-WIFI_DRIVER_FW_PATH_AP           := "ap"
-WPA_SUPPLICANT_VERSION           := VER_0_8_X
+BOARD_HOSTAPD_DRIVER := NL80211
+BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_qcwcn
+TARGET_USES_WCNSS_CTRL := true
+TARGET_USES_QCOM_WCNSS_QMI := true
+TARGET_USES_WCNSS_MAC_ADDR_REV := true
+WIFI_DRIVER_FW_PATH_STA := "sta"
+WIFI_DRIVER_FW_PATH_AP := "ap"
+WPA_SUPPLICANT_VERSION := VER_0_8_X
 
 # fix this up by examining /proc/mtd on a running device
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x02000000 --kernel_offset 0x00008000
