@@ -42,6 +42,7 @@ PRODUCT_COPY_FILES += \
 # system/etc files
 PRODUCT_COPY_FILES += \
     device/iuni/u2/rootdir/etc/init.qcom.bt.sh:system/etc/init.qcom.bt.sh \
+    device/iuni/u2/rootdir/etc/set_baseband.sh:system/etc/set_baseband.sh \
     device/iuni/u2/rootdir/etc/init.qcom.modem_links.sh:system/etc/init.qcom.modem_links.sh
 
 PRODUCT_COPY_FILES += \
