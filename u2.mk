@@ -238,7 +238,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.data.tcpackprio.enable=true \
     persist.radio.add_power_save=1 \
     persist.radio.apm_sim_not_pwdn=1 \
-    persist.radio.multisim.config=dsds \
     rild.libpath=/system/vendor/lib/libril-qc-qmi-1.so \
     ro.data.large_tcp_window_size=true \
     ro.ril.ext.ecclist=112,911,999,110,122,119,120,000,08,118 \
