@@ -16,12 +16,6 @@
 
 #include <stdlib.h>
 
-/* status_t Parcel::readuInt64 */
-extern "C" int _ZNK7android6Parcel10readUint64EPy(uint64_t *pArg);
-extern "C" int _ZNK7android6Parcel10readuInt64EPy(uint64_t *pArg) {
-    return _ZNK7android6Parcel10readUint64EPy(pArg);
-}
-
 /* status_t Parcel::writeString16 */
 extern "C" int _ZN7android6Parcel13writeString16EPKDsj();
 extern "C" int _ZN7android6Parcel13writeString16EPKtj() {
