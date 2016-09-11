@@ -98,6 +98,11 @@ PRODUCT_TAGS += dalvik.gc.type-precise
 DEVICE_PACKAGE_OVERLAYS := \
     device/iuni/u2/overlay
 
+# Data
+PRODUCT_PACKAGES += \
+    librmnetctl \
+    rmnetcli
+
 PRODUCT_PACKAGES += \
     dhcpcd.conf \
     libwpa_client \
@@ -112,9 +117,12 @@ PRODUCT_PACKAGES += \
 
 # SoftAP
 PRODUCT_PACKAGES += \
-    libqsap_sdk \
-    libQWiFiSoftApCfg \
     wcnss_service
+
+# IPv6
+PRODUCT_PACKAGES += \
+    ebtables \
+    ethertypes
 
 # NFC packages
 PRODUCT_PACKAGES += \
@@ -167,24 +175,6 @@ PRODUCT_PACKAGES += \
     libqcomvisualizer \
     libqcomvoiceprocessing \
     tinymix
-
-# Filesystem management tools
-PRODUCT_PACKAGES += \
-    make_ext4fs \
-    setup_fs \
-    mkntfs \
-    dumpe2fs \
-    resize2fs \
-    e2fsck_static \
-    mke2fs_static \
-    resize2fs_static
-
-# Misc dependency packages
-PRODUCT_PACKAGES += \
-    ebtables \
-    ethertypes \
-    libnl_2 \
-    libbson
 
 # for audio.primary.msm8974
 PRODUCT_PACKAGES += \
@@ -266,9 +256,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
     drm.service.enabled=true
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.disableWifiApFirmwareReload=true \
     wifi.interface=wlan0
 
+# qcom
+PRODUCT_PROPERTY_OVERRIDES += \
+    camera2.portability.force_api=1
+ 
 # Enable AAC 5.1 output
 PRODUCT_PROPERTY_OVERRIDES += \
     media.aac_51_output_enabled=true
