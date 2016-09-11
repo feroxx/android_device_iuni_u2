@@ -146,7 +146,8 @@ PRODUCT_PACKAGES += \
 
 # RIL
 PRODUCT_PACKAGES += \
-    libril_shim
+    libril_shim \
+    libshim_camera
 
 # Lights
 PRODUCT_PACKAGES += \
