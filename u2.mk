@@ -138,7 +138,8 @@ PRODUCT_PACKAGES += \
     memtrack.msm8974 \
     liboverlay \
     libxml2 \
-    keystore.msm8974
+    keystore.msm8974 \
+    camera.msm8974
 
 # BoringSSL compatability wrapper
 PRODUCT_PACKAGES += \
