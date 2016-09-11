@@ -43,8 +43,6 @@ using namespace android;
 static Mutex gCameraWrapperLock;
 static camera_module_t *gVendorModule = 0;
 
-static bool gClearImageEnabled = false;
-
 static int camera_device_open(const hw_module_t *module, const char *name,
         hw_device_t **device);
 static int camera_get_number_of_cameras(void);
