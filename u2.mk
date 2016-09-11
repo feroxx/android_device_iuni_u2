@@ -138,9 +138,7 @@ PRODUCT_PACKAGES += \
     memtrack.msm8974 \
     liboverlay \
     libxml2 \
-    keystore.msm8974 \
-    libmm-qcamera \
-    camera.msm8974
+    keystore.msm8974
 
 # BoringSSL compatability wrapper
 PRODUCT_PACKAGES += \
@@ -248,9 +246,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Ril
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.data.netmgrd.qos.enable=true \
-    persist.data.tcpackprio.enable=true \
     persist.radio.add_power_save=1 \
     persist.radio.apm_sim_not_pwdn=1 \
+    rild.libpath=/vendor/lib/libril-qc-qmi-1.so \
     ro.telephony.ril_class=U2RIL \
     ro.data.large_tcp_window_size=true \
     ro.ril.ext.ecclist=112,911,999,110,122,119,120,000,08,118 \
