@@ -112,6 +112,8 @@ PRODUCT_PACKAGES += \
 
 # SoftAP
 PRODUCT_PACKAGES += \
+    libqsap_sdk \
+    libQWiFiSoftApCfg \
     wcnss_service
 
 # NFC packages
@@ -137,6 +139,7 @@ PRODUCT_PACKAGES += \
     liboverlay \
     libxml2 \
     keystore.msm8974 \
+    libmm-qcamera \
     camera.msm8974
 
 # BoringSSL compatability wrapper
@@ -146,8 +149,7 @@ PRODUCT_PACKAGES += \
 
 # RIL
 PRODUCT_PACKAGES += \
-    libril_shim \
-    libshim_camera
+    libril_shim
 
 # Lights
 PRODUCT_PACKAGES += \
@@ -264,15 +266,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
     drm.service.enabled=true
 
 PRODUCT_PROPERTY_OVERRIDES += \
+    ro.disableWifiApFirmwareReload=true \
     wifi.interface=wlan0
 
 # Enable AAC 5.1 output
 PRODUCT_PROPERTY_OVERRIDES += \
     media.aac_51_output_enabled=true
-
-# qcom
-PRODUCT_PROPERTY_OVERRIDES += \
-    camera2.portability.force_api=1
 
 # Audio Configuration
 PRODUCT_PROPERTY_OVERRIDES += \
