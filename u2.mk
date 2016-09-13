@@ -217,13 +217,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/iuni/u2/gps.conf:system/etc/gps.conf
 
-PRODUCT_PACKAGES += \
-    com.android.future.usb.accessory
-
-#Default USB mount
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mtp
-
 # bluetooth
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.qualcomm.bt.hci_transport=smd
@@ -233,19 +226,16 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=196608 \
     persist.hwc.mdpcomp.enable=true
 
-# Ril
+# QMI
 PRODUCT_PROPERTY_OVERRIDES += \
-    persist.data.netmgrd.qos.enable=true \
-    persist.radio.add_power_save=1 \
-    persist.radio.apm_sim_not_pwdn=1 \
+    persist.data.netmgrd.qos.enable=false \
+    persist.data.qmi.adb_logmask=0 \
+    persist.qcril.disable_retry=true \
     rild.libpath=/vendor/lib/libril-qc-qmi-1.so \
-    ro.telephony.ril_class=U2RIL \
-    ro.data.large_tcp_window_size=true \
-    ro.ril.ext.ecclist=112,911,999,110,122,119,120,000,08,118 \
-    ro.telephony.call_ring.multiple=0 \
+    ro.use_data_netmgrd=true
     ro.telephony.default_network=9 \
-    ro.use_data_netmgrd=true \
     telephony.lteOnGsmDevice=1 \
+    persist.radio.apm_sim_not_pwdn=1 \
     ro.qualcomm.cabl=1 \
     hw.cabl.level=Auto \
     ro.nfc.port=I2C
