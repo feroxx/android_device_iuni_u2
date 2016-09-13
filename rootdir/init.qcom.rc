@@ -102,6 +102,9 @@ on boot
     # Allow QMUX daemon to assign port open wait time
     chown radio radio /sys/devices/virtual/hsicctl/hsicctl0/modem_wait
 
+    # Prevents permission denied error for telephony
+    chmod 0644 /proc/cmdline
+
     # Camera Recording
     mkdir /dev/video
     symlink /dev/video32 /dev/video/venus_dec
@@ -157,13 +160,11 @@ on boot
     mkdir /data/nfc 0770 nfc nfc
     mkdir /data/nfc/param 0770 nfc nfc
 
-    # Subsytem Restart
-    # adsp
+    # SubSystem Restart
     write /sys/bus/msm_subsys/devices/subsys0/restart_level "related"
-    # modem
     write /sys/bus/msm_subsys/devices/subsys1/restart_level "related"
-    # venus
     write /sys/bus/msm_subsys/devices/subsys2/restart_level "related"
+    write /sys/bus/msm_subsys/devices/subsys3/restart_level "related"
 
     # Gionee wanglei, 2013-10-21, add for torch led
     chown system camera /sys/class/leds/led:flash_torch/brightness
@@ -356,6 +357,7 @@ service irsc_util /system/bin/irsc_util "/etc/sec_config"
 service rmt_storage /system/bin/rmt_storage
     class core
     user root
+    group system
     
 service config_bluetooth /system/bin/sh /system/etc/init.qcom.bt.sh "onboot"
     class core
@@ -593,7 +595,12 @@ service iprenew_bt-pan /system/bin/dhcpcd -n
 service set_baseband /system/bin/sh /system/etc/set_baseband.sh
     class late_start
     user root
+    seclabel u:r:set_baseband:s0
     oneshot
+    disabled
+
+on property:gsm.version.baseband=""
+    start set_baseband
 
 service qcamerasvr /system/bin/mm-qcamera-daemon
     class late_start
