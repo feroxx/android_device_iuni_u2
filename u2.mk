@@ -100,8 +100,8 @@ DEVICE_PACKAGE_OVERLAYS := \
 
 # Data
 PRODUCT_PACKAGES += \
-    librmnetctl \
-    rmnetcli
+    libxml2 \
+    librmnetctl
 
 PRODUCT_PACKAGES += \
     dhcpcd.conf \
@@ -145,7 +145,6 @@ PRODUCT_PACKAGES += \
     hwcomposer.msm8974 \
     memtrack.msm8974 \
     liboverlay \
-    libxml2 \
     keystore.msm8974 \
     camera.msm8974
 
@@ -156,7 +155,6 @@ PRODUCT_PACKAGES += \
 
 # RIL
 PRODUCT_PACKAGES += \
-    libril_shim \
     libshim_camera
 
 # Lights
