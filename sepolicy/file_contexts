@@ -1,6 +1,5 @@
-# NV backup partitions
-/dev/block/platform/msm_sdcc\.1/by-name/oppodycnvbk     u:object_r:nvbackup_block_device:s0
-/dev/block/platform/msm_sdcc\.1/by-name/oppostanvbk     u:object_r:nvbackup_block_device:s0
+# NFC
+/dev/bcm2079x                                       u:object_r:nfc_device:s0
 
 # Persist filesystem
 /dev/block/platform/msm_sdcc\.1/by-name/persist         u:object_r:persist_block_device:s0
@@ -18,6 +17,9 @@
 # BT/WiFi MAC
 /persist/.genmac                                        u:object_r:wifi_data_file:s0
 /persist/.bt_nv.bin                                     u:object_r:bluetooth_data_file:s0
+
+# Baseband
+/system/etc/set_baseband.sh                         u:object_r:set_baseband_exec:s0
 
 # Backlight
 /sys/class/leds/lcd-backlight/brightness                u:object_r:touchscreen_file:s0
