@@ -1,6 +1,2 @@
-###########################
-# OmniROM e7 sepolicy
-#
-
-allow ueventd sysfs_vibrator:file rw_file_perms;
-allow ueventd sysfs_vibrator:dir search;
+allow ueventd vfat:dir search;
+allow ueventd vfat:file { read open };

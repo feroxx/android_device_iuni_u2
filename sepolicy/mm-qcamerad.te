@@ -1,5 +1,0 @@
-###########################
-# OmniROM e7 sepolicy
-#
-
-allow mm-qcamerad system_file:file execmod;

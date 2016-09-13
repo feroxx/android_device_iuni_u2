@@ -1,5 +1,2 @@
-###########################
-# OmniROM e7 common sepolicy
-#
-
-type persist_block_device, dev_type;
+type nvbackup_block_device, dev_type;
+type drm_block_device, dev_type;

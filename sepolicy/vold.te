@@ -1,4 +1,2 @@
-###########################
-# OmniROM e7 sepolicy
-#
 allow vold persist_file:dir r_file_perms;
+allow vold proc_touchpanel:dir { read open };

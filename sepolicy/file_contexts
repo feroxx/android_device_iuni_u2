@@ -1,23 +1,26 @@
-###########################
-# OmniROM e7 sepolicy
-#
+# NV backup partitions
+/dev/block/platform/msm_sdcc\.1/by-name/oppodycnvbk     u:object_r:nvbackup_block_device:s0
+/dev/block/platform/msm_sdcc\.1/by-name/oppostanvbk     u:object_r:nvbackup_block_device:s0
 
-# touchscreen gestures 
-/sys/kernel/touchscreen(/.*)?	u:object_r:sysfs_touchscreen:s0
-/sys/devices/virtual/timed_output/vibrator(/.*)?	u:object_r:sysfs_vibrator:s0
+# Persist filesystem
+/dev/block/platform/msm_sdcc\.1/by-name/persist         u:object_r:persist_block_device:s0
 
-/data/cam_socket.*  u:object_r:camera_socket:s0
-/persist/sns.reg    u:object_r:sensors_persist_file:s0
-/persist/.genmac    u:object_r:wifi_data_file:s0
-/persist/.bt_nv.bin u:object_r:bluetooth_data_file:s0
+# FRP partition
+/dev/block/bootdevice/by-name/config                    u:object_r:frp_block_device:s0
 
-/dev/block/platform/msm_sdcc\.1/by-name/oppodycnvbk u:object_r:modem_efs_partition_device:s0
-/dev/block/platform/msm_sdcc\.1/by-name/oppostanvbk u:object_r:modem_efs_partition_device:s0
-/dev/block/platform/msm_sdcc\.1/by-name/cache    u:object_r:cache_block_device:s0
-/dev/block/platform/msm_sdcc\.1/by-name/persist u:object_r:persist_block_device:s0
+# Old camera socket
+/data/cam_socket1                                       u:object_r:camera_socket:s0
+/data/cam_socket2                                       u:object_r:camera_socket:s0
 
-/system/bin/hci_qcomm_init     u:object_r:hci_attach_exec:s0
-/dev/smd3 u:object_r:hci_attach_dev:s0
-/system/etc/init\.qcom\.bt\.sh u:object_r:bluetooth_loader_exec:s0
+# Old slim_ap executable
+/system/vendor/bin/slim_ap_daemon                       u:object_r:location_exec:s0
 
-/data/fdAlbum -- u:object_r:camera_data_file:s0
+# BT/WiFi MAC
+/persist/.genmac                                        u:object_r:wifi_data_file:s0
+/persist/.bt_nv.bin                                     u:object_r:bluetooth_data_file:s0
+
+# Backlight
+/sys/class/leds/lcd-backlight/brightness                u:object_r:touchscreen_file:s0
+
+# Thermal-engine
+/system/bin/thermal-engine                              u:object_r:thermal-engine_exec:s0

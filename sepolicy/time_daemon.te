@@ -1,6 +1,0 @@
-###########################
-# OmniROM e7 sepolicy
-#
-
-qmux_socket(time_daemon);
-allow time_daemon devpts:chr_file rw_file_perms;
