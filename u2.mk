@@ -113,8 +113,7 @@ PRODUCT_PACKAGES += \
     p2p_supplicant_overlay.conf \
     hostapd_default.conf \
     hostapd.accept \
-    hostapd.deny \
-    libwcnss_qmi
+    hostapd.deny
 
 # camera
 #PRODUCT_PACKAGES += \
@@ -123,7 +122,9 @@ PRODUCT_PACKAGES += \
 
 # SoftAP
 PRODUCT_PACKAGES += \
+    libwcnss_qmi \
     wcnss_service
+    
 
 # IPv6
 PRODUCT_PACKAGES += \
