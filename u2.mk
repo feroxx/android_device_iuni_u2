@@ -240,6 +240,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
     hw.cabl.level=Auto \
     ro.nfc.port=I2C
 
+#For internal sdcard
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    ro.vold.primary_physical=1
+    
 PRODUCT_PROPERTY_OVERRIDES += \
     drm.service.enabled=true
 
