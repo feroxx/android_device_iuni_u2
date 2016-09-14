@@ -21,3 +21,4 @@ void _ZN7qcamera25QCamera2HardwareInterface16updateParametersEPKcRb() {}
 void _ZN7qcamera19QCameraStateMachine26procEvtPreviewStoppedStateENS_21qcamera_sm_evt_enum_tEPv() {}
 void _ZN7qcamera19QCameraStateMachine16smEvtProcRoutineEPv() {}
 void _ZNK7android16CameraParameters6getStrEPKc() {}
+void _ZN7qcamera17QCameraParameters21setBurstLEDFlashLevelE25cam_led_flash_burst_level() {}
