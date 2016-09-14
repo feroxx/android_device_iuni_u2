@@ -115,6 +115,11 @@ PRODUCT_PACKAGES += \
     hostapd.accept \
     hostapd.deny
 
+# camera
+#PRODUCT_PACKAGES += \
+    camera.msm8974 \
+    libshim_camera
+
 # SoftAP
 PRODUCT_PACKAGES += \
     wcnss_service
@@ -145,17 +150,12 @@ PRODUCT_PACKAGES += \
     hwcomposer.msm8974 \
     memtrack.msm8974 \
     liboverlay \
-    keystore.msm8974 \
-    camera.msm8974
+    keystore.msm8974
 
 # BoringSSL compatability wrapper
 PRODUCT_PACKAGES += \
     libboringssl-compat \
     libstlport
-
-# RIL
-PRODUCT_PACKAGES += \
-    libshim_camera
 
 # Lights
 PRODUCT_PACKAGES += \
