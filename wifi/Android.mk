@@ -3,7 +3,7 @@ LOCAL_PATH:= $(call my-dir)
 #----------------------------------------------------------------------
 # Copy additional target-specific files
 #----------------------------------------------------------------------
-ifeq ($(strip $(BOARD_HAS_QCOM_WLAN)),true)
+ifeq ($(TARGET_DEVICE),u2)
 include $(CLEAR_VARS)
 LOCAL_MODULE           := libwcnss_qmi
 LOCAL_MODULE_TAGS      := optional
