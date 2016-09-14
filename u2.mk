@@ -88,11 +88,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/iuni/u2/thermal-engine-8974.conf:system/etc/thermal-engine-8974.conf
 
-# Wifi config
-PRODUCT_COPY_FILES += \
-    device/iuni/u2/wifi/p2p_supplicant_overlay.conf:system/etc/wifi/p2p_supplicant_overlay.conf \
-    device/iuni/u2/wifi/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf \
-
 PRODUCT_TAGS += dalvik.gc.type-precise
 
 DEVICE_PACKAGE_OVERLAYS := \
@@ -125,7 +120,6 @@ PRODUCT_PACKAGES += \
     libwcnss_qmi \
     wcnss_service
     
-
 # IPv6
 PRODUCT_PACKAGES += \
     ebtables \
