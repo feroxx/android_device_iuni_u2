@@ -113,7 +113,8 @@ PRODUCT_PACKAGES += \
     p2p_supplicant_overlay.conf \
     hostapd_default.conf \
     hostapd.accept \
-    hostapd.deny
+    hostapd.deny \
+    libwcnss_qmi
 
 # camera
 #PRODUCT_PACKAGES += \
