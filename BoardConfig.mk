@@ -33,6 +33,7 @@ BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 2048
 TARGET_CUSTOM_DTBTOOL := dtbToolU2
 BOARD_CUSTOM_BOOTIMG_MK := device/iuni/u2/mkbootimg.mk
+TARGET_KERNEL_CROSS_COMPILE_PREFIX := arm-linux-androideabi-
 
 # global
 TARGET_SPECIFIC_HEADER_PATH := device/iuni/u2/include
