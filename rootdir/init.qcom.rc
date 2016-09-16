@@ -52,7 +52,9 @@ on early-boot
     write /sys/kernel/boot_adsp/boot 1
     exec /system/bin/sh /init.qcom.syspart_fixup.sh ${ro.board.platform} ${ro.serialno}
     
-on boot    
+on boot
+    mkdir /dev/socket/netmgr 0750 radio radio
+
     chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/type
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
@@ -457,8 +459,6 @@ service qmuxd /system/bin/qmuxd
     
 service netmgrd /system/bin/netmgrd
     class main
-    user root
-    group radio
 
 service sensors /system/bin/sensors.qcom
     class main
