@@ -96,6 +96,8 @@ WIFI_DRIVER_FW_PATH_AP           := "ap"
 TARGET_PROVIDES_WCNSS_QMI        := true
 TARGET_USES_QCOM_WCNSS_QMI       := true
 TARGET_USES_WCNSS_CTRL           := true"
+WIFI_DRIVER_MODULE_PATH          := "/system/lib/modules/wlan.ko"
+WIFI_DRIVER_MODULE_NAME          := "wlan"
 
 # fix this up by examining /proc/mtd on a running device
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x02000000 --kernel_offset 0x00008000
