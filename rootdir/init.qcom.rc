@@ -599,6 +599,9 @@ service set_baseband /system/bin/sh /system/etc/set_baseband.sh
     oneshot
     disabled
 
+on property:gsm.version.baseband="Unknown"
+    start set_baseband
+
 service qcamerasvr /system/bin/mm-qcamera-daemon
     class late_start
     user camera
