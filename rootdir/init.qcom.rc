@@ -595,12 +595,7 @@ service dhcpcd_bnep4 /system/bin/dhcpcd -BKLG
 service set_baseband /system/bin/sh /system/etc/set_baseband.sh
     class late_start
     user root
-    seclabel u:r:set_baseband:s0
     oneshot
-    disabled
-
-on property:gsm.version.baseband=""
-    start set_baseband
 
 service qcamerasvr /system/bin/mm-qcamera-daemon
     class late_start
