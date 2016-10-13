@@ -137,8 +137,7 @@ PRODUCT_PACKAGES += \
  PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.nfc.hce.xml:system/etc/permissions/android.hardware.nfc.hce.xml \
     frameworks/native/data/etc/android.hardware.nfc.xml:system/etc/permissions/android.hardware.nfc.xml \
-    device/iuni/u2/nfc/libnfc-brcm.conf:system/etc/libnfc-brcm.conf \
-    device/iuni/u2/nfc/libnfc-brcm-20791b05.conf:system/etc/libnfc-brcm-20791b05.conf \
+    device/iuni/u2/nfc/nfc-nci.conf:system/etc/nfc-nci.conf \
     device/iuni/u2/nfc/nfcee_access.xml:system/etc/nfcee_access.xml
     
 # Graphics
