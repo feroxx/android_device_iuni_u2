@@ -106,9 +106,6 @@ on boot
     # Allow QMUX daemon to assign port open wait time
     chown radio radio /sys/devices/virtual/hsicctl/hsicctl0/modem_wait
 
-    # Prevents permission denied error for telephony
-    chmod 0644 /proc/cmdline
-
     # Camera Recording
     mkdir /dev/video
     symlink /dev/video32 /dev/video/venus_dec
@@ -276,10 +273,6 @@ on post-fs-data
     chown system root /persist/sensors/sensors_settings
     mkdir /data/misc/sensors 0775 system system
     restorecon_recursive /data/misc/sensors
-    
-    # We chown/chmod /persist again so because mount is run as root + defaults
-    chown system system /persist
-    chmod 0771 /persist
     
     chmod 0664 /sys/devices/platform/msm_sdcc.1/polling
     chmod 0664 /sys/devices/platform/msm_sdcc.2/polling
