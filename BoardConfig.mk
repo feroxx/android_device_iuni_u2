@@ -94,8 +94,6 @@ BOARD_HOSTAPD_PRIVATE_LIB   := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
 TARGET_USES_QCOM_WCNSS_QMI  := true
 WIFI_DRIVER_FW_PATH_AP      := "ap"
 WIFI_DRIVER_FW_PATH_STA     := "sta"
-WIFI_DRIVER_MODULE_PATH     := "/system/lib/modules/wlan.ko"
-WIFI_DRIVER_MODULE_NAME     := "wlan"
 
 # fix this up by examining /proc/mtd on a running device
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x02000000 --kernel_offset 0x00008000
