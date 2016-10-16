@@ -582,13 +582,6 @@ service dhcpcd_bnep4 /system/bin/dhcpcd -BKLG
     disabled
     oneshot
 
-service hostapd /system/bin/hostapd -dd /data/hostapd/hostapd.conf
-    class late_start
-    user root
-    group root
-    oneshot
-    disabled
-
 service set_baseband /system/bin/sh /system/etc/set_baseband.sh
     class late_start
     user root
