@@ -114,7 +114,7 @@ TARGET_RECOVERY_FSTAB := device/iuni/u2/rootdir/fstab.qcom
 TARGET_RELEASETOOLS_EXTENSIONS := device/iuni/u2
 
 # inherit from the proprietary version
--include vendor/gm/e7/BoardConfigVendor.mk
+-include vendor/iuni/u2/BoardConfigVendor.mk
 
 # Charger
 BOARD_CHARGER_ENABLE_SUSPEND := true
