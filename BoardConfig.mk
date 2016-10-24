@@ -33,6 +33,7 @@ BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 2048
 TARGET_CUSTOM_DTBTOOL := dtbToolU2
 BOARD_CUSTOM_BOOTIMG_MK := device/iuni/u2/mkbootimg.mk
+TARGET_KERNEL_ARCH := arm
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := arm-linux-androideabi-
 
 # global
@@ -85,17 +86,19 @@ BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/iuni/u2/bluetooth
 
 # Wifi
 BOARD_HAS_QCOM_WLAN              := true
+BOARD_HAS_QCOM_WLAN_SDK          := true
 BOARD_WLAN_DEVICE                := qcwcn
-WPA_SUPPLICANT_VERSION           := VER_0_8_X
 BOARD_WPA_SUPPLICANT_DRIVER      := NL80211
-BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_qcwcn
 BOARD_HOSTAPD_DRIVER             := NL80211
-BOARD_HOSTAPD_PRIVATE_LIB        := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
+BOARD_HOSTAPD_PRIVATE_LIB        := lib_driver_cmd_qcwcn
+TARGET_USES_WCNSS_CTRL           := true
+TARGET_USES_QCOM_WCNSS_QMI       := true
+TARGET_USES_WCNSS_MAC_ADDR_REV   := true
+TARGET_WCNSS_MAC_PREFIX          := e8bba8
 WIFI_DRIVER_FW_PATH_STA          := "sta"
 WIFI_DRIVER_FW_PATH_AP           := "ap"
-TARGET_PROVIDES_WCNSS_QMI        := true
-TARGET_USES_QCOM_WCNSS_QMI       := true
-TARGET_USES_WCNSS_CTRL           := true
+WPA_SUPPLICANT_VERSION           := VER_0_8_X
 
 # fix this up by examining /proc/mtd on a running device
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x02000000 --kernel_offset 0x00008000
