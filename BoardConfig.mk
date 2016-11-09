@@ -34,7 +34,7 @@ BOARD_KERNEL_PAGESIZE := 2048
 TARGET_CUSTOM_DTBTOOL := dtbToolU2
 BOARD_CUSTOM_BOOTIMG_MK := device/iuni/u2/mkbootimg.mk
 TARGET_KERNEL_ARCH := arm
-KERNEL_TOOLCHAIN := "$(ANDROID_BUILD_TOP)/prebuilts/gcc/$(strip $(HOST_OS))-x86/arm/arm-eabi-4.9/bin/"
+TARGET_KERNEL_CROSS_COMPILE_PREFIX := arm-linux-androideabi-
 
 # global
 TARGET_SPECIFIC_HEADER_PATH := device/iuni/u2/include
