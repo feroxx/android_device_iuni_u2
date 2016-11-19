@@ -41,8 +41,4 @@ PRODUCT_BRAND := IUNI
 PRODUCT_MODEL := U810
 PRODUCT_MANUFACTURER := IUNI
 
-# Kernel
-TARGET_KERNEL_SOURCE := kernel/gm/e7
-TARGET_KERNEL_CONFIG := u2test_defconfig
-
 $(call inherit-product-if-exists, vendor/iuni/u2/u2-vendor.mk)
