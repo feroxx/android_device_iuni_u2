@@ -35,8 +35,7 @@ on early-boot
     exec /system/bin/sh /init.qcom.syspart_fixup.sh ${ro.board.platform} ${ro.serialno}
     
 on fs
-    mount_all ./fstab.bacon
-    swapon_all ./fstab.bacon
+    mount_all ./fstab.qcom
 
     restorecon_recursive /persist
 
