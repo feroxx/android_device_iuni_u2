@@ -166,6 +166,7 @@ PRODUCT_PACKAGES += \
     libqcompostprocbundle \
     libqcomvisualizer \
     libqcomvoiceprocessing \
+    libqcomvoiceprocessingdescriptors \
     tinymix
 
 # for audio.primary.msm8974
