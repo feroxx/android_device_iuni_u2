@@ -117,9 +117,6 @@ PRODUCT_PACKAGES += \
 
 # SoftAP
 PRODUCT_PACKAGES += \
-    libqsap_sdk \
-    libQWiFiSoftApCfg \
-    libwcnss_qmi \
     wcnss_service
     
 # IPv6
