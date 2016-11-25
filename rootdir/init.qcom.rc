@@ -51,6 +51,9 @@ on fs
     mkdir /persist/data/sfs 0700 system system
     mkdir /persist/data/tz 0700 system system
 on boot
+    # Necessary for netmgrd to function properly, otherwise no data
+    mkdir /dev/socket/netmgr 0750 radio radio
+
     # bluetooth
     chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/type
