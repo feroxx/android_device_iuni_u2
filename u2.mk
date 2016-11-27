@@ -85,6 +85,12 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.telephony.cdma.xml:system/etc/permissions/android.hardware.telephony.cdma.xml \
     frameworks/native/data/etc/android.hardware.ethernet.xml:system/etc/permissions/android.hardware.ethernet.xml
 
+# WiFi
+PRODUCT_COPY_FILES += \
+    device/iuni/u2/wifi/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
+    device/iuni/u2/wifi/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
+    device/iuni/u2/wifi/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
+
 PRODUCT_COPY_FILES += \
     device/iuni/u2/thermal-engine-8974.conf:system/etc/thermal-engine-8974.conf
 
@@ -100,28 +106,28 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += \
     dhcpcd.conf \
-    libwpa_client \
-    hostapd \
-    wpa_supplicant \
-    wpa_supplicant.conf \
-    wpa_supplicant_overlay.conf \
-    p2p_supplicant_overlay.conf \
     hostapd_default.conf \
     hostapd.accept \
-    hostapd.deny
+    hostapd.deny \
+    wpa_supplicant.conf \
+    wpa_supplicant_overlay.conf \
+    p2p_supplicant_overlay.conf
 
 # camera
 #PRODUCT_PACKAGES += \
     camera.msm8974 \
     libshim_camera
 
-# SoftAP
 PRODUCT_PACKAGES += \
-    wcnss_service
+    hostapd \
+    wcnss_service \
+    wpa_supplicant
     
 # IPv6
 PRODUCT_PACKAGES += \
     ebtables \
+    libbson \
+    libnl_2 \
     ethertypes
 
 # NFC packages
