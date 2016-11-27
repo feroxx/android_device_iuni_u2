@@ -166,8 +166,8 @@ on boot
     write /sys/bus/msm_subsys/devices/subsys2/restart_level "related"
 
     # Gionee wanglei, 2013-10-21, add for torch led
-    chown system camera /sys/class/leds/led:flash_torch/brightness
-    chmod 0666 /sys/class/leds/led:flash_torch/brightness
+    chown system camera /sys/class/leds/torch-light/brightness
+    chmod 0660 /sys/class/leds/torch-light/brightness
 
     # Touchscreen
     chown system radio /sys/devices/platform/tp_wake_switch/double_wake
@@ -653,6 +653,9 @@ on property:drmdiag.load=0
 
 on property:sys.boot_completed=1
     write /dev/kmsg "Boot completed"
+
+# Temp hack to fix torch not being registered on boot
+    restart media
 
 service ppd /system/bin/mm-pp-daemon
     class late_start
