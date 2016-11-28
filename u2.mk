@@ -114,9 +114,8 @@ PRODUCT_PACKAGES += \
     p2p_supplicant_overlay.conf
 
 # camera
-#PRODUCT_PACKAGES += \
-    camera.msm8974 \
-    libshim_camera
+PRODUCT_PACKAGES += \
+    camera.msm8974
 
 PRODUCT_PACKAGES += \
     hostapd \
