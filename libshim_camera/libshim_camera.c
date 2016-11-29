@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 
+int _ZN7qcamera25QCamera2HardwareInterfaceC2Ei() {}
 void _ZN7qcamera25QCamera2HardwareInterface20gnUpdatePictureFrameEv() {}
 void _ZN7qcamera25QCamera2HardwareInterface25gnUpdateFeatureParametersEv() {}
 void _ZN7qcamera25QCamera2HardwareInterface16updateParametersEPKcRb() {}
