@@ -226,14 +226,13 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # QMI
 PRODUCT_PROPERTY_OVERRIDES += \
-    persist.data.netmgrd.qos.enable=false \
-    persist.data.qmi.adb_logmask=0 \
-    persist.qcril.disable_retry=true \
+    persist.data.netmgrd.qos.enable=true \
     rild.libpath=/vendor/lib/libril-qc-qmi-1.so \
     ro.use_data_netmgrd=true \
-    ro.telephony.default_network=9 \
-    telephony.lteOnGsmDevice=1 \
+    ro.telephony.default_network=3 \
     persist.radio.apm_sim_not_pwdn=1 \
+    persist.radio.add_power_save=1 \
+    ro.telephony.call_ring.multiple=0 \
     ro.qualcomm.cabl=1 \
     hw.cabl.level=Auto \
     ro.nfc.port=I2C
