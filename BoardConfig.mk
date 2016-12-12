@@ -25,7 +25,8 @@ TARGET_OTA_ASSERT_DEVICE := iuni,IUNI,u810,U810,U2,u2
 TARGET_BOARD_PLATFORM := msm8974
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno330
 
-USE_CLANG_PLATFORM_BUILD := true
+# Snapdragon LLVM
+TARGET_USE_SDCLANG := true
 
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.selinux=disabled androidboot.hardware=qcom user_debug=22 msm_rtb.filter=0x37 ehci-hcd.park=3 androidboot.bootdevice=msm_sdcc.1
@@ -71,9 +72,13 @@ AUDIO_FEATURE_ENABLED_MULTI_VOICE_SESSIONS := true
 
 # Camera
 USE_DEVICE_SPECIFIC_CAMERA := true
+TARGET_HAS_LEGACY_CAMERA_HAL1 := true
 
 # RIL
 TARGET_RIL_VARIANT := caf
+
+# Sensors
+TARGET_NEEDS_PLATFORM_TEXT_RELOCATIONS := true
 
 # Bluetooth
 BOARD_HAVE_BLUETOOTH := true
