@@ -105,7 +105,6 @@ PRODUCT_PACKAGES += \
     librmnetctl
 
 PRODUCT_PACKAGES += \
-    dhcpcd.conf \
     hostapd_default.conf \
     hostapd.accept \
     hostapd.deny \
@@ -250,7 +249,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # qcom
 PRODUCT_PROPERTY_OVERRIDES += \
     camera2.portability.force_api=1
- 
+ 	media.stagefright.legacyencoder=true \
+    media.stagefright.less-secure=true \
+
 # Enable AAC 5.1 output
 PRODUCT_PROPERTY_OVERRIDES += \
     media.aac_51_output_enabled=true
