@@ -238,7 +238,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 #For internal sdcard
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    ro.vold.primary_physical=1
+    ro.vold.primary_physical=1
     
 PRODUCT_PROPERTY_OVERRIDES += \
     drm.service.enabled=true
@@ -248,8 +248,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # qcom
 PRODUCT_PROPERTY_OVERRIDES += \
-    camera2.portability.force_api=1
- 	media.stagefright.legacyencoder=true \
+    camera2.portability.force_api=1 \
+    media.stagefright.legacyencoder=true \
     media.stagefright.less-secure=true \
 
 # Enable AAC 5.1 output
