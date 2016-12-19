@@ -120,6 +120,7 @@ TARGET_RELEASETOOLS_EXTENSIONS := device/iuni/u2
 
 # inherit from the proprietary version
 -include vendor/iuni/u2/BoardConfigVendor.mk
+-include vendor/qcom/binaries/msm8974/graphics/BoardConfigVendor.mk
 
 # Charger
 BOARD_CHARGER_ENABLE_SUSPEND := true
