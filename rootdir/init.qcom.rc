@@ -250,8 +250,6 @@ on post-fs-data
     mkdir /data/misc/wifi 0770 wifi wifi
     mkdir /data/misc/wifi/sockets 0770 wifi wifi
     mkdir /data/misc/wifi/wpa_supplicant 0770 wifi wifi
-    mkdir /data/misc/dhcp 0770 dhcp dhcp
-    chown dhcp dhcp /data/misc/dhcp
 
     # Create the directories used by CnE subsystem
     mkdir /data/connectivity 0771 system system
@@ -333,12 +331,6 @@ service rmt_storage /system/bin/rmt_storage
     class core
     user root
     group system
-    
-service config_bluetooth /system/bin/sh /system/etc/init.qcom.bt.sh "onboot"
-    class core
-    user root
-    seclabel u:r:bluetooth_loader:s0
-    oneshot
 
 service dbus /system/bin/dbus-daemon --system --nofork
     class main
@@ -541,8 +533,6 @@ service location_mq /system/bin/location-mq
     disabled
 
 on property:vold.decrypt=trigger_restart_framework
-
-    start config_bluetooth
     start wcnss-service
 
 service xtwifi_inet /system/bin/xtwifi-inet-agent
