@@ -15,6 +15,7 @@
 
 # Common QCOM configuration tools
 $(call inherit-product, device/qcom/common/Android.mk)
+$(call inherit-product, vendor/qcom/binaries/msm8974/graphics/graphics-vendor.mk)
 
 # TWRP
 PRODUCT_COPY_FILES += \
