@@ -103,7 +103,8 @@ DEVICE_PACKAGE_OVERLAYS := \
 # Data
 PRODUCT_PACKAGES += \
     libxml2 \
-    librmnetctl
+    librmnetctl \
+    libcnefeatureconfig \
 
 PRODUCT_PACKAGES += \
     hostapd_default.conf \
@@ -217,7 +218,19 @@ PRODUCT_COPY_FILES += \
 
 # bluetooth
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.qualcomm.bt.hci_transport=smd
+     bluetooth.hfp.client=1 \
+     qcom.bluetooth.soc=smd \
+     ro.bluetooth.hfp.ver=1.7 \
+     ro.qualcomm.bt.hci_transport=smd \
+     ro.bluetooth.dun=false \
+     ro.bluetooth.sap=false \
+     ro.qualcomm.bluetooth.ftp=true \
+     ro.qualcomm.bluetooth.hfp=true \
+     ro.qualcomm.bluetooth.hsp=true \
+     ro.qualcomm.bluetooth.map=true \
+     ro.qualcomm.bluetooth.nap=true \
+     ro.qualcomm.bluetooth.opp=true \
+     ro.qualcomm.bluetooth.pbap=true
 
 # Graphics
 PRODUCT_PROPERTY_OVERRIDES += \
