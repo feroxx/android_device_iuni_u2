@@ -104,7 +104,7 @@ DEVICE_PACKAGE_OVERLAYS := \
 PRODUCT_PACKAGES += \
     libxml2 \
     librmnetctl \
-    libcnefeatureconfig \
+    libcnefeatureconfig
 
 PRODUCT_PACKAGES += \
     hostapd_default.conf \
