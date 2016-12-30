@@ -373,15 +373,15 @@ static char *camera_get_parameters(struct camera_device *device)
         /* Disable 352x288 preview sizes, the combination of this preview size and larger resolutions stalls the HAL */
         /* Disable 768x432 preview sizes, causes corruption in preview when recording video at a larger resolution with different aspect ratio*/
         params.set(CameraParameters::KEY_SUPPORTED_PREVIEW_SIZES,
-            "1920x1080,1440x1080,1280x960,1280x720,720x480,640x480,576x432,384x288,320x240");
+            "1920x1080,1440x1080,1280x720,864x480,800x480,768x432,720x480,640x480,576x432,480x320,384x288,352x288,320x240,240x160,176x144");
         params.set(CameraParameters::KEY_SUPPORTED_VIDEO_SIZES,
-            "4096x2160,3840x2160,1920x1080,1440x1080,1280x720,864x480,800x480,720x480,640x480,480x320,384x288,352x288,320x240,176x144");
+            "1920x1080,1280x720,864x480,800x480,720x480,640x480,480x320,352x288,320x240,176x144");
         params.set(CameraParameters::KEY_SUPPORTED_PICTURE_SIZES,
-            "4160x3120,4160x2340,4000x3000,4096x2160,3200x2400,3200x1800,2592x1944,2048x1536,1920x1080,1600x1200,1280x768,1280x720,1024x768,800x600,800x480,720x480,640x480,352x288,320x240");
+            "4608x3456,4208x3120,4000x3000,4096x2160,3200x2400,2592x1944,2688x1520,2048x1536,1920x1080,1600x1200,1280x768,1280x720,1024x768,800x600,800x480,720x480,640x480,352x288,320x240,176x144");
         params.set(CameraParameters::KEY_SUPPORTED_PREVIEW_FPS_RANGE,
             "15000,30000");
         params.set("supported-live-snapshot-sizes",
-            "3200x2400,2592x1944,2048x1536,1920x1080,1600x1200,1280x768,1280x720,1024x768,800x600,864x480,800x480,720x480,640x480,352x288,320x240");
+            "2048x1536,1920x1080,1600x1200,1280x768,1280x720,1024x768,800x600,864x480,800x480,720x480,640x480,352x288,320x240,176x144");
     } else if (CAMERA_ID(device) == FRONT_CAMERA_ID) { 
         /* Inject all supported resolutions */
         params.set(CameraParameters::KEY_SUPPORTED_VIDEO_SIZES,
