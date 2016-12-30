@@ -117,6 +117,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     camera.msm8974
 
+# Widevine
+PRODUCT_PACKAGES += \
+    libshim_wvm
+
 PRODUCT_PACKAGES += \
     hostapd \
     wcnss_service \
