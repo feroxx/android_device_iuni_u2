@@ -32,7 +32,7 @@ $(call inherit-product, vendor/cm/config/common_full_phone.mk)
 # Inherit from hardware-specific part of the product configuration
 $(call inherit-product, device/iuni/u2/u2.mk)
 
-PRODUCT_NAME := lineage_u2
+PRODUCT_NAME := cm_u2
 PRODUCT_DEVICE := u2
 PRODUCT_BRAND := IUNI
 PRODUCT_MODEL := U810
