@@ -137,7 +137,8 @@ PRODUCT_PACKAGES += \
     lights.msm8974 \
     keystore.msm8974 \
     power.msm8974 \
-	libshim_camera \
+    camera-wrapper.msm8974 \
+    libshim_camera \
     libshim_wvm
 
 #Audio
@@ -173,6 +174,11 @@ PRODUCT_PACKAGES += \
     libqcomvoiceprocessingdescriptors \
     libqcompostprocbundle
 
+# Data
+PRODUCT_PACKAGES += \
+    libxml2 \
+    librmnetctl
+
 PRODUCT_PACKAGES += \
     libmm-omxcore \
     libdivxdrmdecrypt \
@@ -181,7 +187,6 @@ PRODUCT_PACKAGES += \
     libOmxCore \
     libstagefrighthw \
     libc2dcolorconvert \
-    libxml2 \
     libboringssl-compat
 
 #    libOmxAacEnc \
