@@ -287,7 +287,7 @@
           format is UMTS|LTE|... -->
     <string translatable="false" name="config_radio_access_family">GSM | WCDMA | LTE | CDMA | EVDO</string>
  
-    <bool name="config_powerProfilesSupported">true</bool>
+    <!--<bool name="config_powerProfilesSupported">true</bool>-->
 
     <!-- Screen brightness when dozing -->
     <integer name="config_screenBrightnessDoze">1</integer>

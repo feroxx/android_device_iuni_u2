@@ -25,6 +25,7 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
+import init.omni.rc
 import init.qcom.usb.rc
 
 on early-init
@@ -35,6 +36,7 @@ on early-init
 on init
     # Preload the BoringSSL wrapper
     export LD_PRELOAD /system/lib/libboringssl-compat.so
+	export LD_SHIM_LIBS "/system/lib/hw/camera.vendor.msm8974.so|/system/lib/libshim_camera.so:/system/vendor/lib/libwvm.so|libshim_wvm.so"
 
     # Set permissions for persist partition
     mkdir /persist 0771 system system
@@ -538,28 +540,9 @@ service p2p_supplicant /system/bin/wpa_supplicant \
     disabled
     oneshot
 
-service dhcpcd_wlan0 /system/bin/dhcpcd -aABDKL
-    class main
-    disabled
-    oneshot
-
-service dhcpcd_p2p /system/bin/dhcpcd -aABKL
-    class main
-    disabled
-    oneshot
-
-service iprenew_wlan0 /system/bin/dhcpcd -n
-    class main
-    disabled
-    oneshot
-
-service iprenew_p2p /system/bin/dhcpcd -n
-    class main
-    disabled
-    oneshot
-
-service dhcpcd_bnep0 /system/bin/dhcpcd -BKLG
-    disabled
+service set_baseband /system/bin/sh /system/etc/set_baseband.sh
+    class late_start
+    user root
     oneshot
 
 service qcamerasvr /system/bin/mm-qcamera-daemon

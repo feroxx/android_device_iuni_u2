@@ -12,6 +12,15 @@ FIRMWARE_IMAGES := adsp.b00 adsp.b01 adsp.b02 adsp.b03 adsp.b04 adsp.b05 adsp.b0
 	cmnlib.b00 cmnlib.b01 cmnlib.b02 cmnlib.mdt \
 	tqs.b00 tqs.b01 tqs.b02 tqs.b03 tqs.mdt
 
+WCNSS_CONFIG_SYMLINK := $(TARGET_OUT_ETC)/firmware/wlan/prima/WCNSS_qcom_cfg.ini
+$(WCNSS_CONFIG_SYMLINK): $(LOCAL_INSTALLED_MODULE)
+	@echo "WCNSS config link: $@"
+	@mkdir -p $(dir $@)
+	@rm -rf $@
+	$(hide) ln -sf /data/misc/wifi/$(notdir $@) $@
+
+ALL_DEFAULT_INSTALLED_MODULES += $(WCNSS_CONFIG_SYMLINK)
+
 FIRMWARE_SYMLINKS := $(addprefix $(TARGET_OUT_ETC)/firmware/,$(notdir $(FIRMWARE_IMAGES)))
 $(FIRMWARE_SYMLINKS): $(LOCAL_INSTALLED_MODULE)
 	@echo "Firmware link: $@"
@@ -26,13 +35,5 @@ $(ACDB_SYMLINKS): $(LOCAL_INSTALLED_MODULE)
 	@mkdir -p $(dir $@)
 	@rm -rf $@
 	$(hide) ln -sf /data/misc/audio/$(notdir $@) $@
-
-ALL_DEFAULT_INSTALLED_MODULES += $(FIRMWARE_SYMLINKS) $(ACDB_SYMLINKS)
-
-# Create a link for the WCNSS config file, which ends up as a writable
-# version in /data/misc/wifi
-$(shell mkdir -p $(TARGET_OUT)/etc/firmware/wlan/prima; \
-    ln -sf /data/misc/wifi/WCNSS_qcom_cfg.ini \
-            $(TARGET_OUT)/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini)
 
 endif

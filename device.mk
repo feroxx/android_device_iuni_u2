@@ -20,6 +20,8 @@
 PRODUCT_AAPT_CONFIG := normal hdpi xhdpi xxhdpi
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
+$(call inherit-product, vendor/qcom/binaries/msm8974/graphics/graphics-vendor.mk)
+
 # TWRP
 PRODUCT_COPY_FILES += \
     device/iuni/u2/rootdir/init.qcom.usb.rc:recovery/root/init.usb.rc \
@@ -93,13 +95,18 @@ PRODUCT_COPY_FILES += \
 DEVICE_PACKAGE_OVERLAYS := \
     device/iuni/u2/overlay
 
+PRODUCT_PACKAGES += \
+    hostapd_default.conf \
+    hostapd.accept \
+    hostapd.deny \
+    wpa_supplicant.conf \
+    wpa_supplicant_overlay.conf \
+    p2p_supplicant_overlay.conf
+
 PRODUCT_PACKAGES := \
-    libwpa_client \
     hostapd \
-    dhcpcd.conf \
     wcnss_service \
-    wpa_supplicant \
-    wpa_supplicant.conf
+    wpa_supplicant
 
 # Live Wallpapers
 PRODUCT_PACKAGES += \
@@ -107,13 +114,6 @@ PRODUCT_PACKAGES += \
     LiveWallpapersPicker \
     VisualizationWallpapers \
     librs_jni
-
-# NFC packages
-PRODUCT_PACKAGES += \
-    nfc_nci.bcm2079x.default \
-    NfcNci \
-    Tag \
-    SnapdragonCamera
  
  PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.nfc.hce.xml:system/etc/permissions/android.hardware.nfc.hce.xml \
@@ -121,6 +121,12 @@ PRODUCT_PACKAGES += \
     device/iuni/u2/nfc/libnfc-brcm.conf:system/etc/libnfc-brcm.conf \
     device/iuni/u2/nfc/libnfc-brcm-20791b05.conf:system/etc/libnfc-brcm-20791b05.conf \
     device/iuni/u2/nfc/nfcee_access.xml:system/etc/nfcee_access.xml
+
+# WiFi
+PRODUCT_COPY_FILES += \
+    device/iuni/u2/wifi/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
+    device/iuni/u2/wifi/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
+    device/iuni/u2/wifi/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
     
 # Hardware modules to build
 PRODUCT_PACKAGES += \
@@ -130,7 +136,9 @@ PRODUCT_PACKAGES += \
     memtrack.msm8974 \
     lights.msm8974 \
     keystore.msm8974 \
-    power.msm8974
+    power.msm8974 \
+	libshim_camera \
+    libshim_wvm
 
 #Audio
 PRODUCT_PACKAGES += \
@@ -263,7 +271,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # qcom
 PRODUCT_PROPERTY_OVERRIDES += \
-    camera2.portability.force_api=1
+    camera2.portability.force_api=1 \
+    media.stagefright.legacyencoder=true \
+    media.stagefright.less-secure=true
 
 # Audio Configuration
 PRODUCT_PROPERTY_OVERRIDES += \

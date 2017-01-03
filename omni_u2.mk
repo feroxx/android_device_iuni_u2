@@ -42,4 +42,4 @@ PRODUCT_MANUFACTURER := IUNI
 TARGET_KERNEL_SOURCE := kernel/gm/e7
 TARGET_KERNEL_CONFIG := e7_defconfig
 
-$(call inherit-product-if-exists, vendor/gm/e7/e7-vendor.mk)
+$(call inherit-product-if-exists, vendor/iuni/u2/u2-vendor.mk)

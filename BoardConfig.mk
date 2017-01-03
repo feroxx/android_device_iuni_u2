@@ -30,6 +30,7 @@ BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.selinux=permissive
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_CUSTOM_BOOTIMG_MK := device/iuni/u2/mkbootimg.mk
+TARGET_KERNEL_CROSS_COMPILE_PREFIX := arm-linux-androideabi-
 
 # global
 TARGET_SPECIFIC_HEADER_PATH := device/iuni/u2/include
@@ -68,6 +69,7 @@ AUDIO_FEATURE_ENABLED_INCALL_MUSIC := true
 
 # Camera
 USE_CAMERA_STUB := true
+TARGET_HAS_LEGACY_CAMERA_HAL1 := true
 
 TARGET_RIL_VARIANT := caf
 BOARD_GLOBAL_CFLAGS += -DUSE_RIL_VERSION_10
@@ -89,8 +91,6 @@ BOARD_HOSTAPD_DRIVER := NL80211
 BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
 WIFI_DRIVER_FW_PATH_STA := "sta"
 WIFI_DRIVER_FW_PATH_AP := "ap"
-WIFI_DRIVER_MODULE_PATH := "/system/lib/modules/wlan.ko"
-WIFI_DRIVER_MODULE_NAME := "wlan"
 TARGET_USES_QCOM_WCNSS_QMI       := true
 TARGET_PROVIDES_WCNSS_QMI        := true
 TARGET_USES_WCNSS_MAC_ADDR_REV   := true
@@ -115,7 +115,8 @@ TARGET_RECOVERY_FSTAB := device/iuni/u2/rootdir/fstab.qcom
 TARGET_RELEASETOOLS_EXTENSIONS := device/iuni/u2
 
 # inherit from the proprietary version
--include vendor/gm/e7/BoardConfigVendor.mk
+-include vendor/iuni/u2/BoardConfigVendor.mk
+-include vendor/qcom/binaries/msm8974/graphics/BoardConfigVendor.mk
 
 # charger
 BOARD_CHARGER_DISABLE_INIT_BLANK := true
@@ -125,14 +126,16 @@ HEALTHD_BACKLIGHT_ON_LEVEL := 125
 # power hal
 TARGET_PROVIDES_POWERHAL := true
 
+WITH_DEXPREOPT := false
+
 # keymaster
 TARGET_KEYMASTER_WAIT_FOR_QSEE := true
 
 # selinux
 include device/qcom/sepolicy/sepolicy.mk
 
-BOARD_SEPOLICY_DIRS += \
-    device/iuni/u2/sepolicy
+#BOARD_SEPOLICY_DIRS += \
+    #device/iuni/u2/sepolicy
     
 #TWRP
 TW_THEME := portrait_hdpi
