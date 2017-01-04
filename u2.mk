@@ -115,7 +115,8 @@ PRODUCT_PACKAGES += \
     p2p_supplicant_overlay.conf
 
 PRODUCT_PACKAGES += \
-    camera.msm8974
+    camera.msm8974 \
+	libshim_camera
 
 # Widevine
 PRODUCT_PACKAGES += \
