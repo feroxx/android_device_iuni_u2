@@ -134,11 +134,7 @@ PRODUCT_PACKAGES += \
     libnl_2 \
     ethertypes
 
-# NFC packages
 PRODUCT_PACKAGES += \
-    nfc_nci.bcm2079x.default \
-    NfcNci \
-    Tag \
     Snap
  
  PRODUCT_COPY_FILES += \
