@@ -35,9 +35,8 @@
 #include <dlfcn.h>
 #include <math.h>
 
-#define BACK_CAMERA_ID 0
-#define FRONT_CAMERA_ID 1
-
+#define BACK_CAMERA_ID 1
+#define FRONT_CAMERA_ID 0
 using namespace android;
 
 static Mutex gCameraWrapperLock;
