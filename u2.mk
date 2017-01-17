@@ -115,7 +115,6 @@ PRODUCT_PACKAGES += \
     p2p_supplicant_overlay.conf
 
 PRODUCT_PACKAGES += \
-    camera.msm8974 \
 	libshim_camera
 
 # Widevine
@@ -151,11 +150,6 @@ PRODUCT_PACKAGES += \
     memtrack.msm8974 \
     liboverlay \
     keystore.msm8974
-
-# BoringSSL compatability wrapper
-PRODUCT_PACKAGES += \
-    libboringssl-compat \
-    libstlport
 
 # Lights
 PRODUCT_PACKAGES += \
