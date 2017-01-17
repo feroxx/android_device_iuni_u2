@@ -566,6 +566,8 @@ on property:drmdiag.load=0
 
 on property:sys.boot_completed=1
     write /dev/kmsg "Boot completed"
+    # Temp hack to fix torch not being registered on boot
+    restart media
 
 service ppd /system/bin/mm-pp-daemon
     class late_start
