@@ -149,9 +149,9 @@ on boot
     #venus
     write /sys/bus/msm_subsys/devices/subsys2/restart_level "related"
 
-    # Gionee wanglei, 2013-10-21, add for torch led
-    chown system camera /sys/class/leds/torch-light/brightness
-    chmod 0660 /sys/class/leds/torch-light/brightness
+    # Torch
+    chown system camera /sys/class/leds/led:flash_torch/brightness
+    chmod 0660 /sys/class/leds/led:flash_torch/brightness
 
     # Touchscreen
     chown system radio /sys/devices/platform/tp_wake_switch/double_wake
