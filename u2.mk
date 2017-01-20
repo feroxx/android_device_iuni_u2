@@ -151,6 +151,9 @@ PRODUCT_PACKAGES += \
     liboverlay \
     keystore.msm8974
 
+PRODUCT_PACKAGES += \
+    libstlport
+
 # Lights
 PRODUCT_PACKAGES += \
     lights.msm8974
