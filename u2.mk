@@ -22,10 +22,8 @@ PRODUCT_COPY_FILES += \
     device/iuni/u2/rootdir/init.qcom.usb.rc:recovery/root/init.usb.rc \
     device/iuni/u2/rootdir/twrp.fstab:recovery/root/etc/twrp.fstab 
 
-# call dalvik heap config
-$(call inherit-product, frameworks/native/build/phone-xxhdpi-2048-dalvik-heap.mk)
-
-# call hwui memory config
+# Dalvik/HWUI
+$(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
 $(call inherit-product, frameworks/native/build/phone-xxhdpi-2048-hwui-memory.mk)
 
 # Screen density
@@ -146,7 +144,7 @@ PRODUCT_PACKAGES += \
     device/iuni/u2/nfc/nfc-nci.conf:system/etc/nfc-nci.conf \
     device/iuni/u2/nfc/nfcee_access.xml:system/etc/nfcee_access.xml
     
-# Graphics
+# Display
 PRODUCT_PACKAGES += \
     copybit.msm8974 \
     gralloc.msm8974 \
@@ -160,7 +158,7 @@ PRODUCT_PACKAGES += \
 
 # Lights
 PRODUCT_PACKAGES += \
-    lights.msm8974
+    lights.u2
 
 PRODUCT_PACKAGES += \
     audiod \
@@ -198,6 +196,9 @@ PRODUCT_PACKAGES += \
     libOmxVdec \
     libOmxVenc \
     libstagefrighthw 
+
+# QCOM HAL
+$(call project-set-path,qcom-display,device/iuni/u2/display)
 
 # sensors
 PRODUCT_COPY_FILES += \
