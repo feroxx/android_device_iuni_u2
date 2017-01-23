@@ -114,9 +114,6 @@ PRODUCT_PACKAGES += \
     wpa_supplicant_overlay.conf \
     p2p_supplicant_overlay.conf
 
-PRODUCT_PACKAGES += \
-	libshim_camera
-
 # Widevine
 PRODUCT_PACKAGES += \
     libshim_wvm
@@ -133,7 +130,14 @@ PRODUCT_PACKAGES += \
     libnl_2 \
     ethertypes
 
+# Camera
 PRODUCT_PACKAGES += \
+    camera.msm8974 \
+    libqomx_core \
+    libmmcamera_interface \
+    libmmjpeg_interface \
+    mm-jpeg-interface-test \
+    mm-qcamera-app \
     Snap
  
  PRODUCT_COPY_FILES += \
