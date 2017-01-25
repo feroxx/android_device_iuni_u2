@@ -288,12 +288,6 @@ on post-fs-data
     mkdir /data/time/ 0700 system system
 
     mkdir /data/audio/ 0770 media audio
-
-    # Create folder for mm-qcamera-daemon
-    mkdir /data/camera 0770 media camera
-    
-    # Camera sockets
-    mkdir /data/misc/camera 0770 camera camera
     
     setprop qcom.audio.init complete
     
@@ -505,7 +499,7 @@ service set_baseband /system/bin/sh /system/etc/set_baseband.sh
 service qcamerasvr /system/bin/mm-qcamera-daemon
     class late_start
     user camera
-    group camera system inet input graphics
+    group camera system inet input
 
 service gpsone_daemon /system/bin/gpsone_daemon
     class late_start
@@ -566,8 +560,6 @@ on property:drmdiag.load=0
 
 on property:sys.boot_completed=1
     write /dev/kmsg "Boot completed"
-    # Temp hack to fix torch not being registered on boot
-    restart media
 
 service ppd /system/bin/mm-pp-daemon
     class late_start
