@@ -130,7 +130,7 @@ PRODUCT_PACKAGES += \
 
 # Camera
 PRODUCT_PACKAGES += \
-    camera.msm8974 \
+    camera.u2 \
     libqomx_core \
     libmmcamera_interface \
     libmmjpeg_interface \
