@@ -265,7 +265,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # qcom
 PRODUCT_PROPERTY_OVERRIDES += \
-    camera2.portability.force_api=1 \
+    camera.disable_zsl_mode=1 \
     media.stagefright.legacyencoder=true \
     media.stagefright.less-secure=true
 
