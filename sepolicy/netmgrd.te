@@ -1,0 +1,5 @@
+# Runs /system/bin/ip addr flush dev <device> commands.
+allow netmgrd system_file:file rx_file_perms;
+
+# Access to /proc/sys/net/*
+allow netmgrd proc_net:dir r_dir_perms;
