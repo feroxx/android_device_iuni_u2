@@ -245,7 +245,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.data.netmgrd.qos.enable=true \
     rild.libpath=/vendor/lib/libril-qc-qmi-1.so \
     ro.use_data_netmgrd=true \
-    ro.telephony.default_network=3 \
+    ro.telephony.default_network=10 \
     persist.radio.apm_sim_not_pwdn=1 \
     persist.radio.add_power_save=1 \
     ro.telephony.call_ring.multiple=0 \
@@ -292,7 +292,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # gps
 #system prop for switching gps driver to qmi
 PRODUCT_PROPERTY_OVERRIDES += \
-    persist.gps.qmienabled=true
+    persist.gps.qmienabled=true \
+    ro.product.first_api_level=19
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.build.selinux=1 \
