@@ -160,6 +160,13 @@ on boot
     #Gionee xuna add for autommitest, 20140724
     chown system system /sys/class/leds/kpdbl-pwm-1/brightness
 
+    # leds
+    chown system system /sys/class/leds/red/on_off_ms
+    chown system system /sys/class/leds/green/on_off_ms
+    chown system system /sys/class/leds/blue/on_off_ms
+    chown system system /sys/class/leds/red/rgb_start
+    chmod 664 /sys/class/leds/lcd-backlight/brightness
+
     # port-bridge
     chmod 0660 /dev/smd0
     chown system system /dev/smd0
