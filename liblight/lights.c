@@ -38,13 +38,13 @@ static pthread_once_t g_init = PTHREAD_ONCE_INIT;
 static pthread_mutex_t g_lock = PTHREAD_MUTEX_INITIALIZER;
 
 char const *const LCD_FILE           = "/sys/class/leds/lcd-backlight/brightness";
-char const *const RED_LED_FILE       = "/sys/class/leds/red/brightness";
-char const *const GREEN_LED_FILE     = "/sys/class/leds/green/brightness";
-char const *const BLUE_LED_FILE      = "/sys/class/leds/blue/brightness";
-char const *const RED_TIMEOUT_FILE   = "/sys/class/leds/red/on_off_ms";
-char const *const GREEN_TIMEOUT_FILE = "/sys/class/leds/green/on_off_ms";
-char const *const BLUE_TIMEOUT_FILE  = "/sys/class/leds/blue/on_off_ms";
-char const *const RGB_LOCKED_FILE    = "/sys/class/leds/red/rgb_start";
+char const *const RED_LED_FILE       = "/sys/class/leds/led:rgb_red/brightness";
+char const *const GREEN_LED_FILE     = "/sys/class/leds/led:rgb_green/brightness";
+char const *const BLUE_LED_FILE      = "/sys/class/leds/led:rgb_blue/brightness";
+char const *const RED_TIMEOUT_FILE   = "/sys/class/leds/led:rgb_red/on_off_ms";
+char const *const GREEN_TIMEOUT_FILE = "/sys/class/leds/led:rgb_green/on_off_ms";
+char const *const BLUE_TIMEOUT_FILE  = "/sys/class/leds/led:rgb_blue/on_off_ms";
+char const *const RGB_LOCKED_FILE    = "/sys/class/leds/led:rgb_red/rgb_start";
 char const *const BUTTONS_FILE       = "/sys/class/leds/kpdbl-pwm-1/brightness";
 
 struct led_config {
