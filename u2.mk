@@ -112,6 +112,10 @@ PRODUCT_PACKAGES += \
     wpa_supplicant_overlay.conf \
     p2p_supplicant_overlay.conf
 
+# Widevine
+PRODUCT_PACKAGES += \
+    libshim_wvm
+
 PRODUCT_PACKAGES += \
     hostapd \
     wcnss_service \
