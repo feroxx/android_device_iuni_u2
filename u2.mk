@@ -27,7 +27,7 @@ $(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
 $(call inherit-product, frameworks/native/build/phone-xxhdpi-2048-hwui-memory.mk)
 
 # Screen density
-PRODUCT_AAPT_CONFIG := normal hdpi xhdpi xxhdpi
+PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
 # u2 Init files
@@ -137,12 +137,6 @@ PRODUCT_PACKAGES += \
     mm-jpeg-interface-test \
     mm-qcamera-app \
     Snap
- 
- PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/android.hardware.nfc.hce.xml:system/etc/permissions/android.hardware.nfc.hce.xml \
-    frameworks/native/data/etc/android.hardware.nfc.xml:system/etc/permissions/android.hardware.nfc.xml \
-    device/iuni/u2/nfc/nfc-nci.conf:system/etc/nfc-nci.conf \
-    device/iuni/u2/nfc/nfcee_access.xml:system/etc/nfcee_access.xml
     
 # Display
 PRODUCT_PACKAGES += \

@@ -123,8 +123,17 @@ BOARD_CHARGER_ENABLE_SUSPEND := true
 # CM Hardware
 BOARD_USES_CYANOGEN_HARDWARE := true
 TARGET_TAP_TO_WAKE_NODE := "/sys/devices/platform/tp_wake_switch/double_wake"
-BOARD_HARDWARE_CLASS += \
-    hardware/cyanogen/cmhw
+BOARD_HARDWARE_CLASS := hardware/cyanogen/cmhw
+
+# Enable dex-preoptimization to speed up first boot sequence
+ifeq ($(HOST_OS),linux)
+  ifeq ($(TARGET_BUILD_VARIANT),user)
+    ifeq ($(WITH_DEXPREOPT),)
+      WITH_DEXPREOPT := true
+    endif
+  endif
+endif
+DONT_DEXPREOPT_PREBUILTS := true
 
 # Lights
 TARGET_PROVIDES_LIBLIGHT := true
