@@ -287,6 +287,17 @@
          that can be set by the user. -->
     <integer name="config_screenBrightnessDim">10</integer>
 
+    <!-- Is the notification LED intrusive?
+         Used to decide if there should be a disable option -->
+    <bool name="config_intrusiveNotificationLed">true</bool>
+
+    <!-- Default LED on time for notification LED in milliseconds. -->
+    <integer name="config_defaultNotificationLedOn">1000</integer>
+
+    <!-- Is the battery LED intrusive?
+         Used to decide if there should be a disable option -->
+    <bool name="config_intrusiveBatteryLed">true</bool>
+
     <!-- Indicate the device's Smart Cover coordinates.
          If none are provided, then the feature will be disabled.
          The array should contain 4 values, in pixels, (sample values provided):
@@ -351,6 +362,6 @@
     <!-- Our modem doesn't support this query yet -->
     <string name="config_radio_access_family">GPRS|EDGE|UMTS|HSDPA|HSUPA|HSPA|LTE|HSPAP|GSM|TD_SCDMA|WCDMA|LTE_CA</string>
 
-    <!-- Enable blur support >
-    <bool name="config_ui_blur_enabled">true</bool-->
+    <!-- Enable UI blur feature -->
+    <bool name="config_uiBlurEnabled">true</bool>
 </resources>
