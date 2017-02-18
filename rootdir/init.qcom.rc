@@ -113,6 +113,8 @@ on boot
     mkdir /dev/video
     symlink /dev/video32 /dev/video/venus_dec
     symlink /dev/video33 /dev/video/venus_enc
+    symlink /dev/video34 /dev/video/q6_dec
+    symlink /dev/video35 /dev/video/q6_enc
 
     # Allow QMUX daemon to assign port open wait time
     chown radio radio /sys/devices/virtual/hsicctl/hsicctl0/modem_wait
