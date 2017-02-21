@@ -80,11 +80,9 @@ public class KeyHandler implements DeviceKeyHandler {
         if (event.getAction() != KeyEvent.ACTION_UP) {
             return false;
         }
-        if (DEBUG) Log.i(TAG, "scanCode=" + event.getScanCode());
         boolean isKeySupported = ArrayUtils.contains(sSupportedGestures, event.getScanCode());
         if (isKeySupported ) {
             if (event.getScanCode() == KEY_DOUBLE_TAP && !mPowerManager.isScreenOn()) {
-                if (DEBUG) Log.i(TAG, "KEY_DOUBLE_TAP");
                 mPowerManager.wakeUp(SystemClock.uptimeMillis());
                 return true;
             }
