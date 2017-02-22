@@ -54,6 +54,8 @@ public class KeyHandler implements DeviceKeyHandler {
     // Supported scancodes
     private static final int KEY_DOUBLE_TAP = 187;
 
+    private static final int GESTURE_WAKELOCK_DURATION = 3000;
+
     private static final int[] sSupportedGestures = new int[]{
         KEY_DOUBLE_TAP
     };
@@ -73,6 +75,15 @@ public class KeyHandler implements DeviceKeyHandler {
         mEventHandler = new EventHandler();
         mGestureWakeLock = mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
                 "GestureWakeLock");
+    }
+
+    private class EventHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.arg1 == KEY_DOUBLE_TAP {
+                mGestureWakeLock.acquire(GESTURE_WAKELOCK_DURATION);
+            }
+        }
     }
 
     private void ensureKeyguardManager() {
@@ -96,3 +107,9 @@ public class KeyHandler implements DeviceKeyHandler {
         return isKeySupported;
     }
 }
+
+    private Message getMessageForKeyEvent(int scancode) {
+        Message msg = mEventHandler.obtainMessage(GESTURE_REQUEST);
+        msg.arg1 = scancode;
+        return msg;
+    }
