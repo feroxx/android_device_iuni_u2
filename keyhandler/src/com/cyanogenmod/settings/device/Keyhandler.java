@@ -61,6 +61,8 @@ public class KeyHandler implements DeviceKeyHandler {
     private final PowerManager mPowerManager;
     WakeLock mGestureWakeLock;
     private KeyguardManager mKeyguardManager;
+    private final NotificationManager mNotificationManager;
+    private EventHandler mEventHandler;
 
     public KeyHandler(Context context) {
         mContext = context;
