@@ -1,4 +1,4 @@
-#
+﻿#
 # Copyright (C) 2013 The Android Open-Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,11 +16,6 @@
 # Common QCOM configuration tools
 $(call inherit-product, device/qcom/common/Android.mk)
 $(call inherit-product, vendor/qcom/binaries/msm8974/graphics/graphics-vendor.mk)
-
-# TWRP
-PRODUCT_COPY_FILES += \
-    device/iuni/u2/rootdir/init.qcom.usb.rc:recovery/root/init.usb.rc \
-    device/iuni/u2/rootdir/twrp.fstab:recovery/root/etc/twrp.fstab 
 
 # Dalvik/HWUI
 $(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)

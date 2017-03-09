@@ -146,17 +146,10 @@ include device/qcom/sepolicy/sepolicy.mk
 
 BOARD_SEPOLICY_DIRS += \
     device/iuni/u2/sepolicy
-    
-#TWRP
-TW_THEME := portrait_hdpi
-TW_NO_SCREEN_TIMEOUT := true 
+
+# Recovery: TWRP support
+ifeq ($(WITH_TWRP),true)
+-include device/iuni/u2/twrp.mk
+endif
+
 TARGET_USERIMAGES_USE_EXT4 := true
-TW_FLASH_FROM_STORAGE := true
-#TW_INCLUDE_JB_CRYPTO := true
-RECOVERY_GRAPHICS_USE_LINELENGTH := true
-TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
-# The real path for this is /sys/devices/mdp.0/qcom,cmdss_fb_primary.148/leds/lcd-backlight/brightness but the comma doesn't compile correctly
-TW_BRIGHTNESS_PATH := "/sys/devices/mdp.0/qcom\x2cmdss_fb_primary.148/leds/lcd-backlight/brightness"
-TW_MAX_BRIGHTNESS := 255
-TW_EXTRA_LANGUAGES := true
-BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_23x41.h\"
