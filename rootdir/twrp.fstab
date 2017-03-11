@@ -11,7 +11,7 @@
 /tz          emmc    /dev/block/platform/msm_sdcc.1/by-name/tz
 /rpm         emmc    /dev/block/platform/msm_sdcc.1/by-name/rpm
 /aboot       emmc    /dev/block/platform/msm_sdcc.1/by-name/aboot
-/sdcard		   vfat	   /dev/block/mmcblk1p1	/dev/block/mmcblk0p20         flags=display=Sdcard
+/sdcard      vfat	   /dev/block/mmcblk1p1	/dev/block/mmcblk0p20         flags=display=Sdcard
 /usb-otg     vfat    /dev/block/sda1    /dev/block/sda                  flags=removable;storage;display=USB-OTG
 /efs1        emmc    /dev/block/platform/msm_sdcc.1/by-name/modemst1    flags=backup=1;display=EFS
 /efs2        emmc    /dev/block/platform/msm_sdcc.1/by-name/modemst2    flags=backup=1;subpartitionof=/efs1
