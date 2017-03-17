@@ -1,4 +1,0 @@
-# Talk to qmuxd (/dev/socket/qmux_radio)
-qmux_socket(radio)
-allow radio system_app_data_file:dir search;
-allow radio baseband_prop:property_service set;
