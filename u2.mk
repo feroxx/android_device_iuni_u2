@@ -156,7 +156,7 @@ PRODUCT_PACKAGES += \
 
 # Lights
 PRODUCT_PACKAGES += \
-    lights.msm8974
+    lights.u2
 
 PRODUCT_PACKAGES += \
     audiod \
