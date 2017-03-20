@@ -1,3 +1,5 @@
-#============= mpdecision ==============
-allow mpdecision system_data_file:dir { add_name remove_name write };
-allow mpdecision system_data_file:sock_file { create setattr unlink write };
+allow mpdecision sysfs_mpdecision:dir r_dir_perms;
+
+r_dir_file(mpdecision, mediaserver)
+
+allow mpdecision mpctl_socket:sock_file create_file_perms;

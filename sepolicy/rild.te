@@ -1,2 +1,1 @@
-#============= rild ==============
-allow rild zygote_exec:file execute;
+allow rild radio_data_file:lnk_file read;
