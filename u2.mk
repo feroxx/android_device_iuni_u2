@@ -114,9 +114,6 @@ PRODUCT_PACKAGES += \
     wpa_supplicant_overlay.conf \
     p2p_supplicant_overlay.conf
 
-PRODUCT_PACKAGES += \
-	libshim_camera
-
 # Widevine
 PRODUCT_PACKAGES += \
     libshim_wvm
