@@ -126,11 +126,6 @@ PRODUCT_PACKAGES += \
 # Camera
 PRODUCT_PACKAGES += \
     camera.msm8974 \
-    libqomx_core \
-    libmmcamera_interface \
-    libmmjpeg_interface \
-    mm-jpeg-interface-test \
-    mm-qcamera-app \
     Snap
     
 # Display
@@ -254,9 +249,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # qcom
 PRODUCT_PROPERTY_OVERRIDES += \
-    camera.disable_zsl_mode=1 \
-    media.stagefright.legacyencoder=true \
-    media.stagefright.less-secure=true
+    persist.camera.cpp.duplication=false
 
 # Enable AAC 5.1 output
 PRODUCT_PROPERTY_OVERRIDES += \

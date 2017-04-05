@@ -27,9 +27,8 @@
  *
  */
 
-#include <sys/ioctl.h>
-#include <linux/msm_ion.h>
 #include "mm_jpeg_ionbuf.h"
+#include <linux/msm_ion.h>
 
 /** buffer_allocate:
  *
@@ -43,7 +42,7 @@
  *      allocates ION buffer
  *
  **/
-void *buffer_allocate(buffer_test_t *p_buffer)
+void *buffer_allocate(buffer_t *p_buffer, int cached)
 {
   void *l_buffer = NULL;
 
@@ -52,7 +51,7 @@ void *buffer_allocate(buffer_test_t *p_buffer)
 
    p_buffer->alloc.len = p_buffer->size;
    p_buffer->alloc.align = 4096;
-   p_buffer->alloc.flags = ION_FLAG_CACHED;
+   p_buffer->alloc.flags = (cached) ? ION_FLAG_CACHED : 0;
    p_buffer->alloc.heap_mask = 0x1 << ION_IOMMU_HEAP_ID;
 
    p_buffer->ion_fd = open("/dev/ion", O_RDONLY);
@@ -112,7 +111,7 @@ ION_ALLOC_FAILED:
  *      deallocates ION buffer
  *
  **/
-int buffer_deallocate(buffer_test_t *p_buffer)
+int buffer_deallocate(buffer_t *p_buffer)
 {
   int lrc = 0;
   int lsize = (p_buffer->size + 4095) & (~4095);
@@ -129,4 +128,36 @@ int buffer_deallocate(buffer_test_t *p_buffer)
   return lrc;
 }
 
+/** buffer_invalidate:
+ *
+ *  Arguments:
+ *     @p_buffer: ION buffer
+ *
+ *  Return:
+ *     error val
+ *
+ *  Description:
+ *      Invalidates the cached buffer
+ *
+ **/
+int buffer_invalidate(buffer_t *p_buffer)
+{
+  int lrc = 0;
+  struct ion_flush_data cache_inv_data;
+  struct ion_custom_data custom_data;
 
+  memset(&cache_inv_data, 0, sizeof(cache_inv_data));
+  memset(&custom_data, 0, sizeof(custom_data));
+  cache_inv_data.vaddr = p_buffer->addr;
+  cache_inv_data.fd = p_buffer->ion_info_fd.fd;
+  cache_inv_data.handle = p_buffer->ion_info_fd.handle;
+  cache_inv_data.length = p_buffer->size;
+  custom_data.cmd = ION_IOC_INV_CACHES;
+  custom_data.arg = (unsigned long)&cache_inv_data;
+
+  lrc = ioctl(p_buffer->ion_fd, ION_IOC_CUSTOM, &custom_data);
+  if (lrc < 0)
+    CDBG_ERROR("%s: Cache Invalidate failed: %s\n", __func__, strerror(errno));
+
+  return lrc;
+}

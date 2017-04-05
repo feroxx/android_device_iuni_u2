@@ -27,55 +27,41 @@
  *
  */
 
-#ifndef __MM_JPEG_IONBUF_H__
-#define __MM_JPEG_IONBUF_H__
+#ifndef __MM_QCAMERA_COMMANDS_H__
+#define __MM_QCAMERA_COMMANDS_H__
 
+#include "mm_qcamera_socket.h"
+#include "mm_qcamera_app.h"
 
-#include <stdio.h>
-#include <string.h>
-#include <linux/msm_ion.h>
-#include <sys/mman.h>
-#include <unistd.h>
-#include <errno.h>
-#include <fcntl.h>
-#include "mm_jpeg_dbg.h"
+int tuneserver_close_cam(mm_camera_lib_handle *lib_handle);
+int tuneserver_stop_cam(mm_camera_lib_handle *lib_handle);
+int tuneserver_open_cam(mm_camera_lib_handle *lib_handle);
 
-typedef struct  {
-  struct ion_fd_data ion_info_fd;
-  struct ion_allocation_data alloc;
-  int p_pmem_fd;
-  long size;
-  int ion_fd;
-  uint8_t *addr;
-} buffer_test_t;
+int tuneserver_initialize_tuningp(void * ctrl, int client_socket_id,
+  char *send_buf, uint32_t send_len);
+int tuneserver_deinitialize_tuningp(void * ctrl, int client_socket_id,
+  char *send_buf, uint32_t send_len);
+int tuneserver_process_get_list_cmd(void * ctrl, void *recv_cmd,
+  char *send_buf, uint32_t send_len);
+int tuneserver_process_misc_cmd(void * ctrl, void *recv_cmd,
+  char *send_buf, uint32_t send_len);
+int tuneserver_process_get_params_cmd(void * ctrl, void *recv_cmd,
+  char *send_buf, uint32_t send_len);
+int tuneserver_process_set_params_cmd(void * ctrl, void *recv_cmd,
+  char *send_buf, uint32_t send_len);
 
-/** buffer_allocate:
- *
- *  Arguments:
- *     @p_buffer: ION buffer
- *
- *  Return:
- *     buffer address
- *
- *  Description:
- *      allocates ION buffer
- *
- **/
-void* buffer_allocate(buffer_test_t *p_buffer);
+int tuneserver_initialize_prevtuningp(void * ctrl,
+  int pr_client_socket_id, cam_dimension_t dimension,
+  char **send_buf, uint32_t *send_len);
+int tuneserver_deinitialize_prevtuningp(void * ctrl,
+  char **send_buf, uint32_t *send_len);
+int tuneserver_preview_getinfo(void * ctrl,
+  char **send_buf, uint32_t *send_len);
+int tuneserver_preview_getchunksize(void * ctrl,
+  char **send_buf, uint32_t *send_len);
+int tuneserver_preview_getframe(void * ctrl,
+  char **send_buf, uint32_t *send_len);
+int tuneserver_preview_unsupported(void * ctrl,
+  char **send_buf, uint32_t *send_len);
 
-/** buffer_deallocate:
- *
- *  Arguments:
- *     @p_buffer: ION buffer
- *
- *  Return:
- *     buffer address
- *
- *  Description:
- *      deallocates ION buffer
- *
- **/
-int buffer_deallocate(buffer_test_t *p_buffer);
-
-#endif
-
+#endif /*__MM_QCAMERA_COMMANDS_H__*/
