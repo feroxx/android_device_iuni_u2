@@ -17,6 +17,8 @@ allow system_server sysfs_usb_supply:file r_file_perms;
 
 allow system_server sysfs_thermal:file r_file_perms;
 
+allow system_server mediaserver:unix_stream_socket write;
+
 # Perfd
 allow system_server mpctl_socket:dir r_dir_perms;
 allow system_server mpctl_socket:sock_file rw_file_perms;
