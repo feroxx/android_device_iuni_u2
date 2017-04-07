@@ -131,7 +131,8 @@ PRODUCT_PACKAGES += \
     ethertypes
 
 PRODUCT_PACKAGES += \
-    Snap
+    Snap \
+    camera.msm8974
  
  PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.nfc.hce.xml:system/etc/permissions/android.hardware.nfc.hce.xml \
