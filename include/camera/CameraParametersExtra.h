@@ -31,7 +31,6 @@ const char CameraParameters::ZSL_OFF[] = "off"; \
 const char CameraParameters::ZSL_ON[] = "on"; \
 const char CameraParameters::KEY_ISO_MODE[] = "iso"; \
 const char CameraParameters::KEY_CAMERA_MODE[] = "camera-mode"; \
-const char CameraParameters::KEY_SAMSUNG_CAMERA_MODE[] = "cam_mode"; \
 const char CameraParameters::KEY_SELECTABLE_ZONE_AF[] = "selectable-zone-af"; \
 const char CameraParameters::KEY_SUPPORTED_SELECTABLE_ZONE_AF[] = "selectable-zone-af-values"; \
 const char CameraParameters::SELECTABLE_ZONE_AF_AUTO[] = "auto"; \
@@ -146,7 +145,6 @@ void CameraParameters::setPreviewFpsRange(int minFPS __unused, int maxFPS __unus
     static const char ZSL_ON[]; \
     static const char KEY_ISO_MODE[]; \
     static const char KEY_CAMERA_MODE[]; \
-    static const char KEY_SAMSUNG_CAMERA_MODE[]; \
     static const char KEY_SELECTABLE_ZONE_AF[]; \
     static const char KEY_SUPPORTED_SELECTABLE_ZONE_AF[]; \
     static const char SELECTABLE_ZONE_AF_AUTO[]; \
