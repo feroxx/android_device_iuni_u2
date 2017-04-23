@@ -1,15 +1,8 @@
-# Grant access to Qualcomm MSM Interface (QMI) audio sockets to mediaserver
-qmux_socket(mediaserver)
-
-# Permit mediaserver to create sockets with no specific SELinux class.
-# TODO: Investigate the specific type of socket.
-allow mediaserver self:socket create_socket_perms;
-binder_call(mediaserver, rild)
-
-allow mediaserver sensorservice_service:service_manager find;
+allow mediaserver camera_prop:property_service set;
+allow mediaserver firmware_file:dir search;
+allow mediaserver firmware_file:file r_file_perms;
+allow mediaserver socket_device:sock_file write;
+allow mediaserver thermal-engine:unix_stream_socket connectto;
 allow mediaserver system_data_file:sock_file write;
+allow mediaserver init:unix_dgram_socket sendto;
 allow mediaserver system_file:file execmod;
-allow mediaserver system_server:unix_stream_socket { read write };
-allow mediaserver audio_device:chr_file { ioctl open read write };
-
-binder_call(mediaserver, audiod)
