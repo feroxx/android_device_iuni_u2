@@ -395,9 +395,6 @@ static char *camera_get_parameters(struct camera_device *device)
         params.set(CameraParameters::KEY_SUPPORTED_PREVIEW_SIZES,
             "1280x960,1280x720,720x480,640x480,576x432,320x240");
         params.set("preview-fps-range-values", "(7500,30000),(8000,30000),(30000,30000)");
-        if(strcmp(params.get(CameraParameters::KEY_PICTURE_SIZE), "352x288") == 0 ||
-           strcmp(params.get(CameraParameters::KEY_PICTURE_SIZE), "176x144") == 0);
-		}
     }
 
     const char *pf = params.get(android::CameraParameters::KEY_PREVIEW_FORMAT);
