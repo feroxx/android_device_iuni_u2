@@ -131,13 +131,8 @@ PRODUCT_PACKAGES += \
     ethertypes
 
 PRODUCT_PACKAGES += \
-    Snap
- 
- PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/android.hardware.nfc.hce.xml:system/etc/permissions/android.hardware.nfc.hce.xml \
-    frameworks/native/data/etc/android.hardware.nfc.xml:system/etc/permissions/android.hardware.nfc.xml \
-    device/iuni/u2/nfc/nfc-nci.conf:system/etc/nfc-nci.conf \
-    device/iuni/u2/nfc/nfcee_access.xml:system/etc/nfcee_access.xml
+    Snap \
+	camera.msm8974
     
 # Graphics
 PRODUCT_PACKAGES += \
@@ -242,8 +237,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.radio.add_power_save=1 \
     ro.telephony.call_ring.multiple=0 \
     ro.qualcomm.cabl=1 \
-    hw.cabl.level=Auto \
-    ro.nfc.port=I2C
+    hw.cabl.level=Auto
 
 #For internal sdcard
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
