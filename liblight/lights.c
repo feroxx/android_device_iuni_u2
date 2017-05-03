@@ -309,7 +309,7 @@ static int set_light_torch(struct light_device_t* dev, struct light_state_t cons
 {
      int err = 0;
      pthread_mutex_lock(&g_lock);
-     err = write_int(TORCH_FILE, state->color & 0xFF);
+     err = write_int(TORCH_FILE, state->color & 0xc8);
      pthread_mutex_unlock(&g_lock);
      return err;
 }
