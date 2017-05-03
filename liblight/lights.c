@@ -98,6 +98,8 @@ char const*const TORCH_FILE
 // Brightness ramp up/down time for blinking
 #define LED_RAMP_MS          500
 
+#define LIGHT_ID_TORCH          "torch"
+
 /**
  * device methods
  */
