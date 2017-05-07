@@ -75,6 +75,11 @@ service time_daemon /system/bin/time_daemon
    user root
    group root
 
+service thermal-engine /system/bin/thermal-engine
+   class main
+   user root
+   group root
+
 service adsprpcd /system/bin/adsprpcd
    class main
    user media
