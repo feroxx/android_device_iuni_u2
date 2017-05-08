@@ -121,7 +121,6 @@ const char CameraParameters::SCENE_MODE_BACKLIGHT[] = "backlight"; \
 const char CameraParameters::SCENE_MODE_ASD[] = "asd"; \
 const char CameraParameters::SCENE_MODE_GESTURE[] = "gesture"; \
 const char CameraParameters::SCENE_MODE_FOOD[] = "food"; \
-int CameraParameters::getStr(const char *key __unused) const { return -1; }; \
 const char *CameraParameters::getPreviewFrameRateMode() const { return get(KEY_PREVIEW_FRAME_RATE_MODE); }; \
 void CameraParameters::setPreviewFrameRateMode(const char *mode) { set(KEY_PREVIEW_FRAME_RATE_MODE, mode); }; \
 void CameraParameters::setTouchIndexAec(int x __unused, int y __unused) { }; \
@@ -239,5 +238,4 @@ void CameraParameters::setPreviewFpsRange(int minFPS __unused, int maxFPS __unus
     void setTouchIndexAf(int x __unused, int y __unused); \
     void setPreviewFpsRange(int minFPS __unused, int maxFPS __unused); \
     static const char SCENE_MODE_GESTURE[]; \
-    static const char SCENE_MODE_FOOD[]; \
-    int getStr(const char *key __unused) const;
+    static const char SCENE_MODE_FOOD[];
