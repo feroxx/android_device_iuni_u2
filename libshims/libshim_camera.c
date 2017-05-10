@@ -17,3 +17,5 @@
 /* TODO: Actually provide implementations for these function! */
 
 void _ZNK7android16CameraParameters6getStrEPKc() {}
+
+void _ZN7qcamera18GNCameraParameters10lookupAttrEPKNS_17QCameraParameters10QCameraMapEiPKc() {}
