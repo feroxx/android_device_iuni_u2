@@ -20,6 +20,9 @@
 void _ZNK7android16CameraParameters6getStrEPKc() {}
 
 //gncamera feature
+void _ZN7qcamera18GNCameraParametersD2Ev() {}
+
+//gncamera feature
 void _ZN7qcamera18GNCameraParameters10lookupAttrEPKNS_17QCameraParameters10QCameraMapEiPKc() {}
 
 //led flash
