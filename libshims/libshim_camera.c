@@ -16,8 +16,12 @@
 
 /* TODO: Actually provide implementations for these function! */
 
+//gncamera feature
 void _ZNK7android16CameraParameters6getStrEPKc() {}
+
+//gncamera feature
 
 void _ZN7qcamera18GNCameraParameters10lookupAttrEPKNS_17QCameraParameters10QCameraMapEiPKc() {}
 
+//led flash
 void _ZN7qcamera17QCameraParameters21setBurstLEDFlashLevelE25cam_led_flash_burst_level() {}
