@@ -19,3 +19,5 @@
 void _ZNK7android16CameraParameters6getStrEPKc() {}
 
 void _ZN7qcamera18GNCameraParameters10lookupAttrEPKNS_17QCameraParameters10QCameraMapEiPKc() {}
+
+void _ZN7qcamera17QCameraParameters21setBurstLEDFlashLevelE25cam_led_flash_burst_level() {}
