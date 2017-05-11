@@ -18,3 +18,5 @@
 
 //gncamera feature
 void _ZNK7android16CameraParameters6getStrEPKc() {}
+
+void _ZN7qcamera19QCameraStateMachine16isPreviewRunningEv() {}
