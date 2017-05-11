@@ -16,7 +16,8 @@
 
 /* TODO: Actually provide implementations for these function! */
 
-//gncamera feature
+//camera.msm8974.so
 void _ZNK7android16CameraParameters6getStrEPKc() {}
 
+//camera.msm8974.so
 void _ZN7qcamera19QCameraStateMachine16isPreviewRunningEv() {}
