@@ -18,7 +18,3 @@
 
 //camera.msm8974.so
 void _ZNK7android16CameraParameters6getStrEPKc() {}
-
-void _ZN7qcamera25QCamera2HardwareInterface20gnUpdatePictureFrameEv() {}
-
-void _ZN7qcamera25QCamera2HardwareInterface23gnUpdateGestureShotModeEv() {}
