@@ -17,4 +17,4 @@
 /* TODO: Actually provide implementations for these function! */
 
 //camera.msm8974.so
-void _ZNK7android16CameraParameters6getStrEPKc() {}
+const char *_ZNK7android16CameraParameters6getStrEPKc;
