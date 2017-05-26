@@ -19,6 +19,4 @@
 //camera.msm8974.so
 const char *_ZNK7android16CameraParameters6getStrEPKc;
 
-const char *_ZN7qcamera25QCamera2HardwareInterface20gnUpdatePictureFrameEv;
-
-const char *_ZN7qcamera25QCamera2HardwareInterface25gnUpdateFeatureParametersEv;
+void *_ZN7qcamera25QCamera2HardwareInterface20gnUpdatePictureFrameEv;
