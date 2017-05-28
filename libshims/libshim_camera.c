@@ -16,7 +16,7 @@
 
 /* TODO: Actually provide implementations for these function! */
 
-const char *_ZNK7android16CameraParameters6getStrEPKc()
+const char *_ZNK7android16CameraParameters6getStrEPKc(const)
 {
 void _ZN7qcamera25QCamera2HardwareInterface20gnUpdatePictureFrameEv();
 }
