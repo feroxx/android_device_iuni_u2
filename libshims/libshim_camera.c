@@ -18,5 +18,5 @@
 
 const char *_ZNK7android16CameraParameters6getStrEPKc()
 {
-return void _ZN7qcamera25QCamera2HardwareInterface20gnUpdatePictureFrameEv();
+void _ZN7qcamera25QCamera2HardwareInterface20gnUpdatePictureFrameEv();
 }
