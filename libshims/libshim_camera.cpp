@@ -17,6 +17,6 @@
 /* TODO: Actually provide implementations for these function! */
 
 extern "C" void _ZN7qcamera25QCamera2HardwareInterface20gnUpdatePictureFrameEv();
-extern "C" const char *_ZNK7android16CameraParameters6getStrEPKc() {
+extern "C" void _ZNK7android16CameraParameters6getStrEPKc() {
   return _ZN7qcamera25QCamera2HardwareInterface20gnUpdatePictureFrameEv();
 }
