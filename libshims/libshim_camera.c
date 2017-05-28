@@ -17,6 +17,6 @@
 /* TODO: Actually provide implementations for these function! */
 
 //camera.msm8974.so
-const char getStr() { };
+const char *getStr() { };
 
 void gnUpdatePictureFrame() { };
