@@ -17,6 +17,6 @@
 /* TODO: Actually provide implementations for these function! */
 
 //camera.msm8974.so
-const char *_ZNK7android16CameraParameters6getStrEPKc;
+const char getStr() { };
 
-void *_ZN7qcamera25QCamera2HardwareInterface20gnUpdatePictureFrameEv;
+void gnUpdatePictureFrame() { };
