@@ -24,6 +24,6 @@ int CameraParameters::getStr(const char *key __unused) const { return -1; };
 #define CAMERA_PARAMETERS_EXTRA_H \
     static const char SCENE_MODE_GESTURE[]; \
     static const char SCENE_MODE_FOOD[]; \
-	static const char KEY_PICTURE_FRAME[]; \
-	static const char KEY_GESTURE_MODE[]; \
-	int getStr(const char *key __unused) const;
+    static const char KEY_PICTURE_FRAME[]; \
+    static const char KEY_GESTURE_MODE[]; \
+    int getStr(const char *key __unused) const;
