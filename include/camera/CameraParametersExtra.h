@@ -31,7 +31,8 @@ int CameraParameters::getStr(const char *key __unused) const { return -1; };
     static const char SCENE_MODE_FOOD[]; \
     static const char KEY_PICTURE_FRAME[]; \
     static const char PICTURE_FRAME_NORMAL[]; \
-    static const char KEY_GESTURE_MODE[]; \  
+    static const char KEY_GESTURE_MODE[]; \
+    static const char GESTURE_MODE_ON[]; \
     static const char KEY_FACE_BEAUTY_MODE[]; \
     static const char FACE_BEAUTY_ON[]; \
     static const char KEY_FACE_BEAUTY_LEVEL[]; \
