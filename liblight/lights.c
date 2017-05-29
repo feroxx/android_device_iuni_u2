@@ -90,16 +90,11 @@ char const*const GREEN_DUTY_STEPS_FILE
 char const*const BLUE_DUTY_STEPS_FILE
         = "/sys/class/leds/blue/duty_pcts";
 
-char const*const TORCH_FILE
-        = "/sys/class/leds/led:flash_torch/brightness";
-
 // Number of steps to use in the duty array
 #define LED_DUTY_STEPS       60
 
 // Brightness ramp up/down time for blinking
 #define LED_RAMP_MS          500
-
-#define LIGHT_ID_TORCH          "torch"
 
 /**
  * device methods
@@ -306,15 +301,6 @@ set_light_battery(struct light_device_t* dev,
     return 0;
 }
 
-static int set_light_torch(struct light_device_t* dev, struct light_state_t const* state)
-{
-     int err = 0;
-     pthread_mutex_lock(&g_lock);
-     err = write_int(TORCH_FILE, state->color & 0xc8);
-     pthread_mutex_unlock(&g_lock);
-     return err;
-}
-
 /** Close the lights device */
 static int
 close_lights(struct light_device_t *dev)
@@ -349,8 +335,6 @@ static int open_lights(const struct hw_module_t* module, char const* name,
         set_light = set_light_battery;
     else if (0 == strcmp(LIGHT_ID_ATTENTION, name))
         set_light = set_light_attention;
-    else if (0 == strcmp(LIGHT_ID_TORCH, name))
-        set_light = set_light_torch;
     else
         return -EINVAL;
 
