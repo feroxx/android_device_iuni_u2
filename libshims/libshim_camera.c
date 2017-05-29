@@ -16,5 +16,4 @@
 
 /* TODO: Actually provide implementations for these function! */
 
-void _ZN7qcamera25QCamera2HardwareInterface20gnUpdatePictureFrameEv() {}
 void _ZNK7android16CameraParameters6getStrEPKc() {}
