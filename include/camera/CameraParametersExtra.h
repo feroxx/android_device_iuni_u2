@@ -21,6 +21,9 @@ const char CameraParameters::KEY_PICTURE_FRAME[] = "picture-frame"; \
 const char CameraParameters::PICTURE_FRAME_NORMAL[] = "normal"; \
 const char CameraParameters::KEY_GESTURE_MODE[] = "gesture"; \
 const char CameraParameters::GESTURE_MODE_ON[] = "on"; \
+const char CameraParameters::KEY_FACE_BEAUTY_MODE[] = "face-beauty-mode"; \
+const char CameraParameters::FACE_BEAUTY_ON[] = "on"; \
+const char CameraParameters::KEY_FACE_BEAUTY_LEVEL[] = "face-beauty-level"; \
 int CameraParameters::getStr(const char *key __unused) const { return -1; };
 
 #define CAMERA_PARAMETERS_EXTRA_H \
@@ -28,6 +31,8 @@ int CameraParameters::getStr(const char *key __unused) const { return -1; };
     static const char SCENE_MODE_FOOD[]; \
     static const char KEY_PICTURE_FRAME[]; \
     static const char PICTURE_FRAME_NORMAL[]; \
-    static const char KEY_GESTURE_MODE[]; \
-    static const char GESTURE_MODE_ON[]; \
+    static const char KEY_GESTURE_MODE[]; \  
+    static const char KEY_FACE_BEAUTY_MODE[]; \
+    static const char FACE_BEAUTY_ON[]; \
+    static const char KEY_FACE_BEAUTY_LEVEL[]; \
     int getStr(const char *key __unused) const;
