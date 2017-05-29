@@ -16,8 +16,14 @@
  
 #define CAMERA_PARAMETERS_EXTRA_C \
 const char CameraParameters::SCENE_MODE_GESTURE[] = "gesture"; \
-const char CameraParameters::SCENE_MODE_FOOD[] = "food";
+const char CameraParameters::SCENE_MODE_FOOD[] = "food"; \
+const char CameraParameters::KEY_PICTURE_FRAME[] = "picture-frame"; \
+const char CameraParameters::KEY_GESTURE_MODE[] = "gesture"; \
+int CameraParameters::getStr(const char *key __unused) const { return -1; };
 
 #define CAMERA_PARAMETERS_EXTRA_H \
     static const char SCENE_MODE_GESTURE[]; \
-    static const char SCENE_MODE_FOOD[];
+    static const char SCENE_MODE_FOOD[]; \
+	static const char KEY_PICTURE_FRAME[]; \
+	static const char KEY_GESTURE_MODE[]; \
+	int getStr(const char *key __unused) const;

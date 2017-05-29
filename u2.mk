@@ -116,8 +116,7 @@ PRODUCT_PACKAGES += \
 
 # Widevine
 PRODUCT_PACKAGES += \
-    libshim_wvm \
-    libshim_camera
+    libshim_wvm
 
 PRODUCT_PACKAGES += \
     hostapd \
