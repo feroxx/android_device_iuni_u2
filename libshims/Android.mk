@@ -1,6 +1,12 @@
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
+LOCAL_SRC_FILES := libshim_camera.c
+LOCAL_MODULE := libshim_camera
+LOCAL_MODULE_TAGS := optional
+include $(BUILD_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
 LOCAL_SRC_FILES := wvm_shim.cpp
 LOCAL_SHARED_LIBRARIES := libstagefright_foundation
 LOCAL_MODULE := libshim_wvm
