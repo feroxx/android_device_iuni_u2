@@ -16,4 +16,4 @@
 
 /* TODO: Actually provide implementations for these function! */
 
-void _ZN7android7String8C1Ev() {}
+void _ZN7android7String8C1ERKS0_() {}
