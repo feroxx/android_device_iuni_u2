@@ -16,4 +16,4 @@
 
 /* TODO: Actually provide implementations for these function! */
 
-void _ZN7qcamera25QCamera2HardwareInterface20gnUpdatePictureFrameEv() {}
+void _ZN7android7String8D1Ev() {}
