@@ -17,3 +17,13 @@
 /* TODO: Actually provide implementations for these function! */
 
 void _ZN7android7String8C1ERKS0_() {}
+
+void _ZN7android7String8C1Ev() {}
+
+void _ZN7android7String8D1Ev() {}
+
+void _ZN7android7String8C1EPKc() {}
+
+void _ZN7android16SortedVectorImpl6removeEPKv() {}
+
+void _ZN7android16SortedVectorImpl3addEPKv() {}
