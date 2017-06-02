@@ -23,7 +23,3 @@ void _ZN7android7String8C1Ev() {}
 void _ZN7android7String8D1Ev() {}
 
 void _ZN7android7String8C1EPKc() {}
-
-void _ZN7android16SortedVectorImpl6removeEPKv() {}
-
-void _ZN7android16SortedVectorImpl3addEPKv() {}
