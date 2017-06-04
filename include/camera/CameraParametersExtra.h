@@ -35,7 +35,7 @@ const char CameraParameters::KEY_SUPPORTED_CAPTURE_MODES[] = "cap-mode-supported
 const char CameraParameters::KEY_CAPTURE_MODE[] = "cap-mode"; \
 const char CameraParameters::CAPTURE_MODE_BURST_SHOT[] = "burstshot"; \
 const char CameraParameters::CAPTURE_MODE_NIGHTSHOT_SHOT[] = "nightshot"; \
-const char CameraParameters::CAPTURE_MODE_NORMAl[] = "normal"; \
+const char CameraParameters::CAPTURE_MODE_NORMAL[] = "normal"; \
 const char CameraParameters::KEY_SUPPORTED_LIVE_EFFECTS[] = "live-effect-values"; \
 const char CameraParameters::KEY_LIVE_EFFECT[] = "live-effect"; \
 const char CameraParameters::KEY_GESTURE_SUPPORTED[] = "gesture-supported"; \
@@ -48,7 +48,7 @@ const char CameraParameters::QC_PIXEL_FORMAT_NV12_VENUS[] = "nv12-venus"; \
 const char CameraParameters::PIXEL_FORMAT_YV12[] = "yuv420p"; \
 const char CameraParameters::PIXEL_FORMAT_NV12[] = "nv12"; \
 const char CameraParameters::KEY_QC_SCALED_PICTURE_SIZES[] = "scaled-picture-sizes"; \
-int CameraParameters::getStr(const char *key __unused) const { return get(); };
+int CameraParameters::getStr(const char *) const { return get(); };
 
 #define CAMERA_PARAMETERS_EXTRA_H \
     static const char SCENE_MODE_GESTURE[]; \
@@ -84,4 +84,4 @@ int CameraParameters::getStr(const char *key __unused) const { return get(); };
     static const char PIXEL_FORMAT_YV12[]; \
     static const char PIXEL_FORMAT_NV12[]; \
     static const char KEY_QC_SCALED_PICTURE_SIZES[]; \
-    int getStr(const char *key __unused) const;
+    int getStr(const char *) const;
