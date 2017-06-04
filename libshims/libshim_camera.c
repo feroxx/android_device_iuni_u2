@@ -16,4 +16,4 @@
 
 /* TODO: Actually provide implementations for these function! */
 
-void _ZN7android15GNCameraFeature4initEv() {}
+void _ZN7qcamera18GNCameraParameters10lookupAttrEPKNS_17QCameraParameters10QCameraMapEiPKc() {}
