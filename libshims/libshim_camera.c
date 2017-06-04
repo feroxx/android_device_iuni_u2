@@ -16,6 +16,6 @@
 
 /* TODO: Actually provide implementations for these function! */
 
-void _ZN7qcamera17QCameraParameters17createSizesStringEPK15cam_dimension_ti() {}
+void _ZN7android15GNCameraFeature14createInstanceEv() {}
 
 
