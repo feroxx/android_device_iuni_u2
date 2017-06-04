@@ -16,6 +16,6 @@
 
 /* TODO: Actually provide implementations for these function! */
 
-void _ZN7android7String8D1Ev() {}
+void _ZN7qcamera23QCameraReprocScaleParam17getPicSizeFromAPKERiS1_() {}
 
-void _ZN7android7String8C1Ev() {}
+void _ZNK7android16CameraParameters14getPictureSizeEPiS1_() {}
