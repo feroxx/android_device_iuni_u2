@@ -16,5 +16,10 @@
 
 /* TODO: Actually provide implementations for these function! */
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <utils/Log.h>
+
 //gnUpdatePictureFrame
-void _ZN7android15GNCameraFeature15setPictureFrameEPc(const char *key __unused) const { return (gnUpdatePictureFrame); };
+void _ZN7android15GNCameraFeature15setPictureFrameEPc() { };
