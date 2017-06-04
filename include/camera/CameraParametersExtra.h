@@ -48,7 +48,7 @@ const char CameraParameters::QC_PIXEL_FORMAT_NV12_VENUS[] = "nv12-venus"; \
 const char CameraParameters::PIXEL_FORMAT_YV12[] = "yuv420p"; \
 const char CameraParameters::PIXEL_FORMAT_NV12[] = "nv12"; \
 const char CameraParameters::KEY_QC_SCALED_PICTURE_SIZES[] = "scaled-picture-sizes"; \
-const char *CameraParameters::getStr() const { return get(char *key); };
+const char *CameraParameters::getStr() const { return get(const char *key); };
 
 #define CAMERA_PARAMETERS_EXTRA_H \
     static const char SCENE_MODE_GESTURE[]; \
