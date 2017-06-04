@@ -16,6 +16,4 @@
 
 /* TODO: Actually provide implementations for these function! */
 
-void _ZN7android15GNCameraFeature14createInstanceEv() {}
-
-
+void _ZN7android15GNCameraFeature4initEv() {}
