@@ -16,4 +16,8 @@
 
 /* TODO: Actually provide implementations for these function! */
 
-void _ZN7qcamera25QCamera2HardwareInterface17getBufNumRequiredE17cam_stream_type_t() {}
+//gnUpdatePictureFrame
+void _ZN7android15GNCameraFeature15setPictureFrameEPc() {}
+
+//gnSetFaceBeauty
+void _ZN7android15GNCameraFeature13setFaceBeautyEi() {}
