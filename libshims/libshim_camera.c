@@ -23,4 +23,4 @@
 
 //gnUpdatePictureFrame
 void _ZN7android15GNCameraFeature15setPictureFrameEPc() { };
-void _ZN7android15GNCameraFeature13setFaceBeautyEi() { };
+void _ZN7android15GNCameraFeature14setGestureShotE15GNGestureShot_t() { };
