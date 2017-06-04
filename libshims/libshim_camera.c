@@ -16,4 +16,6 @@
 
 /* TODO: Actually provide implementations for these function! */
 
-void _ZN7qcamera18GNCameraParametersD2Ev() {}
+void _ZN7qcamera25QCamera2HardwareInterface20gnUpdatePictureFrameEv() {}
+
+void _ZN7android15GNCameraFeature15setPictureFrameEPc() {}
