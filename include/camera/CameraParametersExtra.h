@@ -47,6 +47,7 @@ const char CameraParameters::PIXEL_FORMAT_YUV420SP_ADRENO[] = "yuv420sp-adreno";
 const char CameraParameters::QC_PIXEL_FORMAT_NV12_VENUS[] = "nv12-venus"; \
 const char CameraParameters::PIXEL_FORMAT_YV12[] = "yuv420p"; \
 const char CameraParameters::PIXEL_FORMAT_NV12[] = "nv12"; \
+const char CameraParameters::KEY_QC_SCALED_PICTURE_SIZES[] = "scaled-picture-sizes"; \
 int CameraParameters::getStr(const char *key __unused) const { return -1; };
 
 #define CAMERA_PARAMETERS_EXTRA_H \
@@ -82,4 +83,5 @@ int CameraParameters::getStr(const char *key __unused) const { return -1; };
     static const char QC_PIXEL_FORMAT_NV12_VENUS[]; \
     static const char PIXEL_FORMAT_YV12[]; \
     static const char PIXEL_FORMAT_NV12[]; \
+    static const char KEY_QC_SCALED_PICTURE_SIZES[]; \
     int getStr(const char *key __unused) const;
