@@ -18,6 +18,3 @@
 
 //gnUpdatePictureFrame
 void _ZN7android15GNCameraFeature15setPictureFrameEPc() {}
-
-//gnSetFaceBeauty
-void _ZN7android15GNCameraFeature13setFaceBeautyEi() {}
