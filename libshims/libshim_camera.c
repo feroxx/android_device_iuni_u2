@@ -16,6 +16,4 @@
 
 /* TODO: Actually provide implementations for these function! */
 
-void _ZN7qcamera25QCamera2HardwareInterface20gnUpdatePictureFrameEv() {}
-
-void _ZN7android15GNCameraFeature15setPictureFrameEPc() {}
+void _ZN7qcamera25QCamera2HardwareInterface17getBufNumRequiredE17cam_stream_type_t() {}
