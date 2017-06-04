@@ -17,4 +17,4 @@
 /* TODO: Actually provide implementations for these function! */
 
 //gnUpdatePictureFrame
-void _ZN7android15GNCameraFeature15setPictureFrameEPc() {}
+void _ZN7android15GNCameraFeature15setPictureFrameEPc(const char *key __unused) const { return gnUpdatePictureFrame; };
