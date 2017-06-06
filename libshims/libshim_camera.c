@@ -21,5 +21,4 @@
 #include <stdint.h>
 #include <utils/Log.h>
 
-void _ZN7qcamera23QCameraReprocScaleParam14isScaleEnabledEv() { };
-void _ZN7qcamera23QCameraReprocScaleParam14isUnderScalingEv() { };
+void _ZN7qcamera25QCamera2HardwareInterface25gnUpdateFeatureParametersEv() { };
