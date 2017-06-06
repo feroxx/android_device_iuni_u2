@@ -23,3 +23,5 @@
 
 void _ZN7android15GNCameraFeature15setPictureFrameEPc() { };
 void _ZN7android15GNCameraFeature14setGestureShotE15GNGestureShot_t() { };
+void _ZN7qcamera23QCameraReprocScaleParam14isScaleEnabledEv() { };
+void _ZN7qcamera23QCameraReprocScaleParam14isUnderScalingEv() { };
