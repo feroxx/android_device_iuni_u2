@@ -132,7 +132,8 @@ PRODUCT_PACKAGES += \
     ethertypes
 
 PRODUCT_PACKAGES += \
-    Snap
+    Snap \
+    camera.msm8974
     
 # Graphics
 PRODUCT_PACKAGES += \
