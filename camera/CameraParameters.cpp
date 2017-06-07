@@ -149,6 +149,8 @@ const char CameraParameters::SCENE_MODE_FIREWORKS[] = "fireworks";
 const char CameraParameters::SCENE_MODE_SPORTS[] = "sports";
 const char CameraParameters::SCENE_MODE_PARTY[] = "party";
 const char CameraParameters::SCENE_MODE_CANDLELIGHT[] = "candlelight";
+const char CameraParameters::SCENE_MODE_GESTURE[] = "gesture";
+const char CameraParameters::SCENE_MODE_FOOD[] = "food";
 const char CameraParameters::SCENE_MODE_BARCODE[] = "barcode";
 const char CameraParameters::SCENE_MODE_HDR[] = "hdr";
 
@@ -337,6 +339,14 @@ const char *CameraParameters::get(const char *key) const
     if (v.length() == 0)
         return 0;
     return v.string();
+}
+
+int CameraParameters::getStr(const char *key) const
+{
+    const char *v = get(key);
+    if (v == 0)
+        return -1;
+    return strtol(v, 0, 0);
 }
 
 int CameraParameters::getInt(const char *key) const

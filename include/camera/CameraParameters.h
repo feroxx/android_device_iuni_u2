@@ -54,6 +54,7 @@ public:
     void setFloat(const char *key, float value);
     const char *get(const char *key) const;
     int getInt(const char *key) const;
+	int getStr(const char *key) const;
     float getFloat(const char *key) const;
 
     void remove(const char *key);
@@ -606,6 +607,8 @@ public:
     static const char SCENE_MODE_SPORTS[];
     static const char SCENE_MODE_PARTY[];
     static const char SCENE_MODE_CANDLELIGHT[];
+	static const char SCENE_MODE_GESTURE[];
+	static const char SCENE_MODE_FOOD[];
     // Applications are looking for a barcode. Camera driver will be optimized
     // for barcode reading.
     static const char SCENE_MODE_BARCODE[];
