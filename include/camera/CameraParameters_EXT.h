@@ -31,39 +31,14 @@ public:
     GNCameraParameters(CameraParameters *p);
     ~GNCameraParameters();
 
-    int get_from_attr(const char *path, char *buf, size_t len);
-    bool check_flashlight_restriction();
     int lookupAttr(/* GNCameraParameters::CameraMap const* */
             void *cameraMap, int a3, const char *a4);
 	
 	int createValuesStringFromMap(/* GNCameraParameters::CameraMap const* */
             void *cameraMap, int a3, const char *a4);
 
-    const char *getPreviewFrameRateMode() const;
-    void setPreviewFrameRateMode(const char *mode);
 	void setPictureFrame(const char *mode);
 	void setDefaultParameters(const char *mode);
-
-    void setBrightnessLumaTargetSet(int brightness, int luma);
-    int getBrightnessLumaTargetSet(int *brightness, int *luma) const;
-
-    void setTouchIndexAec(int x, int y);
-    void getTouchIndexAec(int *x, int *y);
-
-    void setTouchIndexAf(int x, int y);
-    void getTouchIndexAf(int *x, int *y);
-
-    void setZsl(const char *mode);
-    const char *getZsl() const;
-
-    void setRawSize(int x, int y);
-    void getRawSize(int *x, int *y);
-
-    void getMeteringAreaCenter(int *x, int *y) const;
-    void getSupportedHfrSizes(Vector<Size> &sizes) const;
-    void setPreviewFpsRange(int min, int max);
-    int getOrientation() const;
-    void setOrientation(int orientation);
 
     static const char KEY_PICTURE_FRAME[];
     static const char PICTURE_FRAME_NORMAL[];

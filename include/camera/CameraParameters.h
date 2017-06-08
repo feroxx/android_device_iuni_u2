@@ -691,7 +691,7 @@ public:
     // High-dynamic range mode
     static const char LIGHTFX_HDR[];
 
-static const char KEY_TIME_CONS_POST_PROCESSING[];
+    static const char KEY_TIME_CONS_POST_PROCESSING[];
     static const char KEY_OIS_MODE[];
     static const char KEY_APP_OIS_SETTING[];
     static const char KEY_OIS_SUPPORT[];
