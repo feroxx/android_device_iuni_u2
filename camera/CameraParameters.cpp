@@ -344,9 +344,8 @@ const char *CameraParameters::get(const char *key) const
 int CameraParameters::getStr(const char *key) const
 {
     const char *v = get(key);
-    if (v == 0)
-        return -1;
-    return strtol(v, 0, 0);
+    if (v == 0) return -1;
+    return strtof(v, 0);
 }
 
 int CameraParameters::getInt(const char *key) const
