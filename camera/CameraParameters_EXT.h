@@ -32,6 +32,9 @@ public:
     bool check_flashlight_restriction();
     int lookupAttr(/* GNCameraParameters::CameraMap const* */
             void *cameraMap, int a3, const char *a4);
+	
+	int createValuesStringFromMap(/* GNCameraParameters::CameraMap const* */
+            void *cameraMap, int a3, const char *a4);
 
     const char *getPreviewFrameRateMode() const;
     void setPreviewFrameRateMode(const char *mode);

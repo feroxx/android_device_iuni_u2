@@ -156,6 +156,12 @@ int GNCameraParameters::lookupAttr(/* GNCameraParameters::CameraMap const* */
     return -2;
 }
 
+int GNCameraParameters::createValuesStringFromMap(/* GNCameraParameters::CameraMap const* */
+        void *cameraMap, int a3, const char *a4)
+{
+    return -2;
+}
+
 const char * GNCameraParameters::getPreviewFrameRateMode() const
 {
     return mParams->get("preview-frame-rate-mode");
