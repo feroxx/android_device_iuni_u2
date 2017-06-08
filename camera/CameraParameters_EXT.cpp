@@ -166,6 +166,11 @@ void GNCameraParameters::setPreviewFrameRateMode(const char *mode)
     mParams->set("preview-frame-rate-mode", mode);
 }
 
+void GNCameraParameters::setDefaultParameters(const char *)
+{
+    mParams->set();
+}
+
 void GNCameraParameters::setPictureFrame(const char *mode)
 {
     mParams->set("picture-frame", mode);

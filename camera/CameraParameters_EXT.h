@@ -36,6 +36,7 @@ public:
     const char *getPreviewFrameRateMode() const;
     void setPreviewFrameRateMode(const char *mode);
 	void setPictureFrame(const char *mode);
+    void setDefaultParameters(const char *);
 
     void setBrightnessLumaTargetSet(int brightness, int luma);
     int getBrightnessLumaTargetSet(int *brightness, int *luma) const;
