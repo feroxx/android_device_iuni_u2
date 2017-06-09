@@ -27,12 +27,6 @@ public:
     GNCameraParameters();
     GNCameraParameters(CameraParameters *p);
     virtual ~GNCameraParameters();
-	
-	int createValuesStringFromMap(/* GNCameraParameters::CameraMap const* */
-            void *cameraMap, int a3, const char *a4);
-
-	void setPictureFrame(const char *mode);
-    void setDefaultParameters(const char *mode);
 
     static const char KEY_PICTURE_FRAME[];
     static const char PICTURE_FRAME_NORMAL[];

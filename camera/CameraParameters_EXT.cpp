@@ -70,27 +70,5 @@ GNCameraParameters::~GNCameraParameters()
 {
 }
 
-int GNCameraParameters::lookupAttr(/* GNCameraParameters::CameraMap const* */
-        void *cameraMap, int a3, const char *a4)
-{
-    return -2;
-}
-
-int GNCameraParameters::createValuesStringFromMap(/* GNCameraParameters::CameraMap const* */
-        void *cameraMap, int a3, const char *a4)
-{
-    return -2;
-}
-
-void GNCameraParameters::setDefaultParameters(const char *mode)
-{
-    mParams->set("", mode);
-}
-
-void GNCameraParameters::setPictureFrame(const char *mode)
-{
-    mParams->set("picture-frame", mode);
-}
-
 } // android
 
