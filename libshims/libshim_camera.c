@@ -21,6 +21,4 @@
 #include <stdint.h>
 #include <utils/Log.h>
 
-void _ZN7qcamera18GNCameraParametersC2ERKN7android7String8E() { };
-
-void _ZN7qcamera18GNCameraParameters16updateParametersERS0_Rb() { };
+void _ZN7qcamera25QCamera2HardwareInterface20gnUpdatePictureFrameEv() { };
