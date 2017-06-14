@@ -139,6 +139,8 @@ static char *camera_fixup_getparams(int id, const char *settings)
 
 static char *camera_fixup_setparams(int id, const char *settings)
 {
+	bool videoMode = false;
+
     android::CameraParameters params;
     params.unflatten(android::String8(settings));
 
