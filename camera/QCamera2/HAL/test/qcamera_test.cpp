@@ -81,7 +81,8 @@ using namespace android;
 
 int CameraContext::JpegIdx = 0;
 int CameraContext::mPiPIdx = 0;
-const char CameraContext::KEY_ZSL[] = "zsl";
+SkBitmap *CameraContext::skBMtmp[2];
+sp<IMemory> CameraContext::PiPPtrTmp[2];
 
 /*===========================================================================
  * FUNCTION   : previewCallback
@@ -144,6 +145,43 @@ void CameraContext::signalFinished()
     mInUse = false;
     mCond.signal();
 }
+
+/*===========================================================================
+ * FUNCTION   : mutexLock
+ *
+ * DESCRIPTION: Mutex lock for ViV Video
+ *
+ * PARAMETERS : none
+ *
+ * RETURN     : none
+ *==========================================================================*/
+void CameraContext::mutexLock()
+{
+    Mutex::Autolock l(mViVLock);
+    if (mViVinUse ) {
+        mViVCond.wait(mViVLock);
+    } else {
+        mViVinUse = true;
+    }
+}
+
+/*===========================================================================
+ * FUNCTION   : mutexUnLock
+ *
+ * DESCRIPTION: Mutex unlock for ViV Video
+ *
+ * PARAMETERS : none
+ *
+ * RETURN     : none
+ *==========================================================================*/
+void CameraContext::mutexUnlock()
+{
+    Mutex::Autolock l(mViVLock);
+    mViVinUse = false;
+    mViVCond.signal();
+}
+
+
 
 /*===========================================================================
  * FUNCTION   : saveFile
@@ -270,16 +308,15 @@ SkBitmap * CameraContext::PiPCopyToOneFile(
  * DESCRIPTION: decode jpeg input buffer.
  *
  * PARAMETERS :
- *   @mem     : buffer to decode
- *   @skBM    : decoded buffer
+ *   @mem : buffer to decode
  *
- * RETURN     : status_t type of status
- *              NO_ERROR  -- success
- *              none-zero failure code
+ * RETURN     : decoded picture in SkBitmap
 
  *==========================================================================*/
-status_t CameraContext::decodeJPEG(const sp<IMemory>& mem, SkBitmap *skBM)
+SkBitmap *CameraContext::decodeJPEG(const sp<IMemory>& mem)
 {
+    SkBitmap *skBM;
+    skBM = new SkBitmap; //Deleted in encodeJPEG (skBMtmp[0] and skBMtmp[1])
     SkBitmap::Config prefConfig = SkBitmap::kARGB_8888_Config;
     const void *buff = NULL;
     int size;
@@ -326,17 +363,13 @@ status_t CameraContext::decodeJPEG(const sp<IMemory>& mem, SkBitmap *skBM)
         break;
     }
 
-#ifdef USE_KK_CODE
     if (SkImageDecoder::DecodeMemory(buff, size, skBM, prefConfig,
             SkImageDecoder::kDecodePixels_Mode) == false) {
         printf("%s():%d:: Failed during jpeg decode\n",__FUNCTION__,__LINE__);
-        return BAD_VALUE;
+        return NULL;
     }
-#else
-    //TODO: Need to investigate and fix it as skia library has been changed.
-#endif
 
-    return NO_ERROR;
+    return skBM;
 }
 
 /*===========================================================================
@@ -368,6 +401,11 @@ status_t CameraContext::encodeJPEG(SkWStream * stream,
     if (skJpegEnc->encodeStream(stream, *bitmap, qFactor) == false) {
         return BAD_VALUE;
     }
+    printf("%s: buffer=%08X, size=%d stored at %s\n",
+        __FUNCTION__, (int)bitmap->getPixels(),
+        bitmap->getSize(), path.string());
+    delete skBMtmp[0];
+    delete skBMtmp[1];
 
     FILE *fh = fopen(path.string(), "r+");
     if ( !fh ) {
@@ -441,17 +479,11 @@ status_t CameraContext::encodeJPEG(SkWStream * stream,
             break;
         }
     }
-    fseek(fh, 0, SEEK_END);
-    len = ftell(fh);
-    rewind(fh);
-    printf("%s: buffer=%p, size=%ld stored at %s\n",
-        __FUNCTION__, bitmap->getPixels(),
-        len, path.string());
-
     free(mJEXIFSection.Data);
     DiscardData();
     DiscardSections();
     fclose(fh);
+
     ret = NO_ERROR;
 
     return ret;
@@ -795,7 +827,6 @@ void CameraContext::postData(int32_t msgType,
                              const sp<IMemory>& dataPtr,
                              camera_frame_metadata_t *metadata)
 {
-    mInterpr->PiPLock();
     Size currentPictureSize = mSupportedPictureSizes.itemAt(
         mCurrentPictureSizeIdx);
     unsigned char *buff = NULL;
@@ -829,33 +860,25 @@ void CameraContext::postData(int32_t msgType,
         } else {
             // PiP capture case
             SkFILEWStream *wStream;
-            ret = decodeJPEG(dataPtr, &skBMtmp);
-            if (NO_ERROR != ret) {
-                printf("Error in decoding JPEG!\n");
-                return;
-            }
+            skBMtmp[mPiPIdx] = decodeJPEG(dataPtr);
 
-            mWidthTmp = currentPictureSize.width;
-            mHeightTmp = currentPictureSize.height;
-            PiPPtrTmp = dataPtr;
+            mWidthTmp[mPiPIdx] = currentPictureSize.width;
+            mHeightTmp[mPiPIdx] = currentPictureSize.height;
+            PiPPtrTmp[mPiPIdx] = dataPtr;
             // If there are two jpeg buffers
             if (mPiPIdx == 1) {
                 printf("PiP done\n");
 
                 // Find the the capture with higher width and height and read
                 // its jpeg sections
-                if ((mInterpr->camera[0]->mWidthTmp *
-                        mInterpr->camera[0]->mHeightTmp) >
-                        (mInterpr->camera[1]->mWidthTmp *
-                        mInterpr->camera[1]->mHeightTmp)) {
-                    buff = (unsigned char *)PiPPtrTmp->pointer();
-                    size= PiPPtrTmp->size();
-                } else if ((mInterpr->camera[0]->mWidthTmp *
-                        mInterpr->camera[0]->mHeightTmp) <
-                        (mInterpr->camera[1]->mWidthTmp *
-                        mInterpr->camera[1]->mHeightTmp)) {
-                    buff = (unsigned char *)PiPPtrTmp->pointer();
-                    size= PiPPtrTmp->size();
+                if ((mWidthTmp[0]*mHeightTmp[0])>
+                        (mWidthTmp[1]*mHeightTmp[1])) {
+                    buff = (unsigned char *)PiPPtrTmp[0]->pointer();
+                    size= PiPPtrTmp[0]->size();
+                } else if ((mWidthTmp[0]*mHeightTmp[0])<
+                        (mWidthTmp[1]*mHeightTmp[1])) {
+                    buff = (unsigned char *)PiPPtrTmp[1]->pointer();
+                    size= PiPPtrTmp[1]->size();
                 } else {
                     printf("Cannot take PiP. Images are with the same width"
                             " and height size!!!\n");
@@ -881,8 +904,7 @@ void CameraContext::postData(int32_t msgType,
                     DiscardSections();
 
                     wStream = new SkFILEWStream(jpegPath.string());
-                    skBMDec = PiPCopyToOneFile(&mInterpr->camera[0]->skBMtmp,
-                        &mInterpr->camera[1]->skBMtmp);
+                    skBMDec = PiPCopyToOneFile(skBMtmp[0], skBMtmp[1]);
                     if (encodeJPEG(wStream, skBMDec, jpegPath) != false) {
                         printf("%s():%d:: Failed during jpeg encode\n",
                             __FUNCTION__,__LINE__);
@@ -903,8 +925,8 @@ void CameraContext::postData(int32_t msgType,
          ( NULL != metadata ) ) {
         printf("Face detected %d \n", metadata->number_of_faces);
     }
-    mInterpr->PiPUnlock();
 
+    signalFinished();
 }
 
 /*===========================================================================
@@ -942,7 +964,7 @@ void CameraContext::dataCallbackTimestamp(nsecs_t timestamp,
         int32_t msgType,
         const sp<IMemory>& dataPtr)
 {
-    mInterpr->ViVLock();
+    mutexLock();
     // Not needed check. Just avoiding warnings of not used variables.
     if (timestamp > 0)
         timestamp = 0;
@@ -1069,7 +1091,7 @@ void CameraContext::dataCallbackTimestamp(nsecs_t timestamp,
     }
     mCamera->releaseRecordingFrame(dataPtr);
 
-    mInterpr->ViVUnlock();
+    mutexUnlock();
 }
 
 /*===========================================================================
@@ -1220,6 +1242,7 @@ void Interpreter::ViVEncode()
 
     return;
 }
+
 
 /*===========================================================================
  * FUNCTION   : calcBufferSize
@@ -1527,6 +1550,7 @@ CameraContext::CameraContext(int cameraIndex) :
     mSections(NULL),
     mJEXIFTmp(NULL),
     mHaveAll(false),
+    mViVinUse(false),
     mCamera(NULL),
     mClient(NULL),
     mSurfaceControl(NULL),
@@ -1595,7 +1619,6 @@ CameraContext::~CameraContext()
 status_t  CameraContext::openCamera()
 {
     useLock();
-    const char *ZSLStr = NULL;
 
     if ( NULL != mCamera.get() ) {
         printf("Camera already open! \n");
@@ -1638,19 +1661,6 @@ status_t  CameraContext::openCamera()
     mInterpr->setViVSize((Size) mSupportedVideoSizes.itemAt(
         mCurrentVideoSizeIdx),
         mCameraIndex);
-
-    ZSLStr = mParams.get(CameraContext::KEY_ZSL);
-    if (NULL != ZSLStr) {
-        if (strcmp(ZSLStr, "on") == 0){
-            mInterpr->mIsZSLOn = true;
-        } else if (strcmp(ZSLStr, "off") == 0) {
-            mInterpr->mIsZSLOn = false;
-        } else {
-            printf("zsl value is not valid!\n");
-        }
-    } else {
-        printf("zsl is NULL");
-    }
 
     signalFinished();
 
@@ -1885,18 +1895,20 @@ status_t CameraContext::enablePreviewCallbacks()
 status_t CameraContext::takePicture()
 {
     status_t ret = NO_ERROR;
-    useLock();
+
+    useLock(); // Unlocked in jpeg callback
+
     if ( mPreviewRunning ) {
         ret = mCamera->takePicture(
             CAMERA_MSG_COMPRESSED_IMAGE|
             CAMERA_MSG_RAW_IMAGE);
-        if (!mRecordingHint && !mInterpr->mIsZSLOn) {
+        if (!mRecordingHint) {
             mPreviewRunning = false;
         }
     } else {
         printf("Please resume/start the preview before taking a picture!\n");
+        signalFinished(); //Unlock in case preview is not running
     }
-    signalFinished();
     return ret;
 }
 
@@ -2620,9 +2632,6 @@ void CameraContext::printMenu(sp<CameraContext> currentCamera)
            Interpreter::CHANGE_PICTURE_SIZE_CMD,
            currentPictureSize.width,
            currentPictureSize.height);
-    printf("   %c. zsl:  %s\n",
-            Interpreter::ZSL_CMD, mParams.get(CameraContext::KEY_ZSL)?
-            mParams.get(CameraContext::KEY_ZSL) : "NULL"   );
 
     printf("\n");
     printf("   Choice: ");
@@ -2682,35 +2691,6 @@ void CameraContext::enablePiPCapture()
 void CameraContext::disablePiPCapture()
 {
     mPiPCapture = false;
-}
-
-/*===========================================================================
- * FUNCTION   : getZSL
- *
- * DESCRIPTION: get ZSL value of current camera
- *
- * PARAMETERS : None
- *
- * RETURN     : current zsl value
- *==========================================================================*/
-const char *CameraContext::getZSL()
-{
-    return mParams.get(CameraContext::KEY_ZSL);
-}
-
-/*===========================================================================
- * FUNCTION   : setZSL
- *
- * DESCRIPTION: set ZSL value of current camera
- *
- * PARAMETERS : zsl value to be set
- *
- * RETURN     : None
- *==========================================================================*/
-void CameraContext::setZSL(const char *value)
-{
-    mParams.set(CameraContext::KEY_ZSL, value);
-    mCamera->setParameters(mParams.flatten());
 }
 
 /*===========================================================================
@@ -2930,7 +2910,6 @@ Interpreter::Interpreter(const char *file)
         case TAKEPICTURE_IN_PICTURE_CMD:
         case ENABLE_PRV_CALLBACKS_CMD:
         case EXIT_CMD:
-        case ZSL_CMD:
         case DELAY:
             p2 = p1;
             while( (p2 != (mScript + len)) && (*p2 != '|')) {
@@ -3007,6 +2986,7 @@ Interpreter::Command Interpreter::getCommand(
  *==========================================================================*/
 TestContext::TestContext()
 {
+    sp<CameraContext> camera;
     int i = 0;
     mTestRunning = false;
     mInterpreter = NULL;
@@ -3017,35 +2997,32 @@ TestContext::TestContext()
     mViVVid.isBuffValid = false;
     mViVVid.sourceCameraID = -1;
     mViVVid.destinationCameraID = -1;
-    mPiPinUse = false;
-    mViVinUse = false;
-    mIsZSLOn = false;
-    mCurrentCameraIndex = 0;
     memset(&mViVBuff, 0, sizeof(ViVBuff_t));
 
     ProcessState::self()->startThreadPool();
 
     do {
-        camera[i] = new CameraContext(i);
-        if ( NULL == camera[i].get() ) {
+        camera = new CameraContext(i);
+        if ( NULL == camera.get() ) {
             break;
         }
-        camera[i]->setTestCtxInstance(this);
+        camera->setTestCtxInstance(this);
 
-        status_t stat = camera[i]->openCamera();
+        status_t stat = camera->openCamera();
         if ( NO_ERROR != stat ) {
             printf("Error encountered Openging camera id : %d\n", i);
             break;
         }
-        mAvailableCameras.add(camera[i]);
-        i++;
-    } while ( i < camera[0]->getNumberOfCameras() ) ;
 
-    if (i < camera[0]->getNumberOfCameras() ) {
+        mAvailableCameras.add(camera);
+        i++;
+    } while ( i < camera->getNumberOfCameras() ) ;
+
+    if (i < camera->getNumberOfCameras() ) {
         for ( size_t j = 0 ; j < mAvailableCameras.size() ; j++ ) {
-            camera[j] = mAvailableCameras.itemAt(j);
-            camera[j]->closeCamera();
-            camera[j].clear();
+            camera = mAvailableCameras.itemAt(j);
+            camera->closeCamera();
+            camera.clear();
         }
 
         mAvailableCameras.clear();
@@ -3066,9 +3043,9 @@ TestContext::~TestContext()
     delete mInterpreter;
 
     for ( size_t j = 0 ; j < mAvailableCameras.size() ; j++ ) {
-        camera[j] = mAvailableCameras.itemAt(j);
-        camera[j]->closeCamera();
-        camera[j].clear();
+        sp<CameraContext> camera = mAvailableCameras.itemAt(j);
+        camera->closeCamera();
+        camera.clear();
     }
 
     mAvailableCameras.clear();
@@ -3138,7 +3115,6 @@ void Interpreter::releasePiPBuff() {
 status_t TestContext::FunctionalTest()
 {
     status_t stat = NO_ERROR;
-    const char *ZSLStr = NULL;
 
     assert(mAvailableCameras.size());
 
@@ -3324,36 +3300,12 @@ status_t TestContext::FunctionalTest()
             mTestRunning = false;
         }
             break;
-
         case Interpreter::DELAY:
         {
             if ( command.arg )
                 usleep(1000 * atoi(command.arg));
         }
             break;
-
-        case Interpreter::ZSL_CMD:
-        {
-            currentCamera = mAvailableCameras.itemAt(
-                    mCurrentCameraIndex);
-            ZSLStr = currentCamera->getZSL();
-
-            if (NULL != ZSLStr) {
-                if (strcmp(ZSLStr, "off") == 0) {
-                    currentCamera->setZSL("on");
-                    mIsZSLOn = true;
-                } else if (strcmp(ZSLStr, "on") == 0) {
-                    currentCamera->setZSL("off");
-                    mIsZSLOn = false;
-                } else {
-                    printf("Set zsl failed!\n");
-                }
-            } else {
-                printf("zsl is NULL");
-            }
-        }
-            break;
-
         default:
         {
             currentCamera->disablePrintPreview();
@@ -3364,77 +3316,6 @@ status_t TestContext::FunctionalTest()
     }
 
     return NO_ERROR;
-}
-
-/*===========================================================================
- * FUNCTION   : PiPLock
- *
- * DESCRIPTION: Mutex lock for PiP capture
- *
- * PARAMETERS : none
- *
- * RETURN     : none
- *==========================================================================*/
-
-void TestContext::PiPLock()
-{
-    Mutex::Autolock l(mPiPLock);
-    if (mPiPinUse ) {
-        mPiPCond.wait(mPiPLock);
-    } else {
-        mPiPinUse = true;
-    }
-}
-
-/*===========================================================================
- * FUNCTION   : PiPUnLock
- *
- * DESCRIPTION: Mutex unlock for PiP capture
- *
- * PARAMETERS : none
- *
- * RETURN     : none
- *==========================================================================*/
-void TestContext::PiPUnlock()
-{
-    Mutex::Autolock l(mPiPLock);
-    mPiPinUse = false;
-    mPiPCond.signal();
-}
-
-/*===========================================================================
- * FUNCTION   : ViVLock
- *
- * DESCRIPTION: Mutex lock for ViV Video
- *
- * PARAMETERS : none
- *
- * RETURN     : none
- *==========================================================================*/
-void TestContext::ViVLock()
-{
-    Mutex::Autolock l(mViVLock);
-    if (mViVinUse ) {
-        mViVCond.wait(mViVLock);
-    } else {
-        mViVinUse = true;
-    }
-}
-
-/*===========================================================================
- * FUNCTION   : ViVUnlock
- *
- * DESCRIPTION: Mutex unlock for ViV Video
- *
- * PARAMETERS : none
- *
- * RETURN     : none
- *==========================================================================*/
-void TestContext::ViVUnlock()
-{
-    Mutex::Autolock l(mViVLock);
-    mViVinUse = false;
-    mViVCond.signal();
 }
 
 /*===========================================================================

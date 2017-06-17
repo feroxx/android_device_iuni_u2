@@ -48,8 +48,6 @@
 #define MM_CAMERA_DEV_OPEN_TRIES 2
 #define MM_CAMERA_DEV_OPEN_RETRY_SLEEP 20
 
-#define MM_CAMERA_POST_FLASH_PREVIEW_SKIP_CNT 3
-
 #ifndef TRUE
 #define TRUE 1
 #endif
@@ -72,8 +70,13 @@ typedef enum
     MM_CAMERA_CMD_TYPE_REQ_DATA_CB,/* request data */
     MM_CAMERA_CMD_TYPE_SUPER_BUF_DATA_CB,    /* superbuf dataB CMD */
     MM_CAMERA_CMD_TYPE_CONFIG_NOTIFY, /* configure notify mode */
+    //Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
+    #ifdef ORIGINAL_VERSION
+	#else
     MM_CAMERA_CMD_TYPE_START_ZSL, /* start zsl snapshot for channel */
     MM_CAMERA_CMD_TYPE_STOP_ZSL, /* stop zsl snapshot for channel */
+    #endif
+    //Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 end
     MM_CAMERA_CMD_TYPE_FLUSH_QUEUE, /* flush queue */
     MM_CAMERA_CMD_TYPE_GENERAL,  /* general cmd */
     MM_CAMERA_CMD_TYPE_MAX
@@ -186,7 +189,6 @@ typedef enum {
     MM_STREAM_EVT_SET_PARM,
     MM_STREAM_EVT_GET_PARM,
     MM_STREAM_EVT_DO_ACTION,
-    MM_STREAM_EVT_GET_QUEUED_BUF_COUNT,
     MM_STREAM_EVT_MAX
 } mm_stream_evt_type_t;
 
@@ -244,11 +246,6 @@ typedef struct mm_stream {
 
     uint8_t is_bundled; /* flag if stream is bundled */
 
-    /* reference to linked channel_obj */
-    struct mm_channel* linked_obj;
-    struct mm_stream * linked_stream; /* original stream */
-    uint8_t is_linked; /* flag if stream is linked */
-
     mm_camera_stream_mem_vtbl_t mem_vtbl; /* mem ops tbl */
 
     int8_t queued_buffer_count;
@@ -266,7 +263,6 @@ typedef enum {
 typedef enum {
     MM_CHANNEL_EVT_ADD_STREAM,
     MM_CHANNEL_EVT_DEL_STREAM,
-    MM_CHANNEL_EVT_LINK_STREAM,
     MM_CHANNEL_EVT_CONFIG_STREAM,
     MM_CHANNEL_EVT_GET_BUNDLE_INFO,
     MM_CHANNEL_EVT_START,
@@ -277,8 +273,6 @@ typedef enum {
     MM_CHANNEL_EVT_CANCEL_REQUEST_SUPER_BUF,
     MM_CHANNEL_EVT_FLUSH_SUPER_BUF_QUEUE,
     MM_CHANNEL_EVT_CONFIG_NOTIFY_MODE,
-    MM_CHANNEL_EVT_START_ZSL_SNAPSHOT,
-    MM_CHANNEL_EVT_STOP_ZSL_SNAPSHOT,
     MM_CHANNEL_EVT_MAP_STREAM_BUF,
     MM_CHANNEL_EVT_UNMAP_STREAM_BUF,
     MM_CHANNEL_EVT_SET_STREAM_PARM,
@@ -289,7 +283,13 @@ typedef enum {
     MM_CHANNEL_EVT_AE_BRACKETING,
     MM_CHANNEL_EVT_FLASH_BRACKETING,
     MM_CHANNEL_EVT_ZOOM_1X,
-    MM_CHANNEL_EVT_GET_STREAM_QUEUED_BUF_COUNT,
+//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
+#ifdef ORIGINAL_VERSION
+#else
+    MM_CHANNEL_EVT_START_ZSL_SNAPSHOT,
+    MM_CHANNEL_EVT_STOP_ZSL_SNAPSHOT,
+#endif
+//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 end
 } mm_channel_evt_type_t;
 
 typedef struct {
@@ -377,24 +377,20 @@ typedef struct mm_channel {
     /* reference to parent cam_obj */
     struct mm_camera_obj* cam_obj;
 
-    /* manual zsl snapshot control */
-    uint8_t manualZSLSnapshot;
-
     /* control for zsl led */
     uint8_t startZSlSnapshotCalled;
     uint8_t needLEDFlash;
-    uint8_t previewSkipCnt;
 
     uint8_t need3ABracketing;
     uint8_t isFlashBracketingEnabled;
     uint8_t isZoom1xFrameRequested;
-
+//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
+#ifdef ORIGINAL_VERSION
+#else
+	uint8_t longshotEnabled;
+#endif
+//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 end
 } mm_channel_t;
-
-typedef struct {
-    mm_channel_t *ch;
-    uint32_t stream_id;
-} mm_camera_stream_link_t;
 
 /* struct to store information about pp cookie*/
 typedef struct {
@@ -480,8 +476,6 @@ extern int32_t mm_camera_register_event_notify(mm_camera_obj_t *my_obj,
 extern int32_t mm_camera_qbuf(mm_camera_obj_t *my_obj,
                               uint32_t ch_id,
                               mm_camera_buf_def_t *buf);
-extern int32_t mm_camera_get_queued_buf_count(mm_camera_obj_t *my_obj,
-        uint32_t ch_id, uint32_t stream_id);
 extern int32_t mm_camera_query_capability(mm_camera_obj_t *my_obj);
 extern int32_t mm_camera_set_parms(mm_camera_obj_t *my_obj,
                                    void *parms);
@@ -499,10 +493,6 @@ extern int32_t mm_camera_prepare_snapshot(mm_camera_obj_t *my_obj,
                                           int32_t do_af_flag);
 extern int32_t mm_camera_start_zsl_snapshot(mm_camera_obj_t *my_obj);
 extern int32_t mm_camera_stop_zsl_snapshot(mm_camera_obj_t *my_obj);
-extern int32_t mm_camera_start_zsl_snapshot_ch(mm_camera_obj_t *my_obj,
-        uint32_t ch_id);
-extern int32_t mm_camera_stop_zsl_snapshot_ch(mm_camera_obj_t *my_obj,
-        uint32_t ch_id);
 extern uint32_t mm_camera_add_channel(mm_camera_obj_t *my_obj,
                                       mm_camera_channel_attr_t *attr,
                                       mm_camera_buf_notify_t channel_cb,
@@ -517,10 +507,6 @@ extern uint32_t mm_camera_add_stream(mm_camera_obj_t *my_obj,
 extern int32_t mm_camera_del_stream(mm_camera_obj_t *my_obj,
                                     uint32_t ch_id,
                                     uint32_t stream_id);
-extern uint32_t mm_camera_link_stream(mm_camera_obj_t *my_obj,
-        uint32_t ch_id,
-        uint32_t stream_id,
-        uint32_t linked_ch_id);
 extern int32_t mm_camera_config_stream(mm_camera_obj_t *my_obj,
                                        uint32_t ch_id,
                                        uint32_t stream_id,
@@ -529,6 +515,16 @@ extern int32_t mm_camera_start_channel(mm_camera_obj_t *my_obj,
                                        uint32_t ch_id);
 extern int32_t mm_camera_stop_channel(mm_camera_obj_t *my_obj,
                                       uint32_t ch_id);
+//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
+#ifdef ORIGINAL_VERSION
+#else
+extern int32_t mm_camera_start_zsl_snapshot_ch(mm_camera_obj_t *my_obj,
+        uint32_t ch_id);
+extern int32_t mm_camera_stop_zsl_snapshot_ch(mm_camera_obj_t *my_obj,
+        uint32_t ch_id);
+#endif
+//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 end
+
 extern int32_t mm_camera_request_super_buf(mm_camera_obj_t *my_obj,
                                            uint32_t ch_id,
                                            uint32_t num_buf_requested);
@@ -584,6 +580,7 @@ extern int32_t mm_channel_init(mm_channel_t *my_obj,
  * from the context of dataCB, but async stop is holding ch_lock */
 extern int32_t mm_channel_qbuf(mm_channel_t *my_obj,
                                mm_camera_buf_def_t *buf);
+
 /* mm_stream */
 extern int32_t mm_stream_fsm_fn(mm_stream_t *my_obj,
                                 mm_stream_evt_type_t evt,

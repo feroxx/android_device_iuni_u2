@@ -172,15 +172,8 @@ static void mm_camera_event_notify(void* user_data)
                     mm_camera_enqueue_evt(my_obj, &evt);
                 }
                 break;
-            case CAM_EVENT_TYPE_INT_TAKE_PIC:
-                {
-                    evt.server_event_type = CAM_EVENT_TYPE_INT_TAKE_PIC;
-                    mm_camera_enqueue_evt(my_obj, &evt);
-                }
-                break;
             case MSM_CAMERA_PRIV_SHUTDOWN:
                 {
-                    CDBG_ERROR("%s: Camera Event DAEMON DIED received", __func__);
                     evt.server_event_type = CAM_EVENT_TYPE_DAEMON_DIED;
                     mm_camera_enqueue_evt(my_obj, &evt);
                 }
@@ -249,31 +242,25 @@ int32_t mm_camera_open(mm_camera_obj_t *my_obj)
     int8_t n_try=MM_CAMERA_DEV_OPEN_TRIES;
     uint8_t sleep_msec=MM_CAMERA_DEV_OPEN_RETRY_SLEEP;
     unsigned int cam_idx = 0;
-    char t_devname[MM_CAMERA_DEV_NAME_LEN];
 
     CDBG("%s:  begin\n", __func__);
 
-    strcpy(t_devname, mm_camera_util_get_dev_name(my_obj->my_hdl));
-    if (t_devname[0] == '\0') {
-        rc = -1;
-        goto on_error;
-    }
-    snprintf(dev_name, sizeof(dev_name), "/dev/%s",t_devname );
+    snprintf(dev_name, sizeof(dev_name), "/dev/%s",
+             mm_camera_util_get_dev_name(my_obj->my_hdl));
     sscanf(dev_name, "/dev/video%u", &cam_idx);
     CDBG_ERROR("%s: dev name = %s, cam_idx = %d", __func__, dev_name, cam_idx);
 
     do{
         n_try--;
-        errno = 0;
         my_obj->ctrl_fd = open(dev_name, O_RDWR | O_NONBLOCK);
         CDBG("%s:  ctrl_fd = %d, errno == %d", __func__, my_obj->ctrl_fd, errno);
-        if((my_obj->ctrl_fd >= 0) || (errno != EIO && errno != ETIMEDOUT) || (n_try <= 0 )) {
-            CDBG_HIGH("%s:  opened, break out while loop", __func__);
+        if((my_obj->ctrl_fd > 0) || (errno != EIO) || (n_try <= 0 )) {
+            CDBG_ERROR("%s:  opened, break out while loop", __func__);
             break;
         }
-        ALOGE("%s:Failed with %s error, retrying after %d milli-seconds",
-             __func__, strerror(errno), sleep_msec);
-        usleep(sleep_msec * 1000U);
+        CDBG("%s:failed with I/O error retrying after %d milli-seconds",
+             __func__, sleep_msec);
+        usleep(sleep_msec * 1000);
     }while (n_try > 0);
 
     if (my_obj->ctrl_fd <= 0) {
@@ -496,42 +483,6 @@ int32_t mm_camera_qbuf(mm_camera_obj_t *my_obj,
 
     return rc;
 }
-
-/*===========================================================================
- * FUNCTION   : mm_camera_get_queued_buf_count
- *
- * DESCRIPTION: return queued buffer count
- *
- * PARAMETERS :
- *   @my_obj       : camera object
- *   @ch_id        : channel handle
- *   @stream_id : stream id
- *
- * RETURN     : queued buffer count
- *==========================================================================*/
-int32_t mm_camera_get_queued_buf_count(mm_camera_obj_t *my_obj,
-        uint32_t ch_id, uint32_t stream_id)
-{
-    int rc = -1;
-    mm_channel_t * ch_obj = NULL;
-    uint32_t payload;
-    ch_obj = mm_camera_util_get_channel_by_handler(my_obj, ch_id);
-    payload = stream_id;
-
-    if (NULL != ch_obj) {
-        pthread_mutex_lock(&ch_obj->ch_lock);
-        pthread_mutex_unlock(&my_obj->cam_lock);
-        rc = mm_channel_fsm_fn(ch_obj,
-                MM_CHANNEL_EVT_GET_STREAM_QUEUED_BUF_COUNT,
-                (void *)&payload,
-                NULL);
-    } else {
-        pthread_mutex_unlock(&my_obj->cam_lock);
-    }
-
-    return rc;
-}
-
 
 /*===========================================================================
  * FUNCTION   : mm_camera_query_capability
@@ -857,51 +808,6 @@ int32_t mm_camera_get_bundle_info(mm_camera_obj_t *my_obj,
 }
 
 /*===========================================================================
- * FUNCTION   : mm_camera_link_stream
- *
- * DESCRIPTION: link a stream into a channel
- *
- * PARAMETERS :
- *   @my_obj       : camera object
- *   @ch_id        : channel handle
- *   @stream_id    : stream that will be linked
- *   @linked_ch_id : channel in which the stream will be linked
- *
- * RETURN     : uint32_t type of stream handle
- *              0  -- invalid stream handle, meaning the op failed
- *              >0 -- successfully linked a stream with a valid handle
- *==========================================================================*/
-uint32_t mm_camera_link_stream(mm_camera_obj_t *my_obj,
-        uint32_t ch_id,
-        uint32_t stream_id,
-        uint32_t linked_ch_id)
-{
-    uint32_t s_hdl = 0;
-    mm_channel_t * ch_obj =
-            mm_camera_util_get_channel_by_handler(my_obj, linked_ch_id);
-    mm_channel_t * owner_obj =
-            mm_camera_util_get_channel_by_handler(my_obj, ch_id);
-
-    if ((NULL != ch_obj) && (NULL != owner_obj)) {
-        pthread_mutex_lock(&ch_obj->ch_lock);
-        pthread_mutex_unlock(&my_obj->cam_lock);
-
-        mm_camera_stream_link_t stream_link;
-        memset(&stream_link, 0, sizeof(mm_camera_stream_link_t));
-        stream_link.ch = owner_obj;
-        stream_link.stream_id = stream_id;
-        mm_channel_fsm_fn(ch_obj,
-                          MM_CHANNEL_EVT_LINK_STREAM,
-                          (void*)&stream_link,
-                          (void*)&s_hdl);
-    } else {
-        pthread_mutex_unlock(&my_obj->cam_lock);
-    }
-
-    return s_hdl;
-}
-
-/*===========================================================================
  * FUNCTION   : mm_camera_add_stream
  *
  * DESCRIPTION: add a stream into a channel
@@ -966,76 +872,6 @@ int32_t mm_camera_del_stream(mm_camera_obj_t *my_obj,
         rc = mm_channel_fsm_fn(ch_obj,
                                MM_CHANNEL_EVT_DEL_STREAM,
                                (void*)stream_id,
-                               NULL);
-    } else {
-        pthread_mutex_unlock(&my_obj->cam_lock);
-    }
-
-    return rc;
-}
-
-/*===========================================================================
- * FUNCTION   : mm_camera_start_zsl_snapshot_ch
- *
- * DESCRIPTION: starts zsl snapshot for specific channel
- *
- * PARAMETERS :
- *   @my_obj       : camera object
- *   @ch_id        : channel handle
- *
- * RETURN     : int32_t type of status
- *              0  -- success
- *              -1 -- failure
- *==========================================================================*/
-int32_t mm_camera_start_zsl_snapshot_ch(mm_camera_obj_t *my_obj,
-        uint32_t ch_id)
-{
-    int32_t rc = -1;
-    mm_channel_t * ch_obj =
-        mm_camera_util_get_channel_by_handler(my_obj, ch_id);
-
-    if (NULL != ch_obj) {
-        pthread_mutex_lock(&ch_obj->ch_lock);
-        pthread_mutex_unlock(&my_obj->cam_lock);
-
-        rc = mm_channel_fsm_fn(ch_obj,
-                               MM_CHANNEL_EVT_START_ZSL_SNAPSHOT,
-                               NULL,
-                               NULL);
-    } else {
-        pthread_mutex_unlock(&my_obj->cam_lock);
-    }
-
-    return rc;
-}
-
-/*===========================================================================
- * FUNCTION   : mm_camera_stop_zsl_snapshot_ch
- *
- * DESCRIPTION: stops zsl snapshot for specific channel
- *
- * PARAMETERS :
- *   @my_obj       : camera object
- *   @ch_id        : channel handle
- *
- * RETURN     : int32_t type of status
- *              0  -- success
- *              -1 -- failure
- *==========================================================================*/
-int32_t mm_camera_stop_zsl_snapshot_ch(mm_camera_obj_t *my_obj,
-        uint32_t ch_id)
-{
-    int32_t rc = -1;
-    mm_channel_t * ch_obj =
-        mm_camera_util_get_channel_by_handler(my_obj, ch_id);
-
-    if (NULL != ch_obj) {
-        pthread_mutex_lock(&ch_obj->ch_lock);
-        pthread_mutex_unlock(&my_obj->cam_lock);
-
-        rc = mm_channel_fsm_fn(ch_obj,
-                               MM_CHANNEL_EVT_STOP_ZSL_SNAPSHOT,
-                               NULL,
                                NULL);
     } else {
         pthread_mutex_unlock(&my_obj->cam_lock);
@@ -1444,6 +1280,81 @@ int32_t mm_camera_do_stream_action(mm_camera_obj_t *my_obj,
 
     return rc;
 }
+
+//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
+#ifdef ORIGINAL_VERSION
+#else
+/*===========================================================================
+ * FUNCTION   : mm_camera_start_zsl_snapshot_ch
+ *
+ * DESCRIPTION: starts zsl snapshot for specific channel
+ *
+ * PARAMETERS :
+ *   @my_obj       : camera object
+ *   @ch_id        : channel handle
+ *
+ * RETURN     : int32_t type of status
+ *              0  -- success
+ *              -1 -- failure
+ *==========================================================================*/
+int32_t mm_camera_start_zsl_snapshot_ch(mm_camera_obj_t *my_obj,
+        uint32_t ch_id)
+{
+    int32_t rc = -1;
+    mm_channel_t * ch_obj =
+        mm_camera_util_get_channel_by_handler(my_obj, ch_id);
+
+    if (NULL != ch_obj) {
+        pthread_mutex_lock(&ch_obj->ch_lock);
+        pthread_mutex_unlock(&my_obj->cam_lock);
+
+        rc = mm_channel_fsm_fn(ch_obj,
+                               MM_CHANNEL_EVT_START_ZSL_SNAPSHOT,
+                               NULL,
+                               NULL);
+    } else {
+        pthread_mutex_unlock(&my_obj->cam_lock);
+    }
+
+    return rc;
+}
+
+/*===========================================================================
+ * FUNCTION   : mm_camera_stop_zsl_snapshot_ch
+ *
+ * DESCRIPTION: stops zsl snapshot for specific channel
+ *
+ * PARAMETERS :
+ *   @my_obj       : camera object
+ *   @ch_id        : channel handle
+ *
+ * RETURN     : int32_t type of status
+ *              0  -- success
+ *              -1 -- failure
+ *==========================================================================*/
+int32_t mm_camera_stop_zsl_snapshot_ch(mm_camera_obj_t *my_obj,
+        uint32_t ch_id)
+{
+    int32_t rc = -1;
+    mm_channel_t * ch_obj =
+        mm_camera_util_get_channel_by_handler(my_obj, ch_id);
+
+    if (NULL != ch_obj) {
+        pthread_mutex_lock(&ch_obj->ch_lock);
+        pthread_mutex_unlock(&my_obj->cam_lock);
+
+        rc = mm_channel_fsm_fn(ch_obj,
+                               MM_CHANNEL_EVT_STOP_ZSL_SNAPSHOT,
+                               NULL,
+                               NULL);
+    } else {
+        pthread_mutex_unlock(&my_obj->cam_lock);
+    }
+
+    return rc;
+}
+#endif
+//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 end
 
 /*===========================================================================
  * FUNCTION   : mm_camera_map_stream_buf

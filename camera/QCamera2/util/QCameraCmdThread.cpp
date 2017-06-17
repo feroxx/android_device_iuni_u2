@@ -90,6 +90,7 @@ int32_t QCameraCmdThread::launch(void *(*start_routine)(void *),
                    user_data);
     return NO_ERROR;
 }
+
 /*===========================================================================
  * FUNCTION   : sendCmd
  *

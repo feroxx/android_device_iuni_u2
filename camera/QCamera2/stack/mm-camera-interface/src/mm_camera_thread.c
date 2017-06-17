@@ -272,10 +272,7 @@ static void mm_camera_poll_proc_pipe(mm_camera_poll_thread_t *poll_cb)
 static void *mm_camera_poll_fn(mm_camera_poll_thread_t *poll_cb)
 {
     int rc = 0, i;
-    if (poll_cb == NULL) {
-        CDBG_ERROR("%s: error: poll_cb=%p",__func__,poll_cb);
-        return NULL;
-    }
+
     CDBG("%s: poll type = %d, num_fd = %d poll_cb = %p\n",
          __func__, poll_cb->poll_type, poll_cb->num_fds,poll_cb);
     do {
@@ -554,10 +551,15 @@ static void *mm_camera_cmd_thread(void *data)
             case MM_CAMERA_CMD_TYPE_REQ_DATA_CB:
             case MM_CAMERA_CMD_TYPE_SUPER_BUF_DATA_CB:
             case MM_CAMERA_CMD_TYPE_CONFIG_NOTIFY:
-            case MM_CAMERA_CMD_TYPE_START_ZSL:
-            case MM_CAMERA_CMD_TYPE_STOP_ZSL:
             case MM_CAMERA_CMD_TYPE_GENERAL:
             case MM_CAMERA_CMD_TYPE_FLUSH_QUEUE:
+			//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
+			#ifdef ORIGINAL_VERSION
+			#else
+			case MM_CAMERA_CMD_TYPE_START_ZSL:
+			case MM_CAMERA_CMD_TYPE_STOP_ZSL:
+			#endif
+			//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 end
                 if (NULL != cmd_thread->cb) {
                     cmd_thread->cb(node, cmd_thread->user_data);
                 }

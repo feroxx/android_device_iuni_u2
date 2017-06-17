@@ -28,10 +28,6 @@ LOCAL_CFLAGS += -DUSE_JB_MR1
 
 endif
 
-ifneq ($(call is-platform-sdk-version-at-least,20),true)
-LOCAL_CFLAGS += -DUSE_KK_CODE
-endif
-
 LOCAL_C_INCLUDES += \
     frameworks/base/include/ui \
     frameworks/base/include/surfaceflinger \
@@ -39,7 +35,7 @@ LOCAL_C_INCLUDES += \
     frameworks/base/include/media \
     external/skia/include/core \
     external/skia/include/images \
-    $(call project-path-for,qcom-display)/libgralloc \
+    hardware/qcom/display/libgralloc \
     frameworks/av/include/media/stagefright \
     frameworks/native/include/media/openmax \
 

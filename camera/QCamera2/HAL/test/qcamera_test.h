@@ -38,8 +38,6 @@ namespace qcamera {
 
 using namespace android;
 
-#define MAX_CAM_INSTANCES 3
-
 class TestContext;
 
 class CameraContext : public CameraListener,
@@ -59,7 +57,6 @@ public:
     } Sections_t;
 
 public:
-    static const char KEY_ZSL[];
 
     CameraContext(int cameraIndex);
     virtual ~CameraContext();
@@ -102,8 +99,6 @@ public:
 
     void printMenu(sp<CameraContext> currentCamera);
     void printSupportedParams();
-    const char *getZSL();
-    void setZSL(const char *value);
 
 
     int getCameraIndex() { return mCameraIndex; }
@@ -141,7 +136,7 @@ private:
 
     status_t saveFile(const sp<IMemory>& mem, String8 path);
     SkBitmap * PiPCopyToOneFile(SkBitmap *bitmap0, SkBitmap *bitmap1);
-    status_t decodeJPEG(const sp<IMemory>& mem, SkBitmap *skBM);
+    SkBitmap *decodeJPEG(const sp<IMemory>& mem);
     status_t encodeJPEG(SkWStream * stream, const SkBitmap *bitmap,
         String8 path);
     void previewCallback(const sp<IMemory>& mem);
@@ -159,8 +154,8 @@ private:
     bool mPiPCapture;
     static int mPiPIdx;
     int mfmtMultiplier;
-    int mWidthTmp;
-    int mHeightTmp;
+    int mWidthTmp[2];
+    int mHeightTmp[2];
     int mSectionsRead;
     int mSectionsAllocated;
     Sections_t * mSections;
@@ -168,6 +163,10 @@ private:
     Sections_t mJEXIFSection;
     int mHaveAll;
     TestContext *mInterpr;
+    Mutex mViVLock;
+    Condition mViVCond;
+    bool mViVinUse;
+
 
     sp<Camera> mCamera;
     sp<SurfaceComposerClient> mClient;
@@ -177,8 +176,8 @@ private:
     CameraParameters mParams;
     SkBitmap *skBMDec;
     SkImageEncoder* skJpegEnc;
-    SkBitmap skBMtmp;
-    sp<IMemory> PiPPtrTmp;
+    static SkBitmap *skBMtmp[2];
+    static sp<IMemory> PiPPtrTmp[2];
 
     int mCurrentPreviewSizeIdx;
     int mCurrentPictureSizeIdx;
@@ -193,6 +192,8 @@ private:
 
     void useLock();
     void signalFinished();
+    void mutexLock();
+    void mutexUnlock();
 
     //------------------------------------------------------------------------
     // JPEG markers consist of one or more 0xFF bytes, followed by a marker
@@ -248,7 +249,6 @@ public:
         ENABLE_PRV_CALLBACKS_CMD = '&',
         EXIT_CMD = 'q',
         DELAY = 'd',
-        ZSL_CMD = 'z',
         INVALID_CMD = '0'
     };
 
@@ -274,6 +274,7 @@ public:
     Command getCommand(sp<CameraContext> currentCamera);
     void releasePiPBuff();
     status_t configureViVCodec();
+    //status_t configureViVCodec();
     void setViVSize(Size VideoSize, int camIndex);
     void setTestCtxInst(TestContext *instance);
     status_t unconfigureViVCodec();
@@ -304,26 +305,14 @@ public:
     status_t FunctionalTest();
     status_t AddScriptFromFile(const char *scriptFile);
     void setViVSize(Size VideoSize, int camIndex);
-    void PiPLock();
-    void PiPUnlock();
-    void ViVLock();
-    void ViVUnlock();
 
 private:
-    sp<CameraContext> camera[MAX_CAM_INSTANCES];
     char GetNextCmd(sp<qcamera::CameraContext> currentCamera);
     int  mCurrentCameraIndex;
     int  mSaveCurrentCameraIndex;
     Vector< sp<qcamera::CameraContext> > mAvailableCameras;
     bool mTestRunning;
     Interpreter *mInterpreter;
-    Mutex mPiPLock;
-    Condition mPiPCond;
-    bool mPiPinUse;
-    Mutex mViVLock;
-    Condition mViVCond;
-    bool mViVinUse;
-    bool mIsZSLOn;
 
     typedef struct ViVBuff_t{
         void *buff;

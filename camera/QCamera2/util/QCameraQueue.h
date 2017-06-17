@@ -32,8 +32,6 @@
 
 #include <pthread.h>
 #include "cam_list.h"
-#include <stdlib.h>
-#include <string.h>
 
 namespace qcamera {
 
@@ -53,7 +51,6 @@ public:
     void flushNodes(match_fn_data match, void *spec_data);
     void* dequeue(bool bFromHead = true);
     bool isEmpty();
-    int getCurrentSize() {return m_size;}
 private:
     typedef struct {
         struct cam_list list;

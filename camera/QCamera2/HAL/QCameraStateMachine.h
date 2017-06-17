@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2014, The Linux Foundataion. All rights reserved.
+/* Copyright (c) 2012-2013, The Linux Foundataion. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -86,7 +86,6 @@ typedef enum {
     QCAMERA_SM_EVT_SNAPSHOT_DONE,            // internal evt that snapshot is done
     QCAMERA_SM_EVT_THERMAL_NOTIFY,           // evt notify from thermal daemon
     QCAMERA_SM_EVT_STOP_CAPTURE_CHANNEL,     // stop capture channel
-    QCAMERA_SM_EVT_RESTART_PERVIEW,          // internal preview restart
     QCAMERA_SM_EVT_MAX
 } qcamera_sm_evt_enum_t;
 
@@ -108,11 +107,6 @@ typedef struct {
         int handle;                           // result_type ==QCAMERA_API_RESULT_TYPE_HANDLE
     };
 } qcamera_api_result_t;
-
-typedef struct api_result_list {
-   qcamera_api_result_t result;
-   struct api_result_list *next;
-}api_result_list;
 
 // definition for payload type of setting callback
 typedef struct {
@@ -144,7 +138,6 @@ typedef enum {
     QCAMERA_INTERNAL_EVT_CROP_INFO,          // crop info
     QCAMERA_INTERNAL_EVT_ASD_UPDATE,         // asd update result
     QCAMERA_INTERNAL_EVT_AWB_UPDATE,         // awb update result
-    QCAMERA_INTERNAL_EVT_ZSL_CAPTURE_DONE,   // ZSL capture done event
     QCAMERA_INTERNAL_EVT_MAX
 } qcamera_internal_evt_type_t;
 
@@ -172,6 +165,12 @@ public:
     bool isPreviewRunning(); // check if preview is running
     bool isCaptureRunning(); // check if image capture is running
     bool isNonZSLCaptureRunning(); // check if image capture is running in non ZSL mode
+//Gionee <zhuangxiaojian> <2014-06-26> modify for CR01310542 begin
+#ifdef ORIGINAL_VERSION
+#else
+    bool isRecordingRunning();
+#endif
+//Gionee <zhuangxiaojian> <2014-06-26> modify for CR01310542 end
 
 private:
     typedef enum {

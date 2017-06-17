@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -391,24 +391,6 @@ typedef struct {
     int32_t (*prepare_snapshot) (uint32_t camera_handle,
                                  int32_t do_af_flag);
 
-    /** start_zsl_snapshot: function definition for starting
-     *                    zsl snapshot.
-     *    @camera_handle : camer handler
-     *    @ch_id         : channel id
-     *  Return value: 0 -- success
-     *                -1 -- failure
-     **/
-    int32_t (*start_zsl_snapshot) (uint32_t camera_handle, uint32_t ch_id);
-
-    /** stop_zsl_snapshot: function definition for stopping
-     *                    zsl snapshot.
-     *    @camera_handle : camer handler
-     *    @ch_id         : channel id
-     *  Return value: 0 -- success
-     *                -1 -- failure
-     **/
-    int32_t (*stop_zsl_snapshot) (uint32_t camera_handle, uint32_t ch_id);
-
     /** add_channel: fucntion definition for adding a channel
      *    @camera_handle : camer handler
      *    @ch_id : channel handler
@@ -463,19 +445,6 @@ typedef struct {
     int32_t (*delete_stream) (uint32_t camera_handle,
                               uint32_t ch_id,
                               uint32_t stream_id);
-
-    /** link_stream: function definition for linking a stream
-     *    @camera_handle : camera handle
-     *    @ch_id : channel handle from which the stream originates
-     *    @stream_id : stream handle
-     *    @linked_ch_id: channel handle in which the stream will be linked
-     *  Return value: 0 -- success
-     *                -1 -- failure
-     **/
-    int32_t (*link_stream) (uint32_t camera_handle,
-          uint32_t ch_id,
-          uint32_t stream_id,
-          uint32_t linked_ch_id);
 
     /** config_stream: fucntion definition for configuring a stream
      *    @camera_handle : camer handler
@@ -606,16 +575,6 @@ typedef struct {
                      uint32_t ch_id,
                      mm_camera_buf_def_t *buf);
 
-    /** get_queued_buf_count: fucntion definition for querying queued buf count
-     *    @camera_handle : camer handler
-     *    @ch_id : channel handler
-     *    @stream_id : stream handler
-     *  Return value: queued buf count
-     **/
-    int32_t (*get_queued_buf_count) (uint32_t camera_handle,
-            uint32_t ch_id,
-            uint32_t stream_id);
-
     /** request_super_buf: fucntion definition for requesting frames
      *                     from superbuf queue in burst mode
      *    @camera_handle : camer handler
@@ -664,11 +623,6 @@ typedef struct {
                                       uint32_t ch_id,
                                       mm_camera_super_buf_notify_mode_t notify_mode);
 
-    /* choose stable frame for image stability */
-    int32_t (*do_is_process_for_capture) (uint32_t camera_handle,
-                                          uint32_t ch_id,
-                                          uint32_t is_process_flag);
-
      /** process_advanced_capture: function definition for start/stop advanced capture
      *                    for snapshot.
      *    @camera_handle : camera handle
@@ -684,6 +638,29 @@ typedef struct {
                                           mm_camera_advanced_capture_t type,
                                           uint32_t ch_id,
                                           int8_t start_flag);
+	 
+//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
+#ifdef ORIGINAL_VERSION
+#else
+	/** start_zsl_snapshot: function definition for starting
+     *                    zsl snapshot.
+     *    @camera_handle : camer handler
+     *    @ch_id         : channel id
+     *  Return value: 0 -- success
+     *                -1 -- failure
+     **/
+    int32_t (*start_zsl_snapshot) (uint32_t camera_handle, uint32_t ch_id);
+
+    /** stop_zsl_snapshot: function definition for stopping
+     *                    zsl snapshot.
+     *    @camera_handle : camer handler
+     *    @ch_id         : channel id
+     *  Return value: 0 -- success
+     *                -1 -- failure
+     **/
+    int32_t (*stop_zsl_snapshot) (uint32_t camera_handle, uint32_t ch_id);
+#endif
+//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 end
 } mm_camera_ops_t;
 
 /** mm_camera_vtbl_t: virtual table for camera operations
@@ -703,13 +680,9 @@ uint8_t get_num_of_cameras();
 mm_camera_vtbl_t * camera_open(uint8_t camera_idx);
 struct camera_info *get_cam_info(int camera_id);
 
-/* return 1 if have another camera opened */
-int have_camera_opened();
-
 /* helper functions */
-int32_t mm_stream_calc_offset_preview(cam_stream_info_t *stream_info,
+int32_t mm_stream_calc_offset_preview(cam_format_t fmt,
         cam_dimension_t *dim,
-        cam_padding_info_t *padding,
         cam_stream_buf_plane_info_t *buf_planes);
 
 int32_t mm_stream_calc_offset_post_view(cam_format_t fmt,

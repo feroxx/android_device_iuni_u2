@@ -34,6 +34,13 @@ extern "C" {
 #include <mm_camera_interface.h>
 #include <mm_jpeg_interface.h>
 }
+//Gionee <zhuangxiaojian> <2013-08-28> modify for CR00882216 begin
+#ifdef ORIGINAL_VERSION
+#else
+#include <sys/time.h>
+#include <time.h>
+#endif
+//Gionee <zhuangxiaojian> <2013-08-28> modify for CR00882216 end
 #include "QCamera2HWI.h"
 
 #define MAX_JPEG_BURST 2
@@ -48,18 +55,15 @@ typedef struct {
     mm_camera_super_buf_t *src_frame;// source frame (need to be returned back to kernel after done)
     mm_camera_super_buf_t *src_reproc_frame; // original source frame for reproc if not NULL
     cam_metadata_info_t * metadata;  // source frame metadata
-    bool reproc_frame_release;       // false release original buffer,
-                                     // true don't release it
+    bool reproc_frame_release;       // false release original buffer, true don't release it
     mm_camera_buf_def_t *src_reproc_bufs;
+    mm_camera_buf_def_t *src_bufs;
     QCameraExif *pJpegExifObj;
 } qcamera_jpeg_data_t;
 
 typedef struct {
     uint32_t jobId;                  // job ID
-    mm_camera_super_buf_t *src_frame;// source frame
-    bool reproc_frame_release;       // false release original buffer
-                                     // true don't release it
-    mm_camera_buf_def_t *src_reproc_bufs;
+    mm_camera_super_buf_t *src_frame;// source frame (need to be returned back to kernel after done)
 } qcamera_pp_data_t;
 
 typedef struct {
@@ -125,8 +129,7 @@ public:
     bool getMultipleStages() { return mMultipleStages; };
     void setMultipleStages(bool stages) { mMultipleStages = stages; };
     inline bool getJpegMemOpt() {return mJpegMemOpt;}
-    inline void setJpegMemOpt(bool val) {mJpegMemOpt = val;}
-    QCameraStream* getReprocStream() {return m_reprocStream;}
+
 private:
     int32_t sendDataNotify(int32_t msg_type,
                            camera_memory_t *data,
@@ -164,13 +167,16 @@ private:
 
     static void *dataProcessRoutine(void *data);
     static void *dataSaveRoutine(void *data);
+	// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 begin
+	#ifdef ORIGINAL_VERSION
+	#else
+	static void *longshotRoutine(void *data);
+	#endif
+	// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 end
 
     int32_t setYUVFrameInfo(mm_camera_super_buf_t *recvd_frame);
     static bool matchJobId(void *data, void *user_data, void *match_data);
     static int getJpegMemory(omx_jpeg_ouput_buf_t *out_buf);
-
-    int32_t reprocess(qcamera_pp_data_t *pp_job);
-    int32_t stopCapture();
 
 private:
     QCamera2HardwareInterface *m_parent;
@@ -195,6 +201,12 @@ private:
     QCameraQueue m_inputSaveQ;          // input save job queue
     QCameraCmdThread m_dataProcTh;      // thread for data processing
     QCameraCmdThread m_saveProcTh;      // thread for storing buffers
+    // Gionee <wutangzhi> <2013-10-28> modify for CR00906596 begin
+	#ifdef ORIGINAL_VERSION
+	#else
+    QCameraCmdThread m_longshotProcTh;	// thread for long shot
+    #endif
+	// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 end
     uint32_t mSaveFrmCnt;               // save frame counter
     static const char *STORE_LOCATION;  // path for storing buffers
     bool mUseSaveProc;                  // use store thread
@@ -203,11 +215,13 @@ private:
     uint8_t mNewJpegSessionNeeded;
     bool mMultipleStages;               // multiple stages are present
     uint32_t   m_JpegOutputMemCount;
-    QCameraStream *m_reprocStream;
-
-public:
-    cam_dimension_t m_dst_dim;
-    cam_dimension_t m_src_dim;
+// Gionee <wutangzhi> <2013-09-13> modify for CR00899328 begin
+#ifdef ORIGINAL_VERSION
+#else
+	int32_t mGnNeedBurstCount;		
+	int32_t mReceiveFrameCnt;
+#endif
+// Gionee <wutangzhi> <2013-09-13> modify for CR00899328 end
 };
 
 }; // namespace qcamera

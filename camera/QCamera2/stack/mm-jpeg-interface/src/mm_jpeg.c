@@ -1304,7 +1304,7 @@ static OMX_ERRORTYPE mm_jpeg_configure_job_params(
   work_buffer.fd = p_session->work_buffer.p_pmem_fd;
   work_buffer.vaddr = p_session->work_buffer.addr;
   work_buffer.length = p_session->work_buffer.size;
-  CDBG_HIGH("%s:%d] Work buffer %d %p WorkBufSize: %d", __func__, __LINE__,
+  CDBG_ERROR("%s:%d] Work buffer %d %p WorkBufSize: %d", __func__, __LINE__,
     work_buffer.fd, work_buffer.vaddr, work_buffer.length);
 
   buffer_invalidate(&p_session->work_buffer);
@@ -1318,7 +1318,7 @@ static OMX_ERRORTYPE mm_jpeg_configure_job_params(
 
   /* set metadata */
   ret = mm_jpeg_metadata(p_session);
-  CDBG_HIGH("%s: config makernote data failed", __func__);
+  CDBG_ERROR("%s: config makernote data failed", __func__);
   if (OMX_ErrorNone != ret) {
     return ret;
   }
@@ -1976,7 +1976,7 @@ int32_t mm_jpeg_start_job(mm_jpeg_obj *my_obj,
       cam_sem_post(&my_obj->job_mgr.job_sem);
   }
 
-  CDBG_HIGH("%s:%d] X", __func__, __LINE__);
+  CDBG_ERROR("%s:%d] X", __func__, __LINE__);
 
   return rc;
 }
@@ -2122,7 +2122,7 @@ int32_t mm_jpeg_create_session(mm_jpeg_obj *my_obj,
   if (work_bufs_need > MM_JPEG_CONCURRENT_SESSIONS_COUNT) {
     work_bufs_need = MM_JPEG_CONCURRENT_SESSIONS_COUNT;
   }
-  CDBG_HIGH("%s:%d] >>>> Work bufs need %d", __func__, __LINE__, work_bufs_need);
+  CDBG_ERROR("%s:%d] >>>> Work bufs need %d", __func__, __LINE__, work_bufs_need);
   work_buf_size = CEILING64(my_obj->max_pic_w) *
       CEILING64(my_obj->max_pic_h) * 1.5;
   for (i = my_obj->work_buf_cnt; i < work_bufs_need; i++) {
@@ -2152,7 +2152,7 @@ int32_t mm_jpeg_create_session(mm_jpeg_obj *my_obj,
 
   /* init output buf queue */
   p_out_buf_q = (mm_jpeg_queue_t *) malloc(sizeof(*p_out_buf_q));
-  if (NULL == p_out_buf_q) {
+  if (NULL == p_session_handle_q) {
     CDBG_ERROR("%s:%d] Error", __func__, __LINE__);
     return -1;
   }
@@ -2256,7 +2256,7 @@ static int32_t mm_jpegenc_destroy_job(mm_jpeg_job_session_t *p_session)
   mm_jpeg_encode_job_t *p_jobparams = &p_session->encode_job;
   int i = 0, rc = 0;
 
-  CDBG_HIGH("%s:%d] Exif entry count %d %d", __func__, __LINE__,
+  CDBG_ERROR("%s:%d] Exif entry count %d %d", __func__, __LINE__,
     (int)p_jobparams->exif_info.numOfEntries,
     (int)p_session->exif_count_local);
   for (i = 0; i < p_session->exif_count_local; i++) {
@@ -2555,7 +2555,7 @@ OMX_ERRORTYPE mm_jpeg_fbd(OMX_HANDLETYPE hComponent,
   int rc = 0;
   mm_jpeg_output_t output_buf;
   CDBG("%s:%d] count %d ", __func__, __LINE__, p_session->fbd_count);
-  CDBG_HIGH("[KPI Perf] : PROFILE_JPEG_FBD");
+  ALOGE("[KPI Perf] : PROFILE_JPEG_FBD");
 
   pthread_mutex_lock(&p_session->lock);
 
@@ -2732,21 +2732,19 @@ mm_jpeg_job_q_node_t* mm_jpeg_queue_remove_job_by_job_id(
     node = member_of(pos, mm_jpeg_q_node_t, list);
     data = (mm_jpeg_job_q_node_t *)node->data;
 
-    if (data != NULL) {
-        if (data->type == MM_JPEG_CMD_TYPE_DECODE_JOB) {
-            lq_job_id = data->dec_info.job_id;
-        } else {
-            lq_job_id = data->enc_info.job_id;
-        }
+    if (data->type == MM_JPEG_CMD_TYPE_DECODE_JOB) {
+      lq_job_id = data->dec_info.job_id;
+    } else {
+      lq_job_id = data->enc_info.job_id;
+    }
 
-      if (lq_job_id == job_id) {
-        CDBG_HIGH("%s:%d] found matching job id", __func__, __LINE__);
-        job_node = data;
-        cam_list_del_node(&node->list);
-        queue->size--;
-        free(node);
-        break;
-      }
+    if (data && (lq_job_id == job_id)) {
+      CDBG_ERROR("%s:%d] found matching job id", __func__, __LINE__);
+      job_node = data;
+      cam_list_del_node(&node->list);
+      queue->size--;
+      free(node);
+      break;
     }
     pos = pos->next;
   }

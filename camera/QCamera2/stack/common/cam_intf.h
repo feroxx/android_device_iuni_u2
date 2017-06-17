@@ -61,8 +61,6 @@ typedef struct{
 
     cam_position_t position;                                /* sensor position: front, back */
 
-    uint8_t auto_hdr_supported;
-
     /* supported iso modes */
     uint8_t supported_iso_modes_cnt;
     cam_iso_mode_type supported_iso_modes[CAM_ISO_MODE_MAX];
@@ -299,10 +297,6 @@ typedef struct{
     /* opti Zoom info */
     cam_opti_zoom_t      opti_zoom_settings_need;
 
-    /* Sensor type information */
-    cam_sensor_type_t sensor_type;
-    char sensor_name[128];
-    uint8_t flash_dev_name[QCAMERA_MAX_FILEPATH_LENGTH];
 } cam_capability_t;
 
 typedef enum {
@@ -397,6 +391,8 @@ typedef struct {
     cam_stream_reproc_config_t reprocess_config;
 
     cam_stream_parm_buffer_t parm_buf;    /* stream based parameters */
+
+    uint8_t useAVTimer; /*flag to indicate use of AVTimer for TimeStamps*/
 
     /* Image Stabilization type */
     cam_is_type_t is_type;
@@ -496,7 +492,6 @@ typedef union {
     INCLUDE(CAM_INTF_PARM_CDS_MODE,                 cam_cds_mode_type_t,         1);
     INCLUDE(CAM_INTF_PARM_WB_CCT,                   int32_t,                     1);
     INCLUDE(CAM_INTF_PARM_EZTUNE_CMD,               cam_eztune_cmd_data_t,       1);
-    INCLUDE(CAM_INTF_PARM_LONGSHOT_ENABLE,          int8_t,                      1);
 
     /* HAL3 specific */
     INCLUDE(CAM_INTF_META_FRAME_NUMBER,             uint32_t,                    1);
@@ -540,11 +535,8 @@ typedef union {
     INCLUDE(CAM_INTF_META_TONEMAP_MODE,             uint8_t,                     1);
     INCLUDE(CAM_INTF_META_FLASH_MODE,               uint8_t,                     1);
     INCLUDE(CAM_INTF_PARM_STATS_DEBUG_MASK,         uint32_t,                    1);
-    INCLUDE(CAM_INTF_PARM_ALGO_OPTIMIZATIONS_MASK,  uint32_t,                    1);
-    INCLUDE(CAM_INTF_PARM_ISP_DEBUG_MASK,           uint32_t,                    1);
     INCLUDE(CAM_INTF_PARM_FOCUS_BRACKETING,         cam_af_bracketing_t,         1);
     INCLUDE(CAM_INTF_PARM_FLASH_BRACKETING,         cam_flash_bracketing_t,      1);
-    INCLUDE(CAM_INTF_PARM_G_SENSOR_DATA,            cam_set_gsensor_t,           1);
 } parm_type_t;
 
 typedef union {
@@ -638,6 +630,16 @@ typedef struct {
     uint32_t num_entry;
     uint32_t tot_rem_size;
     uint32_t curr_size;
+    //there is no clear documentation in Android on the use of a
+    //named semaphore for inter-process synchronization, like
+    //the ones available in System V and Posix. However, as this
+    //semaphore will reside in a mapped memory between two
+    //processes, it's expected to work well. Detailed testing may
+    //be necessary. Semaphore is kicked in only in the extreme
+    //case of a batch set param, where memory memory for the
+    //initial batch is exhausted and caller waits before they are
+    //copied in the camera daemon
+    sem_t   cam_sync_sem;
     char entry[1];
 } parm_buffer_new_t;
 
