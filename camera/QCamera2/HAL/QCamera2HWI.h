@@ -50,6 +50,7 @@
 //Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
 #ifdef ORIGINAL_VERSION
 #else
+#include <GNCameraFeature.h>
 #include "GNCameraParameters.h"
 #endif
 //Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 end
