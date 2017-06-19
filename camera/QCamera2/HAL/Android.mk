@@ -57,7 +57,7 @@ LOCAL_SHARED_LIBRARIES += libmmcamera_interface libmmjpeg_interface
 
 #Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
 LOCAL_SHARED_LIBRARIES += libgn_camera_feature
-LOCAL_C_INCLUDES += $(TOP)/external/libgn_camera_feature/include
+LOCAL_C_INCLUDES += external/libgn_camera_feature/include
 #Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 end
 
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
