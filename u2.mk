@@ -126,6 +126,7 @@ PRODUCT_PACKAGES += \
 # Camera
 PRODUCT_PACKAGES += \
     camera.msm8974 \
+    libgn_camera_feature \
     Snap
     
 # Display
