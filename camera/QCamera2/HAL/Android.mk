@@ -16,7 +16,7 @@ LOCAL_SRC_FILES := \
         QCameraParameters.cpp \
         QCameraThermalAdapter.cpp \
         wrapper/QualcommCamera.cpp \
-		GNCameraParameters.cpp \
+	GNCameraParameters.cpp
 
 #Gionee <zhuangxiaojian> <2013-08-20> modify for CR00867956 begin
 #LOCAL_CFLAGS = -Wall -Werror
@@ -37,7 +37,7 @@ LOCAL_C_INCLUDES := \
         frameworks/native/include/media/openmax \
         hardware/qcom/display/msm8974/libgralloc \
         hardware/qcom/media/msm8974/libstagefrighthw \
-		system/media/camera/include \
+	system/media/camera/include \
         $(LOCAL_PATH)/../../mm-image-codec/qexif \
         $(LOCAL_PATH)/../../mm-image-codec/qomx_core \
         $(LOCAL_PATH)/../util \
@@ -56,8 +56,10 @@ LOCAL_SHARED_LIBRARIES := libcamera_client liblog libhardware libutils libcutils
 LOCAL_SHARED_LIBRARIES += libmmcamera_interface libmmjpeg_interface
 
 #Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
+
 LOCAL_SHARED_LIBRARIES += libgn_camera_feature
 LOCAL_C_INCLUDES += external/libgn_camera_feature/include
+
 #Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 end
 
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
