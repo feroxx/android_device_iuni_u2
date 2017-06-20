@@ -1303,7 +1303,7 @@ uint8_t get_num_of_cameras()
             break;
         }
 
-        if (strncmp(mdev_info.model, "msm_config", sizeof(mdev_info.model) != 0)) {
+        if (strncmp(mdev_info.model, "msm_config", size_t(mdev_info.model) != 0)) {
             close(dev_fd);
             dev_fd = 0;
             continue;
