@@ -45,7 +45,7 @@
 
 static pthread_mutex_t g_intf_lock = PTHREAD_MUTEX_INITIALIZER;
 
-static mm_camera_ctrl_t g_cam_ctrl = {0, {{0}}, {0}, {{0}}};
+static mm_camera_ctrl_t g_cam_ctrl;
 
 static pthread_mutex_t g_handler_lock = PTHREAD_MUTEX_INITIALIZER;
 static uint16_t g_handler_history_count = 0; /* history count for handler */
@@ -1278,7 +1278,7 @@ uint8_t get_num_of_cameras()
     uint8_t num_cameras = 0;
     char subdev_name[32];
     int32_t sd_fd = 0;
-    struct sensor_init_cfg_data cfg;
+    struct sensorb_cfg_data cfg;
 
     CDBG("%s : E", __func__);
     /* lock the mutex */
@@ -1323,7 +1323,7 @@ uint8_t get_num_of_cameras()
             CDBG_ERROR("entity name %s type %d group id %d",
                 entity.name, entity.type, entity.group_id);
             if (entity.type == MEDIA_ENT_T_V4L2_SUBDEV &&
-                entity.group_id == MSM_CAMERA_SUBDEV_SENSOR_INIT) {
+                entity.group_id == MSM_CAMERA_SUBDEV_SENSOR) {
                 snprintf(subdev_name, sizeof(dev_name), "/dev/%s", entity.name);
                 break;
             }
@@ -1339,9 +1339,9 @@ uint8_t get_num_of_cameras()
         return FALSE;
     }
 
-    cfg.cfgtype = CFG_SINIT_PROBE_WAIT_DONE;
+    cfg.cfgtype = CFG_GET_SENSOR_INIT_PARAMS;
     cfg.cfg.setting = NULL;
-    if (ioctl(sd_fd, VIDIOC_MSM_SENSOR_INIT_CFG, &cfg) < 0) {
+    if (ioctl(sd_fd, VIDIOC_MSM_SENSOR_CFG, &cfg) < 0) {
         CDBG_ERROR("failed");
     }
     close(sd_fd);
