@@ -1,6 +1,11 @@
 LOCAL_PATH:= $(call my-dir)
 
 include $(CLEAR_VARS)
+
+# QCamera3Factory.cpp has unused parameters.
+# QCamera3Channel.cpp compares array 'str' to a null pointer.
+LOCAL_CLANG_CFLAGS += -Wno-unused-parameter -Wno-tautological-pointer-compare
+
 LOCAL_SRC_FILES := \
         QCamera2Factory.cpp \
         QCamera2Hal.cpp \
