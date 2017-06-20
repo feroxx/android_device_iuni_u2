@@ -1295,6 +1295,7 @@ uint8_t get_num_of_cameras()
             break;
         }
         num_media_devices++;
+        memset(&mdev_info, 0, sizeof(mdev_info));
         rc = ioctl(dev_fd, MEDIA_IOC_DEVICE_INFO, &mdev_info);
         if (rc < 0) {
             CDBG_ERROR("Error: ioctl media_dev failed: %s\n", strerror(errno));
@@ -1303,7 +1304,7 @@ uint8_t get_num_of_cameras()
             break;
         }
 
-        if (strncmp(mdev_info.model, "msm_config", sizeof(mdev_info.model)) != 0) {
+        if (strncmp(mdev_info.model, "msm_config", sizeof(mdev_info.model) != 0)) {
             close(dev_fd);
             dev_fd = 0;
             continue;
