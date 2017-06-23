@@ -452,7 +452,6 @@ const QCameraParameters::QCameraMap QCameraParameters::FOCUS_MODES_MAP[] = {
     { FOCUS_MODE_EDOF,               CAM_FOCUS_MODE_EDOF },
     { FOCUS_MODE_CONTINUOUS_PICTURE, CAM_FOCUS_MODE_CONTINOUS_PICTURE },
     { FOCUS_MODE_CONTINUOUS_VIDEO,   CAM_FOCUS_MODE_CONTINOUS_VIDEO },
-    { FOCUS_MODE_MANUAL_POSITION,    CAM_FOCUS_MODE_MANUAL},
 };
 
 const QCameraParameters::QCameraMap QCameraParameters::EFFECT_MODES_MAP[] = {
@@ -523,7 +522,6 @@ const QCameraParameters::QCameraMap QCameraParameters::WHITE_BALANCE_MODES_MAP[]
     { WHITE_BALANCE_CLOUDY_DAYLIGHT, CAM_WB_MODE_CLOUDY_DAYLIGHT },
     { WHITE_BALANCE_TWILIGHT,        CAM_WB_MODE_TWILIGHT },
     { WHITE_BALANCE_SHADE,           CAM_WB_MODE_SHADE },
-    { WHITE_BALANCE_MANUAL_CCT,      CAM_WB_MODE_CCT},
 };
 
 const QCameraParameters::QCameraMap QCameraParameters::ANTIBANDING_MODES_MAP[] = {
