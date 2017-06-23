@@ -30,6 +30,8 @@
 #ifndef __QCAMERA_POSTPROC_H__
 #define __QCAMERA_POSTPROC_H__
 
+#define ORIGINAL_VERSION
+
 extern "C" {
 #include <mm_camera_interface.h>
 #include <mm_jpeg_interface.h>
