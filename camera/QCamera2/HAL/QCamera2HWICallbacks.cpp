@@ -29,6 +29,8 @@
 
 #define LOG_TAG "QCamera2HWI"
 
+#define ORIGINAL_VERSION
+
 #include <time.h>
 #include <fcntl.h>
 #include <utils/Errors.h>
