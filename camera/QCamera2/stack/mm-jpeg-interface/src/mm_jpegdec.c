@@ -35,6 +35,9 @@
 #include <fcntl.h>
 #include <poll.h>
 
+#include <stdlib.h>
+#include <string.h>
+
 #include "mm_jpeg_dbg.h"
 #include "mm_jpeg_interface.h"
 #include "mm_jpeg.h"

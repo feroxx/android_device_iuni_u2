@@ -31,6 +31,9 @@
 #include "mm_jpeg_dbg.h"
 #include "mm_jpeg.h"
 
+#include <stdlib.h>
+#include <string.h>
+
 int32_t mm_jpeg_queue_init(mm_jpeg_queue_t* queue)
 {
     pthread_mutex_init(&queue->lock, NULL);
