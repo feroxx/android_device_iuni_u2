@@ -1490,11 +1490,16 @@ uint8_t QCamera2HardwareInterface::getBufNumRequired(cam_stream_type_t stream_ty
             if (mPreviewWindow->get_min_undequeued_buffer_count(mPreviewWindow,&minUndequeCount)
                 != 0) {
                 ALOGE("get_min_undequeued_buffer_count  failed");
+                //TODO: hardcoded because MIN_UNDEQUEUED_BUFFERS not defined
+                //minUndequeCount = BufferQueue::MIN_UNDEQUEUED_BUFFERS;
+                minUndequeCount = 2;
             }
         } else {
             //preview window might not be set at this point. So, query directly
             //from BufferQueue implementation of gralloc buffers.
-            minUndequeCount = BufferQueue::MIN_UNDEQUEUED_BUFFERS;
+            //minUndequeCount = BufferQueue::MIN_UNDEQUEUED_BUFFERS;
+            //hardcoded because MIN_UNDEQUEUED_BUFFERS not defined. REVISIT
+            minUndequeCount = 2;
         }
     }
 
