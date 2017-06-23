@@ -19,6 +19,8 @@
 #ifndef ANDROID_HARDWARE_QCAMERA_PARAMETERS_H
 #define ANDROID_HARDWARE_QCAMERA_PARAMETERS_H
 
+#define ORIGINAL_VERSION
+
 #include <camera/CameraParameters.h>
 #include <cutils/properties.h>
 #include <hardware/camera.h>
