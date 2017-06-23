@@ -29,6 +29,8 @@
 
 #define LOG_TAG "QCameraStateMachine"
 
+#define ORIGINAL_VERSION
+
 #include <utils/Errors.h>
 #include "QCamera2HWI.h"
 #include "QCameraStateMachine.h"
