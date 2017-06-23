@@ -30,6 +30,8 @@
 #ifndef __QCAMERA_STATEMACHINE_H__
 #define __QCAMERA_STATEMACHINE_H__
 
+#define ORIGINAL_VERSION
+
 #include <pthread.h>
 
 #include <cam_semaphore.h>
