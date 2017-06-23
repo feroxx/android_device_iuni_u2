@@ -29,6 +29,8 @@
 
 #define LOG_TAG "QCameraPostProc"
 
+#define ORIGINAL_VERSION
+
 #include <fcntl.h>
 #include <stdlib.h>
 #include <utils/Errors.h>
