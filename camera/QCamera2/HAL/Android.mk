@@ -20,8 +20,7 @@ LOCAL_SRC_FILES := \
         QCamera2HWICallbacks.cpp \
         QCameraParameters.cpp \
         QCameraThermalAdapter.cpp \
-        wrapper/QualcommCamera.cpp \
-	GNCameraParameters.cpp
+        wrapper/QualcommCamera.cpp
 
 #Gionee <zhuangxiaojian> <2013-08-20> modify for CR00867956 begin
 #LOCAL_CFLAGS = -Wall -Werror
