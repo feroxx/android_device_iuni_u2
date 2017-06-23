@@ -29,6 +29,8 @@
 
 #define LOG_TAG "QCameraParameters"
 
+#define ORIGINAL_VERSION
+
 #include <cutils/properties.h>
 #include <math.h>
 #include <utils/Errors.h>
