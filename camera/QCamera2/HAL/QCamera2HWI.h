@@ -30,6 +30,8 @@
 #ifndef __QCAMERA2HARDWAREINTERFACE_H__
 #define __QCAMERA2HARDWAREINTERFACE_H__
 
+#define ORIGINAL_VERSION
+
 #include <hardware/camera.h>
 #include <hardware/power.h>
 #include <utils/Log.h>
