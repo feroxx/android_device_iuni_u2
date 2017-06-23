@@ -3160,7 +3160,7 @@ int QCamera2HardwareInterface::sendCommand(int32_t command, int32_t arg1, int32_
 
     switch (command) {
 //Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
-#if ORIGINAL_VERSION
+#ifdef ORIGINAL_VERSION
     case CAMERA_CMD_LONGSHOT_ON:
         // Longshot can only be enabled when image capture
         // is not active.
