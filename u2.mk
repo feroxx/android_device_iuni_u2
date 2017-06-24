@@ -129,7 +129,7 @@ PRODUCT_PACKAGES += \
     libqomx_core \
     libmmcamera_interface \
     libmmjpeg_interface \
-	libmm-qcamera \
+    libmm-qcamera \
     mm-jpeg-interface-test \
     mm-qcamera-app \
     Snap
@@ -255,7 +255,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # qcom
 PRODUCT_PROPERTY_OVERRIDES += \
-    persist.camera.cpp.duplication=false
+    persist.camera.cpp.duplication=false \
+    media.stagefright.legacyencoder=true \
+    media.stagefright.less-secure=true
 
 # Enable AAC 5.1 output
 PRODUCT_PROPERTY_OVERRIDES += \
