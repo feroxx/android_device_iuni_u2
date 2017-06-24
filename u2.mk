@@ -255,7 +255,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # qcom
 PRODUCT_PROPERTY_OVERRIDES += \
-    persist.camera.cpp.duplication=false \
     media.stagefright.legacyencoder=true \
     media.stagefright.less-secure=true
 
