@@ -1,4 +1,4 @@
-#
+﻿#
 # Copyright (C) 2013 The Android Open-Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -185,10 +185,7 @@ PRODUCT_PACKAGES += \
     libOmxQcelp13Enc \
     libOmxVdec \
     libOmxVenc \
-    libstagefrighthw 
-
-# QCOM HAL
-$(call project-set-path,qcom-display,device/iuni/u2/display)
+    libstagefrighthw
 
 # sensors
 PRODUCT_COPY_FILES += \
