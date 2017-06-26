@@ -3148,7 +3148,7 @@ int QCamera2HardwareInterface::putParameters(char *parms)
  *              NO_ERROR  -- success
  *              none-zero failure code
  *==========================================================================*/
-int QCamera2HardwareInterface::sendCommand(int32_t command, int32_t arg1, int32_t /*arg2*/)
+int QCamera2HardwareInterface::sendCommand(int32_t command, int32_t /*arg1*/, int32_t /*arg2*/)
 {
     int rc = NO_ERROR;
 //Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin	
