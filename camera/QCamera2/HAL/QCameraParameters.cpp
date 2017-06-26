@@ -4245,6 +4245,7 @@ int32_t QCameraParameters::initDefaultParameters()
             sizeof(FOCUS_ALGO_MAP) / sizeof(QCameraMap));
     set(KEY_QC_SUPPORTED_FOCUS_ALGOS, focusAlgoValues);
     setSelectableZoneAf(FOCUS_ALGO_AUTO);
+    }
 
     // Set Zoom Ratios
     if (m_pCapability->zoom_supported > 0) {
