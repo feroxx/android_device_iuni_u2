@@ -1619,6 +1619,11 @@ int32_t QCameraParameters::setPreviewFpsRange(const QCameraParameters& params)
 
     //first check if we need to change fps because of HFR mode change
     updateNeeded = UpdateHFRFrameRate(params);
+    if(updateNeeded) {
+        m_bNeedRestart = true;
+        rc = setHighFrameRate(mHfrMode);
+        if(rc != NO_ERROR) goto end;
+    }
     ALOGE("%s: UpdateHFRFrameRate %d", __func__, updateNeeded);
 
     vidMinFps = m_hfrFpsRange.video_min_fps;
@@ -4717,6 +4722,13 @@ int32_t QCameraParameters::setPreviewFpsRange(int min_fps,
 
     ALOGE("%s: E minFps = %d, maxFps = %d , vid minFps = %d, vid maxFps = %d",
                 __func__, min_fps, max_fps, vid_min_fps, vid_max_fps);
+
+    /* Cap preview frame rate to 30 FPS */
+    if (max_fps > 30000) {
+        max_fps = 30000;
+        if (min_fps > 30000)
+            min_fps = 30000;
+    }
 
     if(fixedFpsValue != 0) {
       min_fps = (int)fixedFpsValue*1000;
