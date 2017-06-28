@@ -12,7 +12,7 @@ LOCAL_SRC_FILES := \
         QCameraStateMachine.cpp \
         QCameraChannel.cpp \
         QCameraStream.cpp \
-	QCameraPostProc.cpp \
+	    QCameraPostProc.cpp \
         QCamera2HWICallbacks.cpp \
         QCameraParameters.cpp \
         QCameraThermalAdapter.cpp \
@@ -35,24 +35,24 @@ endif
 LOCAL_C_INCLUDES := \
         $(LOCAL_PATH)/../stack/common \
         frameworks/native/include/media/openmax \
-        hardware/qcom/display/msm8974/libgralloc \
-        hardware/qcom/media/msm8974/libstagefrighthw \
-	system/media/camera/include \
+        $(call project-path-for,qcom-display)/libgralloc \
+        $(call project-path-for,qcom-media)/libstagefrighthw \
+	    system/media/camera/include \
         $(LOCAL_PATH)/../../mm-image-codec/qexif \
         $(LOCAL_PATH)/../../mm-image-codec/qomx_core \
         $(LOCAL_PATH)/../util \
         $(LOCAL_PATH)/wrapper
 
 ifeq ($(TARGET_USE_VENDOR_CAMERA_EXT),true)
-LOCAL_C_INCLUDES += hardware/qcom/display/msm8974/libgralloc
+LOCAL_C_INCLUDES += $(call project-path-for,qcom-display)/msm8974/libgralloc
 else
-LOCAL_C_INCLUDES += hardware/qcom/display/libgralloc
+LOCAL_C_INCLUDES += $(call project-path-for,qcom-display)/libgralloc
 endif
 LOCAL_C_INCLUDES += $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include
 LOCAL_C_INCLUDES += $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include/media
 LOCAL_ADDITIONAL_DEPENDENCIES := $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr
 
-LOCAL_SHARED_LIBRARIES := libcamera_client liblog libhardware libutils libcutils libdl
+LOCAL_SHARED_LIBRARIES := libcamera_client liblog libhardware libutils libcutils libdl libgui
 LOCAL_SHARED_LIBRARIES += libmmcamera_interface libmmjpeg_interface
 
 #Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
