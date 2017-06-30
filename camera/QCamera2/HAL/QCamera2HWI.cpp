@@ -131,7 +131,7 @@ int QCamera2HardwareInterface::set_preview_window(struct camera_device *device,
     }
 
     hw->lockAPI();
-	qcamera_api_result_t apiResult;
+    qcamera_api_result_t apiResult;
     rc = hw->processAPI(QCAMERA_SM_EVT_SET_PREVIEW_WINDOW, (void *)window);
     if (rc == NO_ERROR) {
         hw->waitAPIResult(QCAMERA_SM_EVT_SET_PREVIEW_WINDOW, &apiResult);
@@ -179,7 +179,7 @@ void QCamera2HardwareInterface::set_CallBacks(struct camera_device *device,
     payload.user = user;
 
     hw->lockAPI();
-	qcamera_api_result_t apiResult;
+    qcamera_api_result_t apiResult;
     int32_t rc = hw->processAPI(QCAMERA_SM_EVT_SET_CALLBACKS, (void *)&payload);
     if (rc == NO_ERROR) {
         hw->waitAPIResult(QCAMERA_SM_EVT_SET_CALLBACKS, &apiResult);
@@ -207,7 +207,7 @@ void QCamera2HardwareInterface::enable_msg_type(struct camera_device *device, in
         return;
     }
     hw->lockAPI();
-	qcamera_api_result_t apiResult;
+    qcamera_api_result_t apiResult;
     int32_t rc = hw->processAPI(QCAMERA_SM_EVT_ENABLE_MSG_TYPE, (void *)msg_type);
     if (rc == NO_ERROR) {
         hw->waitAPIResult(QCAMERA_SM_EVT_ENABLE_MSG_TYPE, &apiResult);
@@ -235,7 +235,7 @@ void QCamera2HardwareInterface::disable_msg_type(struct camera_device *device, i
         return;
     }
     hw->lockAPI();
-	qcamera_api_result_t apiResult;
+    qcamera_api_result_t apiResult;
     int32_t rc = hw->processAPI(QCAMERA_SM_EVT_DISABLE_MSG_TYPE, (void *)msg_type);
     if (rc == NO_ERROR) {
         hw->waitAPIResult(QCAMERA_SM_EVT_DISABLE_MSG_TYPE, &apiResult);
@@ -265,7 +265,7 @@ int QCamera2HardwareInterface::msg_type_enabled(struct camera_device *device, in
         return BAD_VALUE;
     }
     hw->lockAPI();
-	qcamera_api_result_t apiResult;
+    qcamera_api_result_t apiResult;
     ret = hw->processAPI(QCAMERA_SM_EVT_MSG_TYPE_ENABLED, (void *)msg_type);
     if (ret == NO_ERROR) {
         hw->waitAPIResult(QCAMERA_SM_EVT_MSG_TYPE_ENABLED, &apiResult);
@@ -299,7 +299,7 @@ int QCamera2HardwareInterface::start_preview(struct camera_device *device)
     }
     ALOGE("[KPI Perf] %s: E PROFILE_START_PREVIEW", __func__);
     hw->lockAPI();
-	qcamera_api_result_t apiResult;
+    qcamera_api_result_t apiResult;
     qcamera_sm_evt_enum_t evt = QCAMERA_SM_EVT_START_PREVIEW;
     if (hw->isNoDisplayMode()) {
         evt = QCAMERA_SM_EVT_START_NODISPLAY_PREVIEW;
@@ -345,7 +345,7 @@ void QCamera2HardwareInterface::stop_preview(struct camera_device *device)
 #endif
 //Gionee <wutangzhi> <2013-12-12> modify for CR00959091 end
     hw->lockAPI();
-	qcamera_api_result_t apiResult;
+    qcamera_api_result_t apiResult;
     int32_t ret = hw->processAPI(QCAMERA_SM_EVT_STOP_PREVIEW, NULL);
     if (ret == NO_ERROR) {
         hw->waitAPIResult(QCAMERA_SM_EVT_STOP_PREVIEW, &apiResult);
@@ -376,7 +376,7 @@ int QCamera2HardwareInterface::preview_enabled(struct camera_device *device)
     }
 
     hw->lockAPI();
-	qcamera_api_result_t apiResult;
+    qcamera_api_result_t apiResult;
     ret = hw->processAPI(QCAMERA_SM_EVT_PREVIEW_ENABLED, NULL);
     if (ret == NO_ERROR) {
         hw->waitAPIResult(QCAMERA_SM_EVT_PREVIEW_ENABLED, &apiResult);
@@ -412,7 +412,7 @@ int QCamera2HardwareInterface::store_meta_data_in_buffers(
     }
 
     hw->lockAPI();
-	qcamera_api_result_t apiResult;
+    qcamera_api_result_t apiResult;
     ret = hw->processAPI(QCAMERA_SM_EVT_STORE_METADATA_IN_BUFS, (void *)enable);
     if (ret == NO_ERROR) {
         hw->waitAPIResult(QCAMERA_SM_EVT_STORE_METADATA_IN_BUFS, &apiResult);
@@ -478,7 +478,7 @@ void QCamera2HardwareInterface::stop_recording(struct camera_device *device)
     }
     ALOGE("[KPI Perf] %s: E PROFILE_STOP_RECORDING", __func__);
     hw->lockAPI();
-	qcamera_api_result_t apiResult;
+    qcamera_api_result_t apiResult;
     int32_t ret = hw->processAPI(QCAMERA_SM_EVT_STOP_RECORDING, NULL);
     if (ret == NO_ERROR) {
         hw->waitAPIResult(QCAMERA_SM_EVT_STOP_RECORDING, &apiResult);
@@ -508,7 +508,7 @@ int QCamera2HardwareInterface::recording_enabled(struct camera_device *device)
         return BAD_VALUE;
     }
     hw->lockAPI();
-	qcamera_api_result_t apiResult;
+    qcamera_api_result_t apiResult;
     ret = hw->processAPI(QCAMERA_SM_EVT_RECORDING_ENABLED, NULL);
     if (ret == NO_ERROR) {
         hw->waitAPIResult(QCAMERA_SM_EVT_RECORDING_ENABLED, &apiResult);
@@ -533,6 +533,7 @@ int QCamera2HardwareInterface::recording_enabled(struct camera_device *device)
 void QCamera2HardwareInterface::release_recording_frame(
             struct camera_device *device, const void *opaque)
 {
+    int32_t ret = NO_ERROR;
     QCamera2HardwareInterface *hw =
         reinterpret_cast<QCamera2HardwareInterface *>(device->priv);
     if (!hw) {
@@ -540,9 +541,10 @@ void QCamera2HardwareInterface::release_recording_frame(
         return;
     }
     ALOGD("%s: E", __func__);
+
     hw->lockAPI();
-	qcamera_api_result_t apiResult;
-    int32_t ret = hw->processAPI(QCAMERA_SM_EVT_RELEASE_RECORIDNG_FRAME, (void *)opaque);
+    qcamera_api_result_t apiResult;
+    ret = hw->processAPI(QCAMERA_SM_EVT_RELEASE_RECORIDNG_FRAME, (void *)opaque);
     if (ret == NO_ERROR) {
         hw->waitAPIResult(QCAMERA_SM_EVT_RELEASE_RECORIDNG_FRAME, &apiResult);
     }
@@ -573,7 +575,7 @@ int QCamera2HardwareInterface::auto_focus(struct camera_device *device)
     }
     ALOGE("[KPI Perf] %s : E PROFILE_AUTO_FOCUS", __func__);
     hw->lockAPI();
-	qcamera_api_result_t apiResult;
+    qcamera_api_result_t apiResult;
     ret = hw->processAPI(QCAMERA_SM_EVT_START_AUTO_FOCUS, NULL);
     if (ret == NO_ERROR) {
         hw->waitAPIResult(QCAMERA_SM_EVT_START_AUTO_FOCUS, &apiResult);
@@ -607,7 +609,7 @@ int QCamera2HardwareInterface::cancel_auto_focus(struct camera_device *device)
         return BAD_VALUE;
     }
     hw->lockAPI();
-	qcamera_api_result_t apiResult;
+    qcamera_api_result_t apiResult;
     ret = hw->processAPI(QCAMERA_SM_EVT_STOP_AUTO_FOCUS, NULL);
     if (ret == NO_ERROR) {
         hw->waitAPIResult(QCAMERA_SM_EVT_STOP_AUTO_FOCUS, &apiResult);
@@ -641,7 +643,7 @@ int QCamera2HardwareInterface::take_picture(struct camera_device *device)
     }
     ALOGE("[KPI Perf] %s: E PROFILE_TAKE_PICTURE", __func__);
     hw->lockAPI();
-	qcamera_api_result_t apiResult;
+    qcamera_api_result_t apiResult;
 
     /* Prepare snapshot in case LED needs to be flashed */
     if (hw->mFlashNeeded == 1 || hw->mParameters.isChromaFlashEnabled()) {
@@ -690,7 +692,7 @@ int QCamera2HardwareInterface::cancel_picture(struct camera_device *device)
         return BAD_VALUE;
     }
     hw->lockAPI();
-	qcamera_api_result_t apiResult;
+    qcamera_api_result_t apiResult;
     ret = hw->processAPI(QCAMERA_SM_EVT_CANCEL_PICTURE, NULL);
     if (ret == NO_ERROR) {
         hw->waitAPIResult(QCAMERA_SM_EVT_CANCEL_PICTURE, &apiResult);
@@ -725,7 +727,7 @@ int QCamera2HardwareInterface::set_parameters(struct camera_device *device,
         return BAD_VALUE;
     }
     hw->lockAPI();
-	qcamera_api_result_t apiResult;
+    qcamera_api_result_t apiResult;
     ret = hw->processAPI(QCAMERA_SM_EVT_SET_PARAMS, (void *)parms);
     if (ret == NO_ERROR) {
         hw->waitAPIResult(QCAMERA_SM_EVT_SET_PARAMS, &apiResult);
@@ -756,11 +758,27 @@ char* QCamera2HardwareInterface::get_parameters(struct camera_device *device)
         return NULL;
     }
     hw->lockAPI();
-	qcamera_api_result_t apiResult;
+    qcamera_api_result_t apiResult;
     int32_t rc = hw->processAPI(QCAMERA_SM_EVT_GET_PARAMS, NULL);
     if (rc == NO_ERROR) {
         hw->waitAPIResult(QCAMERA_SM_EVT_GET_PARAMS, &apiResult);
-        ret = apiResult.params;
+
+        if (apiResult.params) {
+            android::CameraParameters params;
+            params.unflatten(android::String8(apiResult.params));
+            hw->putParameters(apiResult.params);
+
+            // Hide nv12-venus from userspace to prevent framework crash
+            const char *fmt = params.get("preview-format");
+            if (fmt && !strcmp(fmt, "nv12-venus")) {
+                params.set("preview-format", "yuv420sp");
+            }
+
+            // Set exposure-time-values param for CameraNext slow-shutter
+            params.set("exposure-time-values", "0");
+
+            ret = strdup(params.flatten().string());
+        }
     }
     hw->unlockAPI();
 
@@ -788,7 +806,7 @@ void QCamera2HardwareInterface::put_parameters(struct camera_device *device,
         return;
     }
     hw->lockAPI();
-	qcamera_api_result_t apiResult;
+    qcamera_api_result_t apiResult;
     int32_t ret = hw->processAPI(QCAMERA_SM_EVT_PUT_PARAMS, (void *)parm);
     if (ret == NO_ERROR) {
         hw->waitAPIResult(QCAMERA_SM_EVT_PUT_PARAMS, &apiResult);
@@ -830,7 +848,7 @@ int QCamera2HardwareInterface::send_command(struct camera_device *device,
     payload.arg1 = arg1;
     payload.arg2 = arg2;
     hw->lockAPI();
-	qcamera_api_result_t apiResult;
+    qcamera_api_result_t apiResult;
     ret = hw->processAPI(QCAMERA_SM_EVT_SEND_COMMAND, (void *)&payload);
     if (ret == NO_ERROR) {
         hw->waitAPIResult(QCAMERA_SM_EVT_SEND_COMMAND, &apiResult);
@@ -860,7 +878,7 @@ void QCamera2HardwareInterface::release(struct camera_device *device)
         return;
     }
     hw->lockAPI();
-	qcamera_api_result_t apiResult;
+    qcamera_api_result_t apiResult;
     int32_t ret = hw->processAPI(QCAMERA_SM_EVT_RELEASE, NULL);
     if (ret == NO_ERROR) {
         hw->waitAPIResult(QCAMERA_SM_EVT_RELEASE, &apiResult);
@@ -891,7 +909,7 @@ int QCamera2HardwareInterface::dump(struct camera_device *device, int fd)
         return BAD_VALUE;
     }
     hw->lockAPI();
-	qcamera_api_result_t apiResult;
+    qcamera_api_result_t apiResult;
     ret = hw->processAPI(QCAMERA_SM_EVT_DUMP, (void *)fd);
     if (ret == NO_ERROR) {
         hw->waitAPIResult(QCAMERA_SM_EVT_DUMP, &apiResult);
@@ -960,7 +978,7 @@ int QCamera2HardwareInterface::register_face_image(struct camera_device *device,
     payload.img_ptr = img_ptr;
     payload.config = config;
     hw->lockAPI();
-	qcamera_api_result_t apiResult;
+    qcamera_api_result_t apiResult;
     ret = hw->processAPI(QCAMERA_SM_EVT_REG_FACE_IMAGE, (void *)&payload);
     if (ret == NO_ERROR) {
         hw->waitAPIResult(QCAMERA_SM_EVT_REG_FACE_IMAGE, &apiResult);
@@ -1141,7 +1159,7 @@ int QCamera2HardwareInterface::openCamera(struct hw_device_t **hw_device)
     if (rc == NO_ERROR){
         *hw_device = &mCameraDevice.common;
         //if (m_thermalAdapter.init(this) != 0) {
-        //ALOGE("Init thermal adapter failed");
+        //  ALOGE("Init thermal adapter failed");
         //}
     }
     else
