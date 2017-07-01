@@ -32,9 +32,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 
 #include "qomx_core.h"
 
-#include <stdlib.h>
-#include <string.h>
-
 #define BUFF_SIZE 255
 
 static omx_core_t *g_omxcore;
