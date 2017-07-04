@@ -846,9 +846,9 @@ private:
     int32_t m_curFocusPos;
 //Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin 
 #ifdef ORIGINAL_VERSION
+	cam_led_flash_burst_level m_LEDFlashLevel; // LED flash level for burst shot
 #else
 	bool m_bNeedInitPreviewSize;
-	cam_led_flash_burst_level m_LEDFlashLevel; // LED flash level for burst shot
 	cam_ois_mode_t m_OisMode;
 	float m_ScaleRatio;
 #endif
