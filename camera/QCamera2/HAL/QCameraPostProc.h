@@ -205,7 +205,6 @@ private:
     QCameraCmdThread m_saveProcTh;      // thread for storing buffers
     // Gionee <wutangzhi> <2013-10-28> modify for CR00906596 begin
 	#ifdef ORIGINAL_VERSION
-	#else
     QCameraCmdThread m_longshotProcTh;	// thread for long shot
     #endif
 	// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 end
