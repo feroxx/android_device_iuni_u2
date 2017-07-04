@@ -4467,6 +4467,13 @@ int32_t QCameraParameters::init(cam_capability_t *capabilities,
     m_AdjustFPS = adjustFPS;
     m_pTorch = torch;
 
+    // For CTS
+    capabilities->fps_ranges_tbl_cnt = 2;
+    capabilities->fps_ranges_tbl[1].min_fps = 30.0f;
+    capabilities->fps_ranges_tbl[1].max_fps = 30.0f;
+    capabilities->fps_ranges_tbl[1].video_min_fps = 30.0f;
+    capabilities->fps_ranges_tbl[1].video_max_fps = 30.0f;
+
     //Allocate Set Param Buffer
     m_pParamHeap = new QCameraHeapMemory(QCAMERA_ION_USE_CACHE);
     rc = m_pParamHeap->allocate(1, ONE_MB_OF_PARAMS);
