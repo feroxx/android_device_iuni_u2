@@ -613,10 +613,10 @@ public:
     int32_t setDisplayFrame(bool enabled) {m_bDisplayFrame=enabled; return 0;};
 //Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
 #ifdef ORIGINAL_VERSION
+	int32_t setBurstLEDFlashLevel(cam_led_flash_burst_level level);
 #else
 	bool isInitPreviewSizeNeeded() {return m_bNeedInitPreviewSize; };
 	void updateInitPreviewSizeState(bool value) { m_bNeedInitPreviewSize = value; };
-	int32_t setBurstLEDFlashLevel(cam_led_flash_burst_level level);
 	int32_t setOisMode(cam_ois_mode_t mode);
 	float getScaleRatio() {return m_ScaleRatio;};
 #endif

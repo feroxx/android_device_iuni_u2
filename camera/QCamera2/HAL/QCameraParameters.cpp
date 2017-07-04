@@ -680,9 +680,9 @@ QCameraParameters::QCameraParameters()
       m_bDisplayFrame(true)
 //Gionee <zhuangxiaojian> <2013-09-28> modify for CR00909895 begin 
 #ifdef ORIGINAL_VERSION
+	  ,m_LEDFlashLevel(CAM_LED_FLASH_DEFAULT)
 #else
 	  ,m_bNeedInitPreviewSize(true)
-	  ,m_LEDFlashLevel(CAM_LED_FLASH_DEFAULT)
 	  ,m_OisMode(CAM_OIS_MODE_MAX)
 	  ,m_ScaleRatio(1.0)
 #endif
@@ -5452,7 +5452,6 @@ int32_t QCameraParameters::setFlash(const char *flashStr)
 
 //Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
 #ifdef ORIGINAL_VERSION
-#else
 /*===========================================================================						  
 * FUNCTION	 : setBurstLEDFlashLevel
 *
@@ -5500,6 +5499,7 @@ int32_t QCameraParameters::setBurstLEDFlashLevel(cam_led_flash_burst_level level
     return rc;
 }
 
+#else
 /*===========================================================================						  
 * FUNCTION	 : setOisMode
 *

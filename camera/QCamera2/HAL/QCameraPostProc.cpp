@@ -2229,7 +2229,6 @@ void *QCameraPostProcessor::dataProcessRoutine(void *data)
                                       FALSE);
 			// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 begin
 			#ifdef ORIGINAL_VERSION
-			#else
 			if (pme->m_parent->isLongshotEnabled()) {
 				pme->m_parent->mParameters.setBurstLEDFlashLevel(CAM_LED_FLASH_LOW);
 				pme->m_longshotProcTh.sendCmd(CAMERA_CMD_TYPE_START_DATA_PROC,
@@ -2249,7 +2248,6 @@ void *QCameraPostProcessor::dataProcessRoutine(void *data)
                                            TRUE);
 				// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 begin
 				#ifdef ORIGINAL_VERSION
-				#else
 				if (pme->m_parent->isLongshotEnabled()) {
 					pme->m_parent->mParameters.setBurstLEDFlashLevel(CAM_LED_FLASH_DEFAULT);
 					pme->m_longshotProcTh.sendCmd(CAMERA_CMD_TYPE_STOP_DATA_PROC,

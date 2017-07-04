@@ -38,6 +38,8 @@
 #define CAM_MAX_NUM_BUFS_PER_STREAM 24
 #define MAX_METADATA_PAYLOAD_SIZE 1024
 
+#define ORIGINAL_VERSION
+
 #define CEILING64(X) (((X) + 0x0003F) & 0xFFFFFFC0)
 #define CEILING32(X) (((X) + 0x0001F) & 0xFFFFFFE0)
 #define CEILING16(X) (((X) + 0x000F) & 0xFFF0)
@@ -1040,9 +1042,9 @@ typedef enum {
     CAM_INTF_PARM_EZTUNE_CMD,
 //Gionee <zhuangxiaojian> <2012-10-23> modify for CR00933024 begin
 #ifdef ORIGINAL_VERSION
-#else
-	/* LED flash level*/
+    /* LED flash level*/
 	CAM_INTF_PARM_LED_FLASH_BURST_LEVEL,
+#else
 	CAM_INTF_PARM_OIS_MODE,
 #endif
 //Gionee <zhuangxiaojian> <2012-10-23> modify for CR00933024 end
@@ -1525,6 +1527,10 @@ typedef enum {
 
 //Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
 #ifdef ORIGINAL_VERSION
+typedef enum {
+	CAM_LED_FLASH_DEFAULT,
+	CAM_LED_FLASH_LOW,
+} cam_led_flash_burst_level;
 #else
 typedef enum {
     CAM_CAPTURE_MODE_NORMAL,
@@ -1541,11 +1547,6 @@ typedef enum {
     CAM_GESTURE_EVENT_FACE_PRESENCE,
     CAM_GESTURE_EVENT_MAX
 } cam_gesture_event_t;
-
-typedef enum {
-	CAM_LED_FLASH_DEFAULT,
-	CAM_LED_FLASH_LOW,
-} cam_led_flash_burst_level;
 
 typedef enum {
 	CAM_LIVE_EFFECT_NONE,
