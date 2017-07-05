@@ -666,6 +666,8 @@ int QCamera2HardwareInterface::take_picture(struct camera_device *device)
     }
 
     hw->unlockAPI();
+	hw->mLastCaptureTime = systemTime();
+
     ALOGD("[KPI Perf] %s: X", __func__);
     return ret;
 }
@@ -1939,7 +1941,7 @@ QCameraMemory *QCamera2HardwareInterface::allocateStreamBuf(cam_stream_type_t st
                 bCachedMem = QCAMERA_ION_USE_NOCACHE;
             }
             ALOGD("%s: vidoe buf using cached memory = %d", __func__, bCachedMem);
-            QCameraVideoMemory *videoMemory = new QCameraVideoMemory(mGetMemory, bCachedMem);4
+            QCameraVideoMemory *videoMemory = new QCameraVideoMemory(mGetMemory, bCachedMem);
             int usage = 0;
             cam_format_t fmt;
             mParameters.getStreamFormat(CAM_STREAM_TYPE_VIDEO,fmt);

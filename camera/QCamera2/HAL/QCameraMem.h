@@ -193,7 +193,7 @@ public:
     virtual int allocateMore(int count, int size);
     virtual void deallocate();
     virtual camera_memory_t *getMemory(int index, bool metadata) const;
-    virtual int getMatchBufIndex(const void *opaque, bool metadata) const
+    virtual int getMatchBufIndex(const void *opaque, bool metadata) const;
 #ifdef USE_MEDIA_EXTENSIONS
     native_handle_t *getNativeHandle(int index, bool metadata = true);
     int closeNativeHandle(const void *data, bool metadata);

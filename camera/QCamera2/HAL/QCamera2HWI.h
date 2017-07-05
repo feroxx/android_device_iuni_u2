@@ -633,6 +633,7 @@ private:
     int32_t mMetadataJob;
     int32_t mReprocJob;
     int32_t mOutputCount;
+	nsecs_t mLastCaptureTime;
 //Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
 #ifdef ORIGINAL_VERSION
 #else
