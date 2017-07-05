@@ -128,6 +128,7 @@ private:
 
     QCameraHeapMemory *mStreamInfoBuf;
     QCameraMemory *mStreamBufs;
+	QCameraMemory *mStreamBatchBufs;
     QCameraAllocator &mAllocator;
     mm_camera_buf_def_t *mBufDefs;
     cam_frame_len_offset_t mFrameLenOffset;

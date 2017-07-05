@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2014, The Linux Foundataion. All rights reserved.
+/* Copyright (c) 2012-2016, The Linux Foundataion. All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions are
@@ -1036,7 +1036,8 @@ QCamera2HardwareInterface::QCamera2HardwareInterface(int cameraId)
       mSnapshotJob(-1),
       mPostviewJob(-1),
       mMetadataJob(-1),
-      mReprocJob(-1)
+      mReprocJob(-1),
+      mLastCaptureTime(0)
 	  //Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
       #ifdef ORIGINAL_VERSION
    	  #else
@@ -1938,7 +1939,13 @@ QCameraMemory *QCamera2HardwareInterface::allocateStreamBuf(cam_stream_type_t st
                 bCachedMem = QCAMERA_ION_USE_NOCACHE;
             }
             ALOGD("%s: vidoe buf using cached memory = %d", __func__, bCachedMem);
-            mem = new QCameraVideoMemory(mGetMemory, bCachedMem);
+            QCameraVideoMemory *videoMemory = new QCameraVideoMemory(mGetMemory, bCachedMem);4
+            int usage = 0;
+            cam_format_t fmt;
+            mParameters.getStreamFormat(CAM_STREAM_TYPE_VIDEO,fmt);
+            videoMemory->setVideoInfo(usage, fmt);
+
+            mem = videoMemory;
         }
         break;
     case CAM_STREAM_TYPE_DEFAULT:
@@ -2392,6 +2399,7 @@ int QCamera2HardwareInterface::stopRecording()
 {
     int rc = stopChannel(QCAMERA_CH_TYPE_VIDEO);
     ALOGD("%s: E", __func__);
+	m_cbNotifier.flushVideoNotifications();
 	//Gionee <zhuangxiaojian> <2014-06-26> modify for CR01310542 begin
 	#ifdef ORIGINAL_VERSION
 	#else

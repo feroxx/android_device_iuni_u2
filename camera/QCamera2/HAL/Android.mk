@@ -22,6 +22,11 @@ LOCAL_SRC_FILES := \
 #LOCAL_CFLAGS = -Wall -Werror
 #Gionee <zhuangxiaojian> <2013-08-14> modify for CR00867956 end
 
+#use media extension
+ifeq ($(TARGET_USES_MEDIA_EXTENSIONS), true)
+LOCAL_CFLAGS += -DUSE_MEDIA_EXTENSIONS
+endif
+
 #Debug logs are enabled
 #LOCAL_CFLAGS += -DDISABLE_DEBUG_LOG
 

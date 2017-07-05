@@ -587,6 +587,7 @@ typedef struct  {
 typedef enum {
     CAM_STREAMING_MODE_CONTINUOUS, /* continous streaming */
     CAM_STREAMING_MODE_BURST,      /* burst streaming */
+	CAM_STREAMING_MODE_BATCH,      /* stream frames in batches */
     CAM_STREAMING_MODE_MAX
 } cam_streaming_mode_t;
 
