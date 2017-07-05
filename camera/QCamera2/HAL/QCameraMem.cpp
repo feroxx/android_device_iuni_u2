@@ -1266,7 +1266,7 @@ int QCameraVideoMemory::allocateMore(int count, int size)
         native_handle_t * nh = NULL;
 #ifdef USE_MEDIA_EXTENSIONS
         mNativeHandle[i] = native_handle_create(1, VIDEO_METADATA_NUM_INTS+
-                                              VIDEO_METADATA_NUM_COMMON_INTS)
+                                              VIDEO_METADATA_NUM_COMMON_INTS);
         packet->eType = kMetadataBufferTypeNativeHandleSource;
         packet->pHandle = mNativeHandle[i];
 		nh = mNativeHandle[i];
