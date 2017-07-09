@@ -29,8 +29,6 @@
 
 #define LOG_TAG "QCameraStateMachine"
 
-#define ORIGINAL_VERSION
-
 #include <utils/Errors.h>
 #include "QCamera2HWI.h"
 #include "QCameraStateMachine.h"
@@ -244,7 +242,6 @@ int32_t QCameraStateMachine::procEvt(qcamera_sm_evt_enum_t evt,
 int32_t QCameraStateMachine::stateMachine(qcamera_sm_evt_enum_t evt, void *payload)
 {
     int32_t rc = NO_ERROR;
-
     switch (m_state) {
     case QCAMERA_SM_STATE_PREVIEW_STOPPED:
         rc = procEvtPreviewStoppedState(evt, payload);
@@ -2887,6 +2884,27 @@ bool QCameraStateMachine::isPreviewRunning()
     case QCAMERA_SM_STATE_VIDEO_PIC_TAKING:
     case QCAMERA_SM_STATE_PREVIEW_PIC_TAKING:
     case QCAMERA_SM_STATE_PREPARE_SNAPSHOT:
+    case QCAMERA_SM_STATE_PREVIEW_READY:
+        return true;
+    default:
+        return false;
+    }
+}
+
+/*===========================================================================
+ * FUNCTION   : isPreviewReady
+ *
+ * DESCRIPTION: check if preview is in ready state.
+ *
+ * PARAMETERS : None
+ *
+ * RETURN     : true -- preview is in ready state
+ *              false -- preview is stopped
+ *==========================================================================*/
+bool QCameraStateMachine::isPreviewReady()
+{
+    switch (m_state) {
+    case QCAMERA_SM_STATE_PREVIEW_READY:
         return true;
     default:
         return false;
@@ -2933,33 +2951,6 @@ bool QCameraStateMachine::isNonZSLCaptureRunning()
         return false;
     }
 }
-
-//Gionee <zhuangxiaojian> <2014-06-26> modify for CR01310542 begin
-#ifdef ORIGINAL_VERSION
-#else
-/*===========================================================================
- * FUNCTION   : isRecordingRunning
- *
- * DESCRIPTION: check if camcorder is in process.
- *
- * PARAMETERS : None
- *
- * RETURN     : true -- camcorder running
- *              false -- camcorder stopped
- *==========================================================================*/
-
-bool QCameraStateMachine::isRecordingRunning()
-{
-	switch (m_state) {
-	case QCAMERA_SM_STATE_RECORDING:
-	case QCAMERA_SM_STATE_VIDEO_PIC_TAKING:
-		return true;
-	default:
-		return false;
-	}
-}
-#endif
-//Gionee <zhuangxiaojian> <2014-06-26> modify for CR01310542 end
 
 
 }; // namespace qcamera

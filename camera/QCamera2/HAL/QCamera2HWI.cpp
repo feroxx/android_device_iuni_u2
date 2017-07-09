@@ -1602,7 +1602,8 @@ int QCamera2HardwareInterface::prepareTorchCamera()
     int rc = NO_ERROR;
 
     if ( ( !m_stateMachine.isPreviewRunning() ) &&
-         ( m_channels[QCAMERA_CH_TYPE_PREVIEW] == NULL ) ) {
+            !m_stateMachine.isPreviewReady() &&
+            ( m_channels[QCAMERA_CH_TYPE_PREVIEW] == NULL ) ) {
         rc = addChannel(QCAMERA_CH_TYPE_PREVIEW);
     }
 
@@ -1624,7 +1625,8 @@ int QCamera2HardwareInterface::prepareTorchCamera()
 int QCamera2HardwareInterface::releaseTorchCamera()
 {
     if ( !m_stateMachine.isPreviewRunning() &&
-         ( m_channels[QCAMERA_CH_TYPE_PREVIEW] != NULL ) ) {
+            !m_stateMachine.isPreviewReady() &&
+            ( m_channels[QCAMERA_CH_TYPE_PREVIEW] == NULL ) ) {
         delete m_channels[QCAMERA_CH_TYPE_PREVIEW];
         m_channels[QCAMERA_CH_TYPE_PREVIEW] = NULL;
     }

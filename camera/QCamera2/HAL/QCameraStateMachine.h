@@ -30,8 +30,6 @@
 #ifndef __QCAMERA_STATEMACHINE_H__
 #define __QCAMERA_STATEMACHINE_H__
 
-#define ORIGINAL_VERSION
-
 #include <pthread.h>
 
 #include <cam_semaphore.h>
@@ -170,14 +168,9 @@ public:
     int32_t procEvt(qcamera_sm_evt_enum_t evt, void *evt_payload);
 
     bool isPreviewRunning(); // check if preview is running
+    bool isPreviewReady(); // check if preview is ready
     bool isCaptureRunning(); // check if image capture is running
     bool isNonZSLCaptureRunning(); // check if image capture is running in non ZSL mode
-//Gionee <zhuangxiaojian> <2014-06-26> modify for CR01310542 begin
-#ifdef ORIGINAL_VERSION
-#else
-    bool isRecordingRunning();
-#endif
-//Gionee <zhuangxiaojian> <2014-06-26> modify for CR01310542 end
 
 private:
     typedef enum {

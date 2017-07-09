@@ -817,7 +817,7 @@ int32_t QCameraStream::bufDone(int index)
 int32_t QCameraStream::bufDone(const void *opaque, bool isMetaData)
 {
     int32_t rc = NO_ERROR;
-	int index = -1;
+    int index = -1;
 
     QCameraVideoMemory *lVideoMem = NULL;
     if (mStreamInfo != NULL &&

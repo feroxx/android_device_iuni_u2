@@ -209,7 +209,7 @@ private:
 #ifdef USE_MEDIA_EXTENSIONS
     native_handle_t *mNativeHandle[MM_CAMERA_MAX_NUM_FRAMES];
 #endif
-	int mUsage, mFormat;
+    int mUsage, mFormat;
 };
 
 // Gralloc Memory is acquired from preview window
