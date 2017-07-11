@@ -45,6 +45,8 @@
 #include "mm_camera_sock.h"
 #include "mm_camera.h"
 
+#define ORIGINAL_VERSION
+
 static pthread_mutex_t g_intf_lock = PTHREAD_MUTEX_INITIALIZER;
 
 static mm_camera_ctrl_t g_cam_ctrl = {0, {{0}}, {0}, {{0}}};
@@ -1388,7 +1390,6 @@ static int32_t mm_camera_intf_process_advanced_capture(uint32_t camera_handle,
 
 //Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
 #ifdef ORIGINAL_VERSION
-#else
 /*===========================================================================
  * FUNCTION   : mm_camera_intf_start_zsl_snapshot
  *
@@ -1493,7 +1494,6 @@ static mm_camera_ops_t mm_camera_ops = {
     .process_advanced_capture = mm_camera_intf_process_advanced_capture,
 //Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
 #ifdef ORIGINAL_VERSION
-#else
     .start_zsl_snapshot = mm_camera_intf_start_zsl_snapshot,
     .stop_zsl_snapshot = mm_camera_intf_stop_zsl_snapshot
 #endif

@@ -40,6 +40,8 @@
 #include "mm_camera_interface.h"
 #include "mm_camera.h"
 
+#define ORIGINAL_VERSION
+
 extern mm_camera_obj_t* mm_camera_util_get_camera_by_handler(uint32_t cam_handler);
 extern mm_channel_t * mm_camera_util_get_channel_by_handler(mm_camera_obj_t * cam_obj,
                                                             uint32_t handler);
@@ -78,7 +80,6 @@ int32_t mm_channel_do_stream_action(mm_channel_t *my_obj,
                                     mm_evt_paylod_do_stream_action_t *payload);
 //Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
 #ifdef ORIGINAL_VERSION
-#else
 int32_t mm_channel_start_zsl_snapshot(mm_channel_t *my_obj);
 int32_t mm_channel_stop_zsl_snapshot(mm_channel_t *my_obj);
 #endif
@@ -234,7 +235,6 @@ static void mm_channel_process_stream_buf(mm_camera_cmdcb_t * cmd_cb,
         }
 	//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
 	#ifdef ORIGINAL_VERSION
-	#else
     } else if (MM_CAMERA_CMD_TYPE_START_ZSL == cmd_cb->cmd_type) {
     		ch_obj->longshotEnabled = TRUE;
     } else if (MM_CAMERA_CMD_TYPE_STOP_ZSL == cmd_cb->cmd_type) {
@@ -717,7 +717,6 @@ int32_t mm_channel_fsm_fn_active(mm_channel_t *my_obj,
         break;
 //Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
 #ifdef ORIGINAL_VERSION
-#else
     case MM_CHANNEL_EVT_START_ZSL_SNAPSHOT:
         {
             rc = mm_channel_start_zsl_snapshot(my_obj);
@@ -1505,7 +1504,6 @@ int32_t mm_channel_do_stream_action(mm_channel_t *my_obj,
 
 //Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
 #ifdef ORIGINAL_VERSION
-#else
 /*===========================================================================
  * FUNCTION   : mm_channel_start_zsl_snapshot
  *

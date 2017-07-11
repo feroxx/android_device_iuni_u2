@@ -171,7 +171,6 @@ private:
     static void *dataSaveRoutine(void *data);
 	// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 begin
 	#ifdef ORIGINAL_VERSION
-	#else
 	static void *longshotRoutine(void *data);
 	#endif
 	// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 end

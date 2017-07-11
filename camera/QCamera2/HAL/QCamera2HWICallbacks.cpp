@@ -283,8 +283,7 @@ void QCamera2HardwareInterface::capture_channel_cb_routine(mm_camera_super_buf_t
     // Wait on Postproc initialization if needed
     pme->waitDefferedWork(pme->mReprocJob);
 //Gionee <zhuangxiaojian> <2013-08-28> modify for CR00882216 begin
-#ifdef ORIGINAL_VERSION
-#else 
+#ifdef ORIGINAL_VERSION 
 	if(pme->mParameters.isContinuousShotMode()) {
 		timeval tv;
 		gettimeofday(&tv, NULL);
@@ -465,7 +464,6 @@ void QCamera2HardwareInterface::preview_stream_cb_routine(mm_camera_super_buf_t 
 
 //Gionee <wutangzhi> <2013-09-11> add for CR00899392 begin
 #ifdef ORIGINAL_VERSION
-#else
 	memory->cacheOps(idx, ION_IOC_CLEAN_CACHES);  
 #endif
 //Gionee <wutangzhi> <2013-09-11> add for CR00899392 end
@@ -1748,7 +1746,6 @@ void * QCameraCbNotifier::cbNotifyRoutine(void * data)
                 longShotEnabled = pme->mParent->isLongshotEnabled();
 				//Gionee <zhuangxiaojian> <2014-09-10> modify for CR01371937 begin
 				#ifdef ORIGINAL_VERSION
-				#else
 				if (longShotEnabled) {
 					pme->mParent->mParameters.set3ALock(QCameraParameters::VALUE_TRUE);
 				}
@@ -1869,7 +1866,6 @@ void * QCameraCbNotifier::cbNotifyRoutine(void * data)
 											pme->mParent->processEvt(QCAMERA_SM_EVT_SNAPSHOT_DONE, NULL);
 											//Gionee <zhuangxiaojian> <2014-06-26> modify for CR01310542 begin
 											#ifdef ORIGINAL_VERSION
-											#else
 											if (pme->mParent->m_stateMachine.isPreviewRunning()
 												&& !pme->mParent->m_stateMachine.isRecordingRunning()) {
 												pme->mParent->mParameters.setOisMode(CAM_OIS_MODE_PREVIEW);

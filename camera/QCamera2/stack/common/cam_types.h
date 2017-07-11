@@ -1045,7 +1045,6 @@ typedef enum {
 #ifdef ORIGINAL_VERSION
     /* LED flash level*/
 	CAM_INTF_PARM_LED_FLASH_BURST_LEVEL,
-#else
 	CAM_INTF_PARM_OIS_MODE,
 #endif
 //Gionee <zhuangxiaojian> <2012-10-23> modify for CR00933024 end
@@ -1532,6 +1531,13 @@ typedef enum {
 	CAM_LED_FLASH_DEFAULT,
 	CAM_LED_FLASH_LOW,
 } cam_led_flash_burst_level;
+
+typedef enum {
+	CAM_OIS_MODE_PREVIEW,
+	CAM_OIS_MODE_SNAPSHOT,
+	CAM_OIS_MODE_VIDEO,
+	CAM_OIS_MODE_MAX
+} cam_ois_mode_t;
 #else
 typedef enum {
     CAM_CAPTURE_MODE_NORMAL,
@@ -1606,13 +1612,6 @@ typedef enum {
 	CAM_LIVE_EFFECT_BLACKWHITE,
 	CAM_LIVE_EFFECT_MAX
 } cam_live_effect_t;
-
-typedef enum {
-	CAM_OIS_MODE_PREVIEW,
-	CAM_OIS_MODE_SNAPSHOT,
-	CAM_OIS_MODE_VIDEO,
-	CAM_OIS_MODE_MAX
-} cam_ois_mode_t;
 
 #endif
 //Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 end

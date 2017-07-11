@@ -285,7 +285,6 @@ const char QCameraParameters::KEY_QC_MAX_NUM_REQUESTED_FACES[] = "qc-max-num-req
 
 // Gionee <zhuangxiaojian> <2014-11-24> modify for CR01415653 begin
 #ifdef ORIGINAL_VERSION
-#else
 const char QCameraParameters::KEY_PICZOOM_CROP_MASK[] = "piczoom-crop-mask";
 #endif
 // Gionee <zhuangxiaojian> <2014-11-24> modify for CR01415653
@@ -681,7 +680,6 @@ QCameraParameters::QCameraParameters()
 //Gionee <zhuangxiaojian> <2013-09-28> modify for CR00909895 begin 
 #ifdef ORIGINAL_VERSION
 	  ,m_LEDFlashLevel(CAM_LED_FLASH_DEFAULT)
-#else
 	  ,m_bNeedInitPreviewSize(true)
 	  ,m_OisMode(CAM_OIS_MODE_MAX)
 	  ,m_ScaleRatio(1.0)
@@ -1133,7 +1131,6 @@ int32_t QCameraParameters::setPreviewSize(const QCameraParameters& params)
                 m_bNeedRestart = true;
 			//Gionee <zhuangxiaojian> <2013-09-28> modify for CR00909895 begin 
 			#ifdef ORIGINAL_VERSION
-			#else
 				updateInitPreviewSizeState(true);
 			#endif
 			//Gionee <zhuangxiaojian> <2013-09-28> modify for CR00909895 end 
@@ -4260,7 +4257,6 @@ int32_t QCameraParameters::initDefaultParameters()
         setZoom(0);
 		// Gionee <zhuangxiaojian> <2014-11-24> modify for CR01415653 begin
 		#ifdef ORIGINAL_VERSION
-		#else
 		set(KEY_PICZOOM_CROP_MASK, 0);
 		#endif
 		// Gionee <zhuangxiaojian> <2014-11-24> modify for CR01415653 end
@@ -5502,7 +5498,6 @@ int32_t QCameraParameters::setBurstLEDFlashLevel(cam_led_flash_burst_level level
     return rc;
 }
 
-#else
 /*===========================================================================						  
 * FUNCTION	 : setOisMode
 *

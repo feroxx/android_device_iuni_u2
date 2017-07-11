@@ -35,6 +35,8 @@
 #include "cam_intf.h"
 #include "cam_queue.h"
 
+#define ORIGINAL_VERSION
+
 #define MM_CAMERA_MAX_NUM_SENSORS MSM_MAX_CAMERA_SENSORS
 #define MM_CAMERA_MAX_NUM_FRAMES CAM_MAX_NUM_BUFS_PER_STREAM
 /* num of channels allowed in a camera obj */
@@ -641,7 +643,6 @@ typedef struct {
 	 
 //Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
 #ifdef ORIGINAL_VERSION
-#else
 	/** start_zsl_snapshot: function definition for starting
      *                    zsl snapshot.
      *    @camera_handle : camer handler

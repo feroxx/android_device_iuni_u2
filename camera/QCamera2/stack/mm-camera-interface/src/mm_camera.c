@@ -42,6 +42,8 @@
 #include "mm_camera_interface.h"
 #include "mm_camera.h"
 
+#define ORIGINAL_VERSION
+
 #define SET_PARM_BIT32(parm, parm_arr) \
     (parm_arr[parm/32] |= (1<<(parm%32)))
 
@@ -1283,7 +1285,6 @@ int32_t mm_camera_do_stream_action(mm_camera_obj_t *my_obj,
 
 //Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
 #ifdef ORIGINAL_VERSION
-#else
 /*===========================================================================
  * FUNCTION   : mm_camera_start_zsl_snapshot_ch
  *

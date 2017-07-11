@@ -259,7 +259,6 @@ public:
 
 	// Gionee <zhuangxiaojian> <2014-11-24> modify for CR01415653 begin
 	#ifdef ORIGINAL_VERSION
-	#else
 	static const char KEY_PICZOOM_CROP_MASK[];
 	#endif
 	// Gionee <zhuangxiaojian> <2014-11-24> modify for CR01415653 end
@@ -614,7 +613,6 @@ public:
 //Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
 #ifdef ORIGINAL_VERSION
 	int32_t setBurstLEDFlashLevel(cam_led_flash_burst_level level);
-#else
 	bool isInitPreviewSizeNeeded() {return m_bNeedInitPreviewSize; };
 	void updateInitPreviewSizeState(bool value) { m_bNeedInitPreviewSize = value; };
 	int32_t setOisMode(cam_ois_mode_t mode);
@@ -847,7 +845,6 @@ private:
 //Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin 
 #ifdef ORIGINAL_VERSION
 	cam_led_flash_burst_level m_LEDFlashLevel; // LED flash level for burst shot
-#else
 	bool m_bNeedInitPreviewSize;
 	cam_ois_mode_t m_OisMode;
 	float m_ScaleRatio;

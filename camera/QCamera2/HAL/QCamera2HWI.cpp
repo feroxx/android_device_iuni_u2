@@ -336,7 +336,6 @@ void QCamera2HardwareInterface::stop_preview(struct camera_device *device)
     ALOGE("[KPI Perf] %s: E PROFILE_STOP_PREVIEW", __func__);
 //Gionee <wutangzhi> <2013-12-12> modify for CR00959091 begin
 #ifdef ORIGINAL_VERSION
-#else
 	int times = 0;
 	while (hw->m_stateMachine.isCaptureRunning() && times <= 20) {
 		times++;
@@ -1024,7 +1023,6 @@ QCamera2HardwareInterface::QCamera2HardwareInterface(int cameraId)
       mLongshotEnabled(false),
       //Gionee <wutangzhi> <2013-12-12> modify for CR00959091 begin
       #ifdef ORIGINAL_VERSION
-	  #else
       mCancelLongshot(false),
       #endif
 	  //Gionee <wutangzhi> <2013-12-12> modify for CR00959091 end
@@ -2280,7 +2278,6 @@ int QCamera2HardwareInterface::startPreview()
     ALOGD("%s: E", __func__);
 	//Gionee <zhuangxiaojian> <2014-06-26> modify for CR01310542 begin
 	#ifdef ORIGINAL_VERSION
-	#else
 	mParameters.setOisMode(CAM_OIS_MODE_PREVIEW);
 	#endif
 	//Gionee <zhuangxiaojian> <2014-06-26> modify for CR01310542 end
@@ -2371,7 +2368,6 @@ int QCamera2HardwareInterface::startRecording()
     if (rc == NO_ERROR) {
 		//Gionee <zhuangxiaojian> <2014-06-26> modify for CR01310542 begin
 		#ifdef ORIGINAL_VERSION
-		#else
 		if (m_stateMachine.isPreviewRunning()) {
 			mParameters.setOisMode(CAM_OIS_MODE_VIDEO);
 		}
@@ -2406,7 +2402,6 @@ int QCamera2HardwareInterface::stopRecording()
 	m_cbNotifier.flushVideoNotifications();
 	//Gionee <zhuangxiaojian> <2014-06-26> modify for CR01310542 begin
 	#ifdef ORIGINAL_VERSION
-	#else
 	if (m_stateMachine.isPreviewRunning()) {
 		mParameters.setOisMode(CAM_OIS_MODE_PREVIEW);
 	}
@@ -2852,7 +2847,6 @@ int QCamera2HardwareInterface::takePicture()
     ALOGE("%s: numSnapshot = %d",__func__, numSnapshots);
 	//Gionee <zhuangxiaojian> <2014-06-26> modify for CR01310542 begin
 	#ifdef ORIGINAL_VERSION
-	#else
 	mParameters.setOisMode(CAM_OIS_MODE_SNAPSHOT);
 	#endif
 	//Gionee <zhuangxiaojian> <2014-06-26> modify for CR01310542 end
@@ -2881,7 +2875,6 @@ int QCamera2HardwareInterface::takePicture()
             }
 			//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
 			#ifdef ORIGINAL_VERSION
-			#else
 			if ( mLongshotEnabled ) {
 				mCameraHandle->ops->start_zsl_snapshot(
 					mCameraHandle->camera_handle,
@@ -3098,7 +3091,6 @@ int QCamera2HardwareInterface::cancelPicture()
 
 //Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
 #ifdef ORIGINAL_VERSION
-#else
 	if (isLongshotEnabled()) {
 		QCameraChannel *pZSLChannel = m_channels[QCAMERA_CH_TYPE_ZSL];
 		if (isZSLMode() && (NULL != pZSLChannel)) {
@@ -3331,12 +3323,11 @@ int QCamera2HardwareInterface::putParameters(char *parms)
  *              NO_ERROR  -- success
  *              none-zero failure code
  *==========================================================================*/
-int QCamera2HardwareInterface::sendCommand(int32_t command, int32_t /*arg1*/, int32_t /*arg2*/)
+int QCamera2HardwareInterface::sendCommand(int32_t command, int32_t arg1, int32_t /*arg2*/)
 {
     int rc = NO_ERROR;
 //Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin	
 #ifdef ORIGINAL_VERSION
-#else
 	int32_t value = arg1;
 #endif
 //Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 end
@@ -3372,7 +3363,6 @@ int QCamera2HardwareInterface::sendCommand(int32_t command, int32_t /*arg1*/, in
         break;
 //Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
 #ifdef ORIGINAL_VERSION
-#else
 	case CAMERA_CMD_SLOW_CONTINUOUS_SHOT:
 		rc = setContinuousShotSpeed(2);
 		break;
@@ -4909,7 +4899,6 @@ QCameraReprocessChannel *QCamera2HardwareInterface::addOnlineReprocChannel(
 
 // Gionee <zhuangxiaojian> <2014-11-24> modify for CR01415653 begin
 #ifdef ORIGINAL_VERSION
-#else
 	if (mPiczoomEnabled) {
 		pp_config.feature_mask &= ~CAM_QCOM_FEATURE_CROP;
 	} else {
@@ -5786,7 +5775,6 @@ int QCamera2HardwareInterface::updateParameters(const char *parms, bool &needRes
 
 //Gionee <zhuangxiaojian> <2014-09-10> modify for CR01371937 begin
 #ifdef ORIGINAL_VERSION
-#else
 	if (mParameters.isContinuousShotMode()) {
 		mLongshotEnabled = true;
 		mCancelLongshot = false;
@@ -5922,7 +5910,6 @@ bool QCamera2HardwareInterface::needReprocess()
 
 //Gionee <wutangzhi> <2013-11-16> modify for CR00951873 begin
 #ifdef ORIGINAL_VERSION
-#else
 	if (mLongshotEnabled) {
 		pthread_mutex_unlock(&m_parm_lock);
 		return true;
@@ -6010,7 +5997,6 @@ bool QCamera2HardwareInterface::needRotationReprocess()
 
 //Gionee <wutangzhi> <2013-11-16> modify for CR00951873 begin
 #ifdef ORIGINAL_VERSION
-#else
 	if (mLongshotEnabled) {
 		pthread_mutex_unlock(&m_parm_lock);
 		return true;
@@ -6305,7 +6291,6 @@ int32_t QCamera2HardwareInterface::setFaceDetection(bool enabled)
 
 //Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
 #ifdef ORIGINAL_VERSION
-#else
 int32_t QCamera2HardwareInterface::setContinuousShotSpeed(int32_t speed)
 {
 	mShotSpeed = speed;
