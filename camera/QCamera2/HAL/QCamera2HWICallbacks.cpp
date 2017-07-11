@@ -1761,20 +1761,11 @@ void * QCameraCbNotifier::cbNotifyRoutine(void * data)
             {
                 pme->mDataQ.flushNodes(matchSnapshotNotifications);
                 isSnapshotActive = FALSE;
-
-				// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 begin
-				#ifdef ORIGINAL_VERSION
-				if (longShotEnabled) {
-					pme->mParent->sendEvtNotify(CAMERA_MSG_NOTIFY_CONTINUOUS_SHOT, 
-											0, numOfSnapshotRcvd);
-					//Gionee <zhuangxiaojian> <2014-02-14> modify for CR01035122 begin
-					#ifdef ORIGINAL_VERSION
-					pme->mParent->mParameters.setBurstLEDFlashLevel(CAM_LED_FLASH_DEFAULT);
-					#endif
-					//Gionee <zhuangxiaojian> <2014-02-14> modify for CR01035122 end
-				}
-				#endif
-				// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 end
+		//Gionee <zhuangxiaojian> <2014-02-14> modify for CR01035122 begin
+		#ifdef ORIGINAL_VERSION
+		pme->mParent->mParameters.setBurstLEDFlashLevel(CAM_LED_FLASH_DEFAULT);
+		#endif
+		//Gionee <zhuangxiaojian> <2014-02-14> modify for CR01035122 end
 
                 numOfSnapshotExpected = 0;
                 numOfSnapshotRcvd = 0;
