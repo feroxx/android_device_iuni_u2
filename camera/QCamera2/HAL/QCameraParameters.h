@@ -612,6 +612,7 @@ public:
     int32_t setDisplayFrame(bool enabled) {m_bDisplayFrame=enabled; return 0;};
 //Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
 #ifdef ORIGINAL_VERSION
+    bool 	isContinuousShotMode() {return (m_nCaptureMode == CAM_CAPTURE_MODE_BURST);};
 	int32_t setBurstLEDFlashLevel(cam_led_flash_burst_level level);
 	bool isInitPreviewSizeNeeded() {return m_bNeedInitPreviewSize; };
 	void updateInitPreviewSizeState(bool value) { m_bNeedInitPreviewSize = value; };
@@ -844,6 +845,7 @@ private:
     int32_t m_curFocusPos;
 //Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin 
 #ifdef ORIGINAL_VERSION
+    int32_t m_nCaptureMode;
 	cam_led_flash_burst_level m_LEDFlashLevel; // LED flash level for burst shot
 	bool m_bNeedInitPreviewSize;
 	cam_ois_mode_t m_OisMode;
