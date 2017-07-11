@@ -4899,6 +4899,7 @@ QCameraReprocessChannel *QCamera2HardwareInterface::addOnlineReprocChannel(
 
 // Gionee <zhuangxiaojian> <2014-11-24> modify for CR01415653 begin
 #ifdef ORIGINAL_VERSION
+#else
 	if (mPiczoomEnabled) {
 		pp_config.feature_mask &= ~CAM_QCOM_FEATURE_CROP;
 	} else {
