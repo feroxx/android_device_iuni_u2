@@ -1764,22 +1764,14 @@ void * QCameraCbNotifier::cbNotifyRoutine(void * data)
 
 				// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 begin
 				#ifdef ORIGINAL_VERSION
-				#else
 				if (longShotEnabled) {
 					pme->mParent->sendEvtNotify(CAMERA_MSG_NOTIFY_CONTINUOUS_SHOT, 
 											0, numOfSnapshotRcvd);
 					//Gionee <zhuangxiaojian> <2014-02-14> modify for CR01035122 begin
 					#ifdef ORIGINAL_VERSION
 					pme->mParent->mParameters.setBurstLEDFlashLevel(CAM_LED_FLASH_DEFAULT);
-					#else
-					if (pme->mParent->m_stateMachine.isPreviewRunning()) {
-						pme->mParent->mParameters.setBurstLEDFlashLevel(CAM_LED_FLASH_DEFAULT);
-					}
 					#endif
 					//Gionee <zhuangxiaojian> <2014-02-14> modify for CR01035122 end
-					pme->mParent->mParameters.setCaptureMode(GNCameraParameters::CAPTURE_MODE_NORMAL);
-					longShotEnabled = false;
-					pme->mParent->mParameters.set3ALock(QCameraParameters::VALUE_FALSE);
 				}
 				#endif
 				// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 end
