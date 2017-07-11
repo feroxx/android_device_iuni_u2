@@ -438,7 +438,6 @@ private:
 
 //Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
 #ifdef ORIGINAL_VERSION
-#else
 	int32_t setContinuousShotSpeed(int32_t speed);
 	bool isCancelLongshot() {return mCancelLongshot;};
 	void setLongshotEnabled(bool enabled) {mLongshotEnabled = enabled;};
@@ -504,7 +503,6 @@ private:
 private:
 //Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
 #ifdef ORIGINAL_VERSION
-#else
 	int32_t mShotSpeed;
     timeval mtvLastJpegStart;
 #endif
@@ -570,7 +568,6 @@ private:
     bool mLongshotEnabled;
 //Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
 #ifdef ORIGINAL_VERSION
-#else
 	bool mCancelLongshot;
 #endif
 //Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 end

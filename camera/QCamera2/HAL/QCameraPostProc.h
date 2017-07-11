@@ -38,7 +38,6 @@ extern "C" {
 }
 //Gionee <zhuangxiaojian> <2013-08-28> modify for CR00882216 begin
 #ifdef ORIGINAL_VERSION
-#else
 #include <sys/time.h>
 #include <time.h>
 #endif
