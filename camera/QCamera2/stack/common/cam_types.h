@@ -1538,7 +1538,7 @@ typedef enum {
 	CAM_OIS_MODE_VIDEO,
 	CAM_OIS_MODE_MAX
 } cam_ois_mode_t;
-#else
+
 typedef enum {
     CAM_CAPTURE_MODE_NORMAL,
     CAM_CAPTURE_MODE_BURST,
@@ -1546,7 +1546,7 @@ typedef enum {
     CAM_CAPTURE_MODE_PICZOOM,
     CAM_CAPTURE_MODE_MAX
 } cam_capture_mode_t;
-
+#else
 typedef enum {
     CAM_GESTURE_EVENT_NONE,
     CAM_GESTURE_EVENT_OPEN_HAND_PRESENCE,

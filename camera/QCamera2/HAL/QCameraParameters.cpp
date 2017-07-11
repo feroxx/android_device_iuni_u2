@@ -679,6 +679,7 @@ QCameraParameters::QCameraParameters()
       m_bDisplayFrame(true)
 //Gionee <zhuangxiaojian> <2013-09-28> modify for CR00909895 begin 
 #ifdef ORIGINAL_VERSION
+      ,m_nCaptureMode(CAM_CAPTURE_MODE_NORMAL)
 	  ,m_LEDFlashLevel(CAM_LED_FLASH_DEFAULT)
 	  ,m_bNeedInitPreviewSize(true)
 	  ,m_OisMode(CAM_OIS_MODE_MAX)
