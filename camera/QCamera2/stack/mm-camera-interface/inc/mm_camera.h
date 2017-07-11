@@ -30,6 +30,8 @@
 #ifndef __MM_CAMERA_H__
 #define __MM_CAMERA_H__
 
+#define ORIGINAL_VERSION
+
 #include <cam_semaphore.h>
 
 #include "mm_camera_interface.h"
@@ -72,7 +74,6 @@ typedef enum
     MM_CAMERA_CMD_TYPE_CONFIG_NOTIFY, /* configure notify mode */
     //Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
     #ifdef ORIGINAL_VERSION
-	#else
     MM_CAMERA_CMD_TYPE_START_ZSL, /* start zsl snapshot for channel */
     MM_CAMERA_CMD_TYPE_STOP_ZSL, /* stop zsl snapshot for channel */
     #endif
@@ -285,7 +286,6 @@ typedef enum {
     MM_CHANNEL_EVT_ZOOM_1X,
 //Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
 #ifdef ORIGINAL_VERSION
-#else
     MM_CHANNEL_EVT_START_ZSL_SNAPSHOT,
     MM_CHANNEL_EVT_STOP_ZSL_SNAPSHOT,
 #endif
@@ -386,7 +386,6 @@ typedef struct mm_channel {
     uint8_t isZoom1xFrameRequested;
 //Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
 #ifdef ORIGINAL_VERSION
-#else
 	uint8_t longshotEnabled;
 #endif
 //Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 end
@@ -517,7 +516,6 @@ extern int32_t mm_camera_stop_channel(mm_camera_obj_t *my_obj,
                                       uint32_t ch_id);
 //Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
 #ifdef ORIGINAL_VERSION
-#else
 extern int32_t mm_camera_start_zsl_snapshot_ch(mm_camera_obj_t *my_obj,
         uint32_t ch_id);
 extern int32_t mm_camera_stop_zsl_snapshot_ch(mm_camera_obj_t *my_obj,
