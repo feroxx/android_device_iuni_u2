@@ -3363,6 +3363,7 @@ int QCamera2HardwareInterface::sendCommand(int32_t command, int32_t arg1, int32_
         break;
 //Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
 #ifdef ORIGINAL_VERSION
+#else
 	case CAMERA_CMD_SLOW_CONTINUOUS_SHOT:
 		rc = setContinuousShotSpeed(2);
 		break;
