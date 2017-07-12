@@ -1250,7 +1250,7 @@ void get_sensor_info()
             }
         }
 
-        CDBG("%s: dev_info[id=%d,name='%s']\n",
+        ALOGD("%s: dev_info[id=%d,name='%s']\n",
             __func__, num_cameras, g_cam_ctrl.video_dev_name[num_cameras]);
 
         close(dev_fd);
@@ -1258,7 +1258,7 @@ void get_sensor_info()
     }
 
     /* unlock the mutex */
-    CDBG("%s: num_cameras=%d\n", __func__, g_cam_ctrl.num_cam);
+    ALOGD("%s: num_cameras=%d\n", __func__, g_cam_ctrl.num_cam);
     return;
 }
 
@@ -1326,7 +1326,7 @@ void get_sensor_info()
              }
          }
 
-        CDBG("%s: dev_info[id=%d,name='%s']\n",
+        ALOGD("%s: dev_info[id=%d,name='%s']\n",
             __func__, num_cameras, g_cam_ctrl.video_dev_name[num_cameras]);
 
         num_cameras++;
@@ -1338,7 +1338,7 @@ void get_sensor_info()
     get_sensor_info();
     /* unlock the mutex */
     pthread_mutex_unlock(&g_intf_lock);
-    CDBG("%s: num_cameras=%d\n", __func__, g_cam_ctrl.num_cam);
+    ALOGD("%s: num_cameras=%d\n", __func__, g_cam_ctrl.num_cam);
     return g_cam_ctrl.num_cam;
 }
 
