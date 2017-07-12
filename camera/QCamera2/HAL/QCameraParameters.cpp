@@ -8638,7 +8638,7 @@ int32_t QCameraParameters::commitSetBatch()
     if (m_pParamBuf->num_entry > 0) {
         rc = m_pCamOpsTbl->ops->set_parms(m_pCamOpsTbl->camera_handle,
                                                       (void *)m_pParamBuf);
-        CDBG("%s: commitSetBatch done",__func__);
+        ALOGD("%s: commitSetBatch done",__func__);
     }
     if (rc == NO_ERROR) {
         // commit change from temp storage into param map
@@ -8663,7 +8663,7 @@ int32_t QCameraParameters::commitGetBatch()
     if (m_pParamBuf->num_entry > 0) {
         return m_pCamOpsTbl->ops->get_parms(m_pCamOpsTbl->camera_handle,
                                                           (void *)m_pParamBuf);
-        CDBG_HIGH("%s: commitGetBatch done",__func__);
+        ALOGD("%s: commitGetBatch done",__func__);
     } else {
         return NO_ERROR;
     }
