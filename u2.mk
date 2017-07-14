@@ -126,6 +126,7 @@ PRODUCT_PACKAGES += \
 # Camera
 PRODUCT_PACKAGES += \
     camera.msm8974 \
+    libshim_c \
     Snap
     
 # Display
