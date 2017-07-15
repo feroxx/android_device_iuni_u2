@@ -1554,9 +1554,9 @@ int32_t QCameraPostProcessor::encodeData(qcamera_jpeg_data_t *jpeg_job_data,
 
 //Gionee <zhuangxiaojian> <2013-08-20> modify for CR00867956 begin
 #ifdef ORIGINAL_VERSION
+	memObj->cacheOps(main_frame->buf_idx, ION_IOC_CLEAN_CACHES);
 #else
     m_parent->gnProcessRaw(main_frame->buffer, main_frame->frame_len);
-	memObj->cacheOps(main_frame->buf_idx, ION_IOC_CLEAN_CACHES);
 #endif
 //Gionee <zhuangxiaojian> <2013-08-20> modify for CR00867956 end
 
