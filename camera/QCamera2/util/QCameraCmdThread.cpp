@@ -31,9 +31,6 @@
 #include <utils/Log.h>
 #include "QCameraCmdThread.h"
 
-#include <stdlib.h>
-#include <string.h>
-
 using namespace android;
 
 namespace qcamera {

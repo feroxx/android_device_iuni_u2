@@ -45,8 +45,6 @@
 #include "mm_camera_sock.h"
 #include "mm_camera.h"
 
-#define ORIGINAL_VERSION
-
 static pthread_mutex_t g_intf_lock = PTHREAD_MUTEX_INITIALIZER;
 
 static mm_camera_ctrl_t g_cam_ctrl = {0, {{0}}, {0}, {{0}}};
@@ -1283,8 +1281,15 @@ uint8_t get_num_of_cameras()
     char subdev_name[32];
     int32_t sd_fd = 0;
     struct sensor_init_cfg_data cfg;
+    char prop[PROPERTY_VALUE_MAX];
 
     CDBG("%s : E", __func__);
+
+    property_get("vold.decrypt", prop, "0");
+    int decrypt = atoi(prop);
+    if (decrypt == 1)
+     return 0;
+
     /* lock the mutex */
     pthread_mutex_lock(&g_intf_lock);
 
@@ -1457,80 +1462,6 @@ static int32_t mm_camera_intf_process_advanced_capture(uint32_t camera_handle,
     return rc;
 }
 
-//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
-#ifdef ORIGINAL_VERSION
-/*===========================================================================
- * FUNCTION   : mm_camera_intf_start_zsl_snapshot
- *
- * DESCRIPTION: Starts zsl snapshot
- *
- * PARAMETERS :
- *   @camera_handle: camera handle
- *   @ch_id        : channel handle
- *
- * RETURN     : int32_t type of status
- *              0  -- success
- *              -1 -- failure
- *==========================================================================*/
-static int32_t mm_camera_intf_start_zsl_snapshot(uint32_t camera_handle,
-        uint32_t ch_id)
-{
-    int32_t rc = -1;
-    mm_camera_obj_t * my_obj = NULL;
-
-    CDBG("%s :E camera_handler = %d,ch_id = %d",
-         __func__, camera_handle, ch_id);
-    pthread_mutex_lock(&g_intf_lock);
-    my_obj = mm_camera_util_get_camera_by_handler(camera_handle);
-
-    if(my_obj) {
-        pthread_mutex_lock(&my_obj->cam_lock);
-        pthread_mutex_unlock(&g_intf_lock);
-        rc = mm_camera_start_zsl_snapshot_ch(my_obj, ch_id);
-    } else {
-        pthread_mutex_unlock(&g_intf_lock);
-    }
-    CDBG("%s :X rc = %d", __func__, rc);
-    return rc;
-}
-
-/*===========================================================================
- * FUNCTION   : mm_camera_intf_stop_zsl_snapshot
- *
- * DESCRIPTION: Stops zsl snapshot
- *
- * PARAMETERS :
- *   @camera_handle: camera handle
- *   @ch_id        : channel handle
- *
- * RETURN     : int32_t type of status
- *              0  -- success
- *              -1 -- failure
- *==========================================================================*/
-static int32_t mm_camera_intf_stop_zsl_snapshot(uint32_t camera_handle,
-        uint32_t ch_id)
-{
-    int32_t rc = -1;
-    mm_camera_obj_t * my_obj = NULL;
-
-    CDBG("%s :E camera_handler = %d,ch_id = %d",
-         __func__, camera_handle, ch_id);
-    pthread_mutex_lock(&g_intf_lock);
-    my_obj = mm_camera_util_get_camera_by_handler(camera_handle);
-
-    if(my_obj) {
-        pthread_mutex_lock(&my_obj->cam_lock);
-        pthread_mutex_unlock(&g_intf_lock);
-        rc = mm_camera_stop_zsl_snapshot_ch(my_obj, ch_id);
-    } else {
-        pthread_mutex_unlock(&g_intf_lock);
-    }
-    CDBG("%s :X rc = %d", __func__, rc);
-    return rc;
-}
-#endif
-//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 end
-
 /* camera ops v-table */
 static mm_camera_ops_t mm_camera_ops = {
     .query_capability = mm_camera_intf_query_capability,
@@ -1560,13 +1491,7 @@ static mm_camera_ops_t mm_camera_ops = {
     .cancel_super_buf_request = mm_camera_intf_cancel_super_buf_request,
     .flush_super_buf_queue = mm_camera_intf_flush_super_buf_queue,
     .configure_notify_mode = mm_camera_intf_configure_notify_mode,
-    .process_advanced_capture = mm_camera_intf_process_advanced_capture,
-//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
-#ifdef ORIGINAL_VERSION
-    .start_zsl_snapshot = mm_camera_intf_start_zsl_snapshot,
-    .stop_zsl_snapshot = mm_camera_intf_stop_zsl_snapshot
-#endif
-//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 end
+    .process_advanced_capture = mm_camera_intf_process_advanced_capture
 };
 
 /*===========================================================================

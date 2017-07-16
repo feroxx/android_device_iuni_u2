@@ -29,8 +29,6 @@
 
 #define LOG_TAG "QCamera2HWI"
 
-#define ORIGINAL_VERSION
-
 #include <time.h>
 #include <fcntl.h>
 #include <utils/Errors.h>
@@ -77,6 +75,9 @@ void QCamera2HardwareInterface::zsl_channel_cb(mm_camera_super_buf_t *recvd_fram
         ALOGE("%s: ZSL channel doesn't exist, return here", __func__);
         return;
     }
+
+    /* indicate the parent that capture is done */
+    pme->captureDone();
 
     // save a copy for the superbuf
     mm_camera_super_buf_t* frame =
@@ -282,27 +283,6 @@ void QCamera2HardwareInterface::capture_channel_cb_routine(mm_camera_super_buf_t
 
     // Wait on Postproc initialization if needed
     pme->waitDefferedWork(pme->mReprocJob);
-//Gionee <zhuangxiaojian> <2013-08-28> modify for CR00882216 begin
-#ifdef ORIGINAL_VERSION 
-	if(pme->mParameters.isContinuousShotMode()) {
-		timeval tv;
-		gettimeofday(&tv, NULL);
-		unsigned int usLast = pme->mtvLastJpegStart.tv_sec * 1000000 + pme->mtvLastJpegStart.tv_usec;
-		unsigned int usCurr = tv.tv_sec * 1000000 + tv.tv_usec;
-		unsigned int usDiff = (usCurr-usLast);
-		unsigned int usMinShotToShotTime = 1000000/pme->mShotSpeed; // us
-		
-	    if  ( usDiff < usMinShotToShotTime )
-	    {
-	        int32_t const usSleep = usMinShotToShotTime - usDiff;
-	        ALOGD("usSleep = %u, usMinShotToShotTime = %u",usSleep, usMinShotToShotTime);
-	        usleep(usSleep);
-	    }
-		
-	    gettimeofday(&pme->mtvLastJpegStart, NULL);
-	}
-#endif
-//Gionee <zhuangxiaojian> <2013-08-28> modify for CR00882216 end
 
     // send to postprocessor
     pme->m_postprocessor.processData(frame);
@@ -446,27 +426,32 @@ void QCamera2HardwareInterface::preview_stream_cb_routine(mm_camera_super_buf_t 
     if (pme->needDebugFps()) {
         pme->debugShowPreviewFPS();
     }
-	
-//Gionee <zhuangxiaojian> <2013-08-20> add for CR00867956 begin
-#ifdef ORIGINAL_VERSION
-#else
-    pme->gnProcessPreview(super_frame->bufs[0]->buffer, super_frame->bufs[0]->frame_len);
-#endif
-//Gionee <zhuangxiaojian> <2013-08-20> add for CR00867956 end
 
     int idx = frame->buf_idx;
     pme->dumpFrameToFile(stream, frame, QCAMERA_DUMP_FRM_PREVIEW);
+
+    if (pme->mPreviewFrameSkipValid) {
+        uint32_t min_frame_idx = pme->mPreviewFrameSkipIdxRange.min_frame_idx;
+        uint32_t max_frame_idx = pme->mPreviewFrameSkipIdxRange.max_frame_idx;
+        uint32_t current_frame_idx = frame->frame_idx;
+        if (current_frame_idx >= max_frame_idx) {
+            // Reset the flags when current frame ID >= max frame ID
+            pme->mPreviewFrameSkipValid = 0;
+            pme->mPreviewFrameSkipIdxRange.min_frame_idx = 0;
+            pme->mPreviewFrameSkipIdxRange.max_frame_idx = 0;
+        }
+        if (current_frame_idx >= min_frame_idx && current_frame_idx <= max_frame_idx) {
+            ALOGD("%s: Skip Preview frame ID %d during flash", __func__, current_frame_idx);
+            stream->bufDone(frame->buf_idx);
+            free(super_frame);
+            return;
+        }
+    }
 
     if(pme->m_bPreviewStarted) {
        ALOGE("[KPI Perf] %s : PROFILE_FIRST_PREVIEW_FRAME", __func__);
        pme->m_bPreviewStarted = false ;
     }
-
-//Gionee <wutangzhi> <2013-09-11> add for CR00899392 begin
-#ifdef ORIGINAL_VERSION
-	memory->cacheOps(idx, ION_IOC_CLEAN_CACHES);  
-#endif
-//Gionee <wutangzhi> <2013-09-11> add for CR00899392 end
 
     // Display the buffer.
     ALOGV("%p displayBuffer %d E", pme, idx);
@@ -591,6 +576,24 @@ void QCamera2HardwareInterface::nodisplay_preview_stream_cb_routine(
         pme->debugShowPreviewFPS();
     }
 
+    if (pme->mPreviewFrameSkipValid) {
+        uint32_t min_frame_idx = pme->mPreviewFrameSkipIdxRange.min_frame_idx;
+        uint32_t max_frame_idx = pme->mPreviewFrameSkipIdxRange.max_frame_idx;
+        uint32_t current_frame_idx = frame->frame_idx;
+        if (current_frame_idx >= max_frame_idx) {
+            // Reset the flags when current frame ID >= max frame ID
+            pme->mPreviewFrameSkipValid = 0;
+            pme->mPreviewFrameSkipIdxRange.min_frame_idx = 0;
+            pme->mPreviewFrameSkipIdxRange.max_frame_idx = 0;
+        }
+        if (current_frame_idx >= min_frame_idx && current_frame_idx <= max_frame_idx) {
+            ALOGD("%s: Skip Preview frame ID %d during flash", __func__, current_frame_idx);
+            stream->bufDone(frame->buf_idx);
+            free(super_frame);
+            return;
+        }
+    }
+
     QCameraMemory *previewMemObj = (QCameraMemory *)frame->mem_info;
     camera_memory_t *preview_mem = NULL;
     if (previewMemObj != NULL) {
@@ -701,14 +704,11 @@ void QCamera2HardwareInterface::postview_stream_cb_routine(mm_camera_super_buf_t
  *             done with the video frame, it will call another API
  *             (release_recording_frame) to return the frame back
  *==========================================================================*/
- //Gionee <zhaocuiqin> <2014-07-01> add for CR01310448 begin
- static long int lastTimeStamp = 0; 
- //Gionee <zhaocuiqin> <2014-07-01> add for CR01310448 end
 void QCamera2HardwareInterface::video_stream_cb_routine(mm_camera_super_buf_t *super_frame,
                                                         QCameraStream *stream,
                                                         void *userdata)
 {
-	QCameraVideoMemory *videoMemObj = NULL;
+    QCameraVideoMemory *videoMemObj = NULL;
     ALOGD("[KPI Perf] %s : BEGIN", __func__);
     QCamera2HardwareInterface *pme = (QCamera2HardwareInterface *)userdata;
     if (pme == NULL ||
@@ -728,7 +728,7 @@ void QCamera2HardwareInterface::video_stream_cb_routine(mm_camera_super_buf_t *s
        ALOGE("[KPI Perf] %s : PROFILE_FIRST_RECORD_FRAME", __func__);
        pme->m_bRecordStarted = false ;
     }
-    ALOGE("%s: Stream(%d), Timestamp: %ld %ld",
+    ALOGD("%s: Stream(%d), Timestamp: %ld %ld",
           __func__,
           frame->stream_id,
           frame->ts.tv_sec,
@@ -739,22 +739,12 @@ void QCamera2HardwareInterface::video_stream_cb_routine(mm_camera_super_buf_t *s
     } else {
         timeStamp = nsecs_t(frame->ts.tv_sec) * 1000000000LL + frame->ts.tv_nsec;
     }
-    ALOGE("Send Video frame to services/encoder TimeStamp : %lld", timeStamp);
-
-//Gionee <zhaocuiqin> <2014-07-01> add for CR01310448 begin
-   if(lastTimeStamp < timeStamp) 
-   lastTimeStamp = timeStamp; 
-   else{ 
-   free(super_frame); 
-   return; 
-   } 
-//Gionee <zhaocuiqin> <2014-07-01> add for CR01310448 end
-
+    ALOGD("Send Video frame to services/encoder TimeStamp : %lld", timeStamp);
     videoMemObj = (QCameraVideoMemory *)frame->mem_info;
     camera_memory_t *video_mem = NULL;
     if (NULL != videoMemObj) {
         video_mem = videoMemObj->getMemory(frame->buf_idx, (pme->mStoreMetaDataInFrame > 0)? true : false);
-		videoMemObj->getNativeHandle(frame->buf_idx);
+        videoMemObj->getNativeHandle(frame->buf_idx);
     }
     if (NULL != videoMemObj && NULL != video_mem) {
         pme->dumpFrameToFile(stream, frame, QCAMERA_DUMP_FRM_VIDEO);
@@ -1029,6 +1019,14 @@ void QCamera2HardwareInterface::metadata_stream_cb_routine(mm_camera_super_buf_t
        pme->playShutter();
     }
 
+    if (pMetaData->is_preview_frame_skip_valid) {
+        pme->mPreviewFrameSkipValid = 1;
+        pme->mPreviewFrameSkipIdxRange = pMetaData->preview_frame_skip_idx_range;
+        ALOGD("%s: Skip preview frame ID range min = %d max = %d", __func__,
+                   pme->mPreviewFrameSkipIdxRange.min_frame_idx,
+                   pme->mPreviewFrameSkipIdxRange.max_frame_idx);
+    }
+
     if (pMetaData->is_tuning_params_valid && pme->mParameters.getRecordingHintValue() == true) {
         //Dump Tuning data for video
         pme->dumpMetadataToFile(stream,frame,(char *)"Video");
@@ -1096,9 +1094,23 @@ void QCamera2HardwareInterface::metadata_stream_cb_routine(mm_camera_super_buf_t
                 free(payload);
                 payload = NULL;
 
+            } else if (pMetaData->focus_data.focus_state == CAM_AF_SCANNING) {
+                pme->mLastAFScanTime = systemTime();
             }
         } else {
             ALOGE("%s: No memory for focus qcamera_sm_internal_evt_payload_t", __func__);
+        }
+    } else if (pme->m_currentFocusState == CAM_AF_SCANNING) {
+        /* Recover if passive AF has stalled after photo capture */
+        if (pme->mLastAFScanTime && pme->mLastCaptureTime) {
+            nsecs_t now = systemTime();
+            nsecs_t scanDelta = now - pme->mLastAFScanTime;
+            nsecs_t captureDelta = now - pme->mLastCaptureTime;
+            if (captureDelta < ms2ns(1000) && scanDelta > ms2ns(200)) {
+                /* Notify userspace that passive AF has stopped */
+                pme->sendEvtNotify(CAMERA_MSG_FOCUS_MOVE, false, 0);
+                pme->mLastAFScanTime = 0;
+            }
         }
     }
 
@@ -1744,13 +1756,6 @@ void * QCameraCbNotifier::cbNotifyRoutine(void * data)
                 isSnapshotActive = TRUE;
                 numOfSnapshotExpected = pme->mParent->numOfSnapshotsExpected();
                 longShotEnabled = pme->mParent->isLongshotEnabled();
-				//Gionee <zhuangxiaojian> <2014-09-10> modify for CR01371937 begin
-				#ifdef ORIGINAL_VERSION
-				if (longShotEnabled) {
-					pme->mParent->mParameters.set3ALock(QCameraParameters::VALUE_TRUE);
-				}
-				#endif
-				//Gionee <zhuangxiaojian> <2014-09-10> modify for CR01371937 end
                 numOfSnapshotRcvd = 0;
             }
             break;
@@ -1758,14 +1763,6 @@ void * QCameraCbNotifier::cbNotifyRoutine(void * data)
             {
                 pme->mDataQ.flushNodes(matchSnapshotNotifications);
                 isSnapshotActive = FALSE;
-
-				//Gionee <zhuangxiaojian> <2014-02-14> modify for CR01035122 begin
-				#ifdef ORIGINAL_VERSION
-				if (pme->mParent->m_stateMachine.isPreviewRunning()) {
-						pme->mParent->mParameters.setBurstLEDFlashLevel(CAM_LED_FLASH_DEFAULT);
-				}
-				#endif
-					//Gionee <zhuangxiaojian> <2014-02-14> modify for CR01035122 end
 
                 numOfSnapshotExpected = 0;
                 numOfSnapshotRcvd = 0;
@@ -1830,8 +1827,6 @@ void * QCameraCbNotifier::cbNotifyRoutine(void * data)
                         case QCAMERA_DATA_SNAPSHOT_CALLBACK:
                             {
                                 if (TRUE == isSnapshotActive && pme->mDataCb ) {
-									//Gionee <zhuangxiaojian> <2014-06-23> modify for CR01261494 begin 
-									#ifdef ORIGINAL_VERSION
                                     if (!longShotEnabled) {
                                         numOfSnapshotRcvd++;
                                         if (numOfSnapshotExpected > 0 &&
@@ -1846,64 +1841,6 @@ void * QCameraCbNotifier::cbNotifyRoutine(void * data)
                                                  cb->index,
                                                  cb->metadata,
                                                  pme->mCallbackCookie);
-									#else
-									
-									numOfSnapshotRcvd++;
-
-									if (longShotEnabled) {
-										if (!pme->mParent->isCancelLongshot() 
-											&& (numOfSnapshotRcvd <= pme->mParent->mParameters.getBurstShotNum())
-											&& pme->mCallbackCookie != NULL) {
-											pme->mDataCb(cb->msg_type,
-		                                                 cb->data,
-		                                                 cb->index,
-		                                                 cb->metadata,
-		                                                 pme->mCallbackCookie);
-										}
-										
-										if (pme->mParent->isCancelLongshot()
-											|| (numOfSnapshotRcvd == pme->mParent->mParameters.getBurstShotNum()
-												&& pme->mParent->m_stateMachine.isCaptureRunning())) {
-											pme->mParent->cancelPicture();
-											pme->mParent->setLongshotEnabled(false);
-											pme->mParent->processEvt(QCAMERA_SM_EVT_SNAPSHOT_DONE, NULL);
-											//Gionee <zhuangxiaojian> <2014-06-26> modify for CR01310542 begin
-											#ifdef ORIGINAL_VERSION
-											if (pme->mParent->m_stateMachine.isPreviewRunning()
-												&& !pme->mParent->m_stateMachine.isRecordingRunning()) {
-												pme->mParent->mParameters.setOisMode(CAM_OIS_MODE_PREVIEW);
-											}
-											#endif
-											//Gionee <zhuangxiaojian> <2014-06-26> modify for CR01310542 end
-										}
-										break;
-									}
-									
-                                    if (numOfSnapshotExpected > 0 &&
-                                        numOfSnapshotExpected == numOfSnapshotRcvd) {
-                                        // notify HWI that snapshot is done
-                                        pme->mParent->processSyncEvt(QCAMERA_SM_EVT_SNAPSHOT_DONE,
-                                                                     NULL);
-										//Gionee <zhuangxiaojian> <2014-06-26> modify for CR01310542 begin
-										if (pme->mParent->m_stateMachine.isPreviewRunning()
-											&& !pme->mParent->m_stateMachine.isRecordingRunning()) {
-											pme->mParent->mParameters.setOisMode(CAM_OIS_MODE_PREVIEW);
-										}
-										//Gionee <zhuangxiaojian> <2014-06-26> modify for CR01310542 end
-                                        }
-
-									if (pme->mDataCb && pme->mCallbackCookie != NULL) {
-	                                    pme->mDataCb(cb->msg_type,
-	                                                 cb->data,
-	                                                 cb->index,
-	                                                 cb->metadata,
-	                                                 pme->mCallbackCookie);
-									} else {
-										ALOGE("%s:data cb with tmp not set!",
-											  __func__);
-									}
-									#endif
-									//Gionee <zhuangxiaojian> <2014-06-23> modify for CR01261494 end 
                                 }
                             }
                             break;

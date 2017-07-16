@@ -35,8 +35,6 @@
 #include "cam_intf.h"
 #include "cam_queue.h"
 
-#define ORIGINAL_VERSION
-
 #define MM_CAMERA_MAX_NUM_SENSORS MSM_MAX_CAMERA_SENSORS
 #define MM_CAMERA_MAX_NUM_FRAMES CAM_MAX_NUM_BUFS_PER_STREAM
 /* num of channels allowed in a camera obj */
@@ -640,28 +638,6 @@ typedef struct {
                                           mm_camera_advanced_capture_t type,
                                           uint32_t ch_id,
                                           int8_t start_flag);
-	 
-//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
-#ifdef ORIGINAL_VERSION
-	/** start_zsl_snapshot: function definition for starting
-     *                    zsl snapshot.
-     *    @camera_handle : camer handler
-     *    @ch_id         : channel id
-     *  Return value: 0 -- success
-     *                -1 -- failure
-     **/
-    int32_t (*start_zsl_snapshot) (uint32_t camera_handle, uint32_t ch_id);
-
-    /** stop_zsl_snapshot: function definition for stopping
-     *                    zsl snapshot.
-     *    @camera_handle : camer handler
-     *    @ch_id         : channel id
-     *  Return value: 0 -- success
-     *                -1 -- failure
-     **/
-    int32_t (*stop_zsl_snapshot) (uint32_t camera_handle, uint32_t ch_id);
-#endif
-//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 end
 } mm_camera_ops_t;
 
 /** mm_camera_vtbl_t: virtual table for camera operations

@@ -19,8 +19,6 @@
 #ifndef ANDROID_HARDWARE_QCAMERA_PARAMETERS_H
 #define ANDROID_HARDWARE_QCAMERA_PARAMETERS_H
 
-#define ORIGINAL_VERSION
-
 #include <camera/CameraParameters.h>
 #include <cutils/properties.h>
 #include <hardware/camera.h>
@@ -257,12 +255,6 @@ public:
     static const char EFFECT_SKETCH[];
     static const char EFFECT_NEON[];
 
-	// Gionee <zhuangxiaojian> <2014-11-24> modify for CR01415653 begin
-	#ifdef ORIGINAL_VERSION
-	static const char KEY_PICZOOM_CROP_MASK[];
-	#endif
-	// Gionee <zhuangxiaojian> <2014-11-24> modify for CR01415653 end
-	
     //AF Bracketing
     static const char KEY_QC_AF_BRACKET[];
     static const char KEY_QC_SUPPORTED_AF_BRACKET_MODES[];
@@ -406,6 +398,8 @@ public:
     static const char KEY_QC_VIDEO_HDR[];
     static const char KEY_QC_VT_ENABLE[];
     static const char KEY_QC_SUPPORTED_VIDEO_HDR_MODES[];
+    static const char KEY_QC_SNAPSHOT_HDR[];
+    static const char KEY_QC_SUPPORTED_SNAPSHOT_HDR_MODES[];
 
     // Values for SKIN TONE ENHANCEMENT
     static const char SKIN_TONE_ENHANCEMENT_ENABLE[] ;
@@ -559,6 +553,7 @@ public:
     int32_t enableFlash(bool enableFlash, bool commitSettings);
     int32_t updateRAW(cam_dimension_t max_dim);
     bool isAVTimerEnabled();
+    bool isDISEnabled();
     bool isMobicatEnabled();
 
     cam_focus_mode_type getFocusMode() const {return mFocusMode;};
@@ -610,17 +605,6 @@ public:
     int32_t  updateCurrentFocusPosition(int32_t pos);
     bool isDisplayFrameNeeded() { return m_bDisplayFrame; };
     int32_t setDisplayFrame(bool enabled) {m_bDisplayFrame=enabled; return 0;};
-//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
-#ifdef ORIGINAL_VERSION
-    bool 	isContinuousShotMode() {return (m_nCaptureMode == CAM_CAPTURE_MODE_BURST);};
-	int32_t setBurstLEDFlashLevel(cam_led_flash_burst_level level);
-	bool isInitPreviewSizeNeeded() {return m_bNeedInitPreviewSize; };
-	void updateInitPreviewSizeState(bool value) { m_bNeedInitPreviewSize = value; };
-	int32_t setOisMode(cam_ois_mode_t mode);
-	float getScaleRatio() {return m_ScaleRatio;};
-#endif
-//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 end
-
 
 private:
     int32_t setPreviewSize(const QCameraParameters& );
@@ -645,6 +629,7 @@ private:
     int32_t setSkinToneEnhancement(const QCameraParameters& );
     int32_t setSceneDetect(const QCameraParameters& );
     int32_t setVideoHDR(const QCameraParameters& );
+    int32_t setSnapshotHDR(const QCameraParameters& );
     int32_t setVtEnable(const QCameraParameters& );
     int32_t setZoom(const QCameraParameters& );
     int32_t setISOValue(const QCameraParameters& );
@@ -656,8 +641,6 @@ private:
     int32_t setAwbLock(const QCameraParameters& );
     int32_t setMCEValue(const QCameraParameters& );
     int32_t setDISValue(const QCameraParameters& params);
-    int32_t setHighFrameRate(const QCameraParameters& );
-    int32_t setHighSpeedRecording(const QCameraParameters& );
     int32_t setLensShadeValue(const QCameraParameters& );
     int32_t setExposureCompensation(const QCameraParameters& );
     int32_t setWhiteBalance(const QCameraParameters& );
@@ -705,6 +688,7 @@ private:
     int32_t setSkinToneEnhancement(int sceFactor);
     int32_t setSceneDetect(const char *scendDetect);
     int32_t setVideoHDR(const char *videoHDR);
+    int32_t setSnapshotHDR(const char *snapshotHDR);
     int32_t setVtEnable(const char *vtEnable);
     int32_t setZoom(int zoom_level);
     int32_t setISOValue(const char *isoValue);
@@ -714,7 +698,7 @@ private:
     int32_t setAwbLock(const char *awbStr);
     int32_t setMCEValue(const char *mceStr);
     int32_t setDISValue(const char *disStr);
-    int32_t setHighFrameRate(const char *hfrStr);
+    int32_t setHighFrameRate(const int32_t hfrMode);
     int32_t setLensShadeValue(const char *lensShadeStr);
     int32_t setExposureCompensation(int expComp);
     int32_t setWhiteBalance(const char *wbStr);
@@ -832,6 +816,7 @@ private:
     cam_dimension_t m_rawSize; // live snapshot size
     bool m_bHDREnabled;             // if HDR is enabled
     bool m_bAVTimerEnabled;    //if AVTimer is enabled
+    bool m_bDISEnabled;
     bool m_bMobiEnabled;
     QCameraAdjustFPS *m_AdjustFPS;
     bool m_bHDR1xFrameEnabled;          // if frame with exposure compensation 0 during HDR is enabled
@@ -843,15 +828,6 @@ private:
     bool m_bReleaseTorchCamera; // Release camera resources after torch gets disabled
     int32_t m_curCCT;
     int32_t m_curFocusPos;
-//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin 
-#ifdef ORIGINAL_VERSION
-    int32_t m_nCaptureMode;
-	cam_led_flash_burst_level m_LEDFlashLevel; // LED flash level for burst shot
-	bool m_bNeedInitPreviewSize;
-	cam_ois_mode_t m_OisMode;
-	float m_ScaleRatio;
-#endif
-//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 end
 
     DefaultKeyedVector<String8,String8> m_tempMap; // map for temororily store parameters to be set
     cam_fps_range_t m_default_fps_range;
@@ -862,7 +838,11 @@ private:
     bool m_bUbiRefocus;
     cam_fps_range_t m_hfrFpsRange;
     bool m_bHfrMode;
+    int32_t mHfrMode;
     bool m_bDisplayFrame;
+    int32_t mExposureTime;
+    int32_t mManualIso;
+    bool m_bSceneModeAuto;
 };
 
 }; // namespace qcamera

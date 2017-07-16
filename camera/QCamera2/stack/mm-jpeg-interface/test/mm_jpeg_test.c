@@ -31,9 +31,6 @@
 #include "mm_jpeg_ionbuf.h"
 #include <sys/time.h>
 
-#include <stdlib.h>
-#include <string.h>
-
 /** DUMP_TO_FILE:
  *  @filename: file name
  *  @p_addr: address of the buffer

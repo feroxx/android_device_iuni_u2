@@ -28,6 +28,10 @@ LOCAL_CFLAGS += -DUSE_JB_MR1
 
 endif
 
+ifneq ($(call is-platform-sdk-version-at-least,20),true)
+LOCAL_CFLAGS += -DUSE_KK_CODE
+endif
+
 LOCAL_C_INCLUDES += \
     frameworks/base/include/ui \
     frameworks/base/include/surfaceflinger \
@@ -44,6 +48,6 @@ LOCAL_MODULE_TAGS:= tests
 
 LOCAL_CFLAGS += -Wall -fno-short-enums -O0
 
-include $(BUILD_EXECUTABLE)
+#include $(BUILD_EXECUTABLE)
 
 

@@ -32,8 +32,6 @@
 #include <errno.h>
 #include <math.h>
 
-#include <stdlib.h>
-#include <string.h>
 
 #define LOWER(a)               ((a) & 0xFFFF)
 #define UPPER(a)               (((a)>>16) & 0xFFFF)
@@ -416,8 +414,13 @@ int process_3a_data(cam_ae_params_t *p_ae_params, cam_awb_params_t *p_awb_params
       val_rat.num = 0;
       val_rat.denom = 0;
     } else {
-      val_rat.num = 1;
-      val_rat.denom = ROUND(1.0/p_ae_params->exp_time);
+      if (p_ae_params->exp_time >= 1.0f) {
+          val_rat.num = (uint32_t)p_ae_params->exp_time;
+          val_rat.denom = 1;
+      } else {
+          val_rat.num = 1;
+          val_rat.denom = ROUND(1.0/p_ae_params->exp_time);
+      }
     }
     ALOGD("%s: numer %d denom %d", __func__, val_rat.num, val_rat.denom );
 

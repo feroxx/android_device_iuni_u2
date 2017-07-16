@@ -30,18 +30,10 @@
 #ifndef __QCAMERA_POSTPROC_H__
 #define __QCAMERA_POSTPROC_H__
 
-#define ORIGINAL_VERSION
-
 extern "C" {
 #include <mm_camera_interface.h>
 #include <mm_jpeg_interface.h>
 }
-//Gionee <zhuangxiaojian> <2013-08-28> modify for CR00882216 begin
-#ifdef ORIGINAL_VERSION
-#include <sys/time.h>
-#include <time.h>
-#endif
-//Gionee <zhuangxiaojian> <2013-08-28> modify for CR00882216 end
 #include "QCamera2HWI.h"
 
 #define MAX_JPEG_BURST 2
@@ -168,11 +160,6 @@ private:
 
     static void *dataProcessRoutine(void *data);
     static void *dataSaveRoutine(void *data);
-	// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 begin
-	#ifdef ORIGINAL_VERSION
-	static void *longshotRoutine(void *data);
-	#endif
-	// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 end
 
     int32_t setYUVFrameInfo(mm_camera_super_buf_t *recvd_frame);
     static bool matchJobId(void *data, void *user_data, void *match_data);
@@ -201,11 +188,6 @@ private:
     QCameraQueue m_inputSaveQ;          // input save job queue
     QCameraCmdThread m_dataProcTh;      // thread for data processing
     QCameraCmdThread m_saveProcTh;      // thread for storing buffers
-    // Gionee <wutangzhi> <2013-10-28> modify for CR00906596 begin
-	#ifdef ORIGINAL_VERSION
-    QCameraCmdThread m_longshotProcTh;	// thread for long shot
-    #endif
-	// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 end
     uint32_t mSaveFrmCnt;               // save frame counter
     static const char *STORE_LOCATION;  // path for storing buffers
     bool mUseSaveProc;                  // use store thread
@@ -214,13 +196,6 @@ private:
     uint8_t mNewJpegSessionNeeded;
     bool mMultipleStages;               // multiple stages are present
     uint32_t   m_JpegOutputMemCount;
-// Gionee <wutangzhi> <2013-09-13> modify for CR00899328 begin
-#ifdef ORIGINAL_VERSION
-#else
-	int32_t mGnNeedBurstCount;		
-	int32_t mReceiveFrameCnt;
-#endif
-// Gionee <wutangzhi> <2013-09-13> modify for CR00899328 end
 };
 
 }; // namespace qcamera

@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2016, The Linux Foundataion. All rights reserved.
+/* Copyright (c) 2012-2014,2016 The Linux Foundataion. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -30,8 +30,6 @@
 #ifndef __QCAMERA2HARDWAREINTERFACE_H__
 #define __QCAMERA2HARDWAREINTERFACE_H__
 
-#define ORIGINAL_VERSION
-
 #include <hardware/camera.h>
 #include <hardware/power.h>
 #include <utils/Log.h>
@@ -48,14 +46,6 @@
 #include "QCameraPostProc.h"
 #include "QCameraThermalAdapter.h"
 #include "QCameraMem.h"
-
-//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
-#ifdef ORIGINAL_VERSION
-#else
-#include <GNCameraFeature.h>
-#include "GNCameraParameters.h"
-#endif
-//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 end
 
 extern "C" {
 #include <mm_camera_interface.h>
@@ -361,6 +351,8 @@ private:
     inline int getFlash(){ return mFlash; }
     inline int getFlashPresence(){ return mFlashPresence; }
     inline int getRedeye(){ return mRedEye; }
+    inline bool getCancelAutoFocus(){ return mCancelAutoFocus; }
+    inline void setCancelAutoFocus(bool flag){ mCancelAutoFocus = flag; }
     QCameraExif *getExifData();
 
     int32_t processAutoFocusEvent(cam_auto_focus_data_t &focus_data);
@@ -432,18 +424,10 @@ private:
     inline void setOutputImageCount(uint32_t aCount) {mOutputCount = aCount;}
     inline uint32_t getOutputImageCount() {return mOutputCount;}
     bool processUFDumps(qcamera_jpeg_evt_payload_t *evt);
+    void captureDone();
 
     static void copyList(cam_dimension_t* src_list,
                    cam_dimension_t* dst_list, uint8_t len);
-
-//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
-#ifdef ORIGINAL_VERSION
-	int32_t setContinuousShotSpeed(int32_t speed);
-	bool isCancelLongshot() {return mCancelLongshot;};
-	void setLongshotEnabled(bool enabled) {mLongshotEnabled = enabled;};
-#endif
-//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 end
-
     static void camEvtHandle(uint32_t camera_handle,
                           mm_camera_event_t *evt,
                           void *user_data);
@@ -501,26 +485,13 @@ private:
     static int32_t getEffectValue(const char *effect);
 
 private:
-//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
-#ifdef ORIGINAL_VERSION
-	int32_t mShotSpeed;
-    timeval mtvLastJpegStart;
-#endif
-//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 end
     camera_device_t   mCameraDevice;
     uint8_t           mCameraId;
     mm_camera_vtbl_t *mCameraHandle;
     bool mCameraOpened;
 
     preview_stream_ops_t *mPreviewWindow;
-//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
-#ifdef ORIGINAL_VERSION
-	QCameraParameters mParameters;
-#else
-    GNCameraParameters mParameters;
-#endif
-//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 end
-
+    QCameraParameters mParameters;
     int32_t               mMsgEnabled;
     int                   mStoreMetaDataInFrame;
 
@@ -564,13 +535,9 @@ private:
     int mDumpSkipCnt; // frame skip count
     mm_jpeg_exif_params_t mExifParams;
     qcamera_thermal_level_enum_t mThermalLevel;
+    bool mCancelAutoFocus;
     bool m_HDRSceneEnabled;
     bool mLongshotEnabled;
-//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
-#ifdef ORIGINAL_VERSION
-	bool mCancelLongshot;
-#endif
-//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 end
     int32_t m_max_pic_width;
     int32_t m_max_pic_height;
     pthread_t mLiveSnapshotThread;
@@ -630,56 +597,10 @@ private:
     int32_t mMetadataJob;
     int32_t mReprocJob;
     int32_t mOutputCount;
-	nsecs_t mLastCaptureTime;
-//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
-#ifdef ORIGINAL_VERSION
-#else
-	private:
-		class GNListener : public GNCameraFeatureListener {
-		public:
-			GNListener(QCameraCbNotifier* cbNotifier) {mpCbNotifier = cbNotifier;};
-			void notify(GNCameraMsgType_t msgType, int32 ext1, int32 ext2, int32 ext3, void* ext4);
-			void setMemoryAllocInterface(camera_request_memory get_memory) {mAllocMemory = get_memory;};
-			void updateDisplayDimension(cam_dimension_t dim){
-				mDisplayDim.width = dim.width;
-				mDisplayDim.height = dim.height;
-			}
-	
-		private:
-			QCameraCbNotifier* mpCbNotifier;
-			camera_request_memory		   mAllocMemory;
-			cam_dimension_t mDisplayDim;
-		};
-	
-	
-		int32_t gnParseFaceBeautyParamString(const char *str,
-													  int max_num_face,
-													  AgeGenderParam_t* faceBautyParam,
-													  int* faceNum);
-		int32_t gnParseVector(const char *str, int *num, int N, char delim);
-		void gnUpdatePreviewSize();
-		void gnUpdateFeatureParameters();
-		void gnUpdatePictureFrame();
-		void gnUpdateGestureShotMode();
-		void gnUpdateGestureDetection();
-		void gnUpdateMirror();
-		void gnUpdateSceneDetection();
-		void gnUpdateNightShotMode();
-		void gnUpdatePicZoomMode();
-		void gnUpdateLiveEffect();
-		void gnProcessPreview(void* inputBuffer, int size); 
-		void gnSetFaceBeauty(void); 
-		void gnUpdateAgeGenderDetection();
-		void gnProcessRaw(void* inputBuffer, int size);
-		void gnProcessPicture(void* inputBuffer, int* size);  
-		bool gnNeedRotationReprocess();
-		uint32_t gnGetBurstCount();
-	
-		GNCameraFeature 		*mpGNCameraFeature;
-		GNListener				*mpGNListener;	
-		bool					mPiczoomEnabled;
-#endif   
-//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 end
+    bool mPreviewFrameSkipValid;
+    cam_frame_idx_range_t mPreviewFrameSkipIdxRange;
+    nsecs_t mLastAFScanTime;
+    nsecs_t mLastCaptureTime;
 };
 
 }; // namespace qcamera

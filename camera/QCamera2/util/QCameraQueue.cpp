@@ -31,9 +31,6 @@
 #include <utils/Log.h>
 #include "QCameraQueue.h"
 
-#include <stdlib.h>
-#include <string.h>
-
 namespace qcamera {
 
 /*===========================================================================
