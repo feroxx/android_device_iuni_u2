@@ -696,7 +696,7 @@ GNCameraParameters::setPicZoomMode(const GNCameraParameters& params)
 	return rc;
 }
 
-const char *GNCameraParameters::getStr(const char *key) const
+String8 GNCameraParameters::getStr(const char *key)
 {
     String8 v = mMap.valueFor(String8(key));
     if (v.length() == 0)
