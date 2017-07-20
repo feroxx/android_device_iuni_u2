@@ -133,6 +133,13 @@ PRODUCT_PACKAGES += \
     mm-jpeg-interface-test \
     mm-qcamera-app \
     Snap
+
+#GNCamera
+PRODUCT_PACKAGES += \
+    libgn_camera_feature \
+    libarcsoft \
+    libcrunchfish \
+    libscalado
     
 # Display
 PRODUCT_PACKAGES += \
