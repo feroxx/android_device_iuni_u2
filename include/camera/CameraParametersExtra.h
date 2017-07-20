@@ -15,7 +15,7 @@
  */
  
 #define CAMERA_PARAMETERS_EXTRA_C \
-const char *CameraParameters::getStr() const { return get(); };
+int CameraParameters::getStr(const char *key __unused) const { return -1; };
  
 #define CAMERA_PARAMETERS_EXTRA_H \
-    const char *getStr() const;
+    int getStr(const char *key __unused) const;
