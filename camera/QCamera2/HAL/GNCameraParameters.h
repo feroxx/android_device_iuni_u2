@@ -166,6 +166,7 @@ public:
 	int32_t getNumOfExtraNightShotOutBufsIfNeeded();
 	int32_t getNumOfExtraNightShotBurst();
 	int32_t getLiveEffect() {return m_nLiveEffect;};
+	const char *getStr(const char *key) const;
 	
 
 private:
