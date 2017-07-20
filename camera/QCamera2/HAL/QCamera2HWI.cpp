@@ -1492,7 +1492,11 @@ uint8_t QCamera2HardwareInterface::getBufNumRequired(cam_stream_type_t stream_ty
         } else {
             //preview window might not be set at this point. So, query directly
             //from BufferQueue implementation of gralloc buffers.
+#ifdef USE_KK_CODE
             minUndequeCount = BufferQueue::MIN_UNDEQUEUED_BUFFERS;
+#else
+            minUndequeCount = 2;
+#endif
         }
     }
 
@@ -3182,7 +3186,6 @@ int QCamera2HardwareInterface::sendCommand(int32_t command, int32_t arg1, int32_
         break;
 //Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
 #ifdef ORIGINAL_VERSION
-#else
 	case CAMERA_CMD_SLOW_CONTINUOUS_SHOT:
 		rc = setContinuousShotSpeed(2);
 		break;
