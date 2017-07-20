@@ -183,7 +183,7 @@ private:
 
     int 	lookupAttr(const QCameraMap arr[], int len, const char *name);
 	String8 createValuesStringFromMap(const QCameraMap *map, int map_len);
-	String8 getStr(const char *key);
+	String8 getStr(const values*);
 
     // Map from strings to values
 	static const QCameraMap CAPTURE_MODES_MAP[];
