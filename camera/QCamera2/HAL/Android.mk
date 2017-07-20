@@ -55,9 +55,9 @@ LOCAL_SHARED_LIBRARIES := libcamera_client liblog libhardware libutils libcutils
 LOCAL_SHARED_LIBRARIES += libmmcamera_interface libmmjpeg_interface
 
 #Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
-ifeq "$(strip $(GN_CAMERA_FEATURE_SUPPORT))" "yes"
+ifeq ($(GN_CAMERA_FEATURE_SUPPORT),true)
 LOCAL_SHARED_LIBRARIES += libgn_camera_feature
-LOCAL_C_INCLUDES += $(TOP)/external/libgn_camera_feature/include
+LOCAL_C_INCLUDES += external/libgn_camera_feature/include
 endif
 #Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 end
 
