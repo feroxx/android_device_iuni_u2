@@ -33,7 +33,7 @@
 #include <cam_semaphore.h>
 
 #include "mm_camera_interface.h"
-
+#include <hardware/camera.h>
 /**********************************************************************************
 * Data structure declare
 ***********************************************************************************/
