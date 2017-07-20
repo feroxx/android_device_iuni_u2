@@ -1,5 +1,7 @@
 LOCAL_PATH:= $(call my-dir)
 
+LOCAL_CLANG_CFLAGS += -Wno-unused-parameter -Wno-tautological-pointer-compare
+
 include $(CLEAR_VARS)
 LOCAL_SRC_FILES := \
         QCamera2Factory.cpp \
@@ -69,7 +71,6 @@ endif
 
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
 LOCAL_MODULE := camera.$(TARGET_BOARD_PLATFORM)
-LOCAL_CLANG := false
 LOCAL_MODULE_TAGS := optional
 
 include $(BUILD_SHARED_LIBRARY)
