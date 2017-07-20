@@ -81,6 +81,12 @@ QCameraPostProcessor::QCameraPostProcessor(QCamera2HardwareInterface *cam_ctrl)
       mNewJpegSessionNeeded(true),
       mMultipleStages(false),
       m_JpegOutputMemCount(0)
+	  // Gionee <wutangzhi> <2013-09-13> modify for CR00899328 begin
+      #ifdef ORIGINAL_VERSION
+      #else
+	  , mGnNeedBurstCount(0)
+	  #endif
+	  // Gionee <wutangzhi> <2013-09-13> modify for CR00899328 end
 {
     memset(&mJpegHandle, 0, sizeof(mJpegHandle));
     memset(&m_pJpegOutputMem, 0, sizeof(m_pJpegOutputMem));
@@ -141,6 +147,13 @@ int32_t QCameraPostProcessor::init(jpeg_encode_callback_t jpeg_cb, void *user_da
 
     m_dataProcTh.launch(dataProcessRoutine, this);
     m_saveProcTh.launch(dataSaveRoutine, this);
+	
+	// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 begin
+	#ifdef ORIGINAL_VERSION
+	#else
+	m_longshotProcTh.launch(longshotRoutine, this);
+	#endif
+	// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 end
 
     m_bInited = TRUE;
     return NO_ERROR;
@@ -162,6 +175,13 @@ int32_t QCameraPostProcessor::deinit()
     if (m_bInited == TRUE) {
         m_dataProcTh.exit();
         m_saveProcTh.exit();
+		
+		// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 begin
+		#ifdef ORIGINAL_VERSION
+		#else
+		m_longshotProcTh.exit();
+		#endif
+		// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 end
 
         if(mJpegClientHandle > 0) {
             int rc = mJpegHandle.close(mJpegClientHandle);
@@ -221,13 +241,26 @@ int32_t QCameraPostProcessor::start(QCameraChannel *pSrcChannel)
         }
     }
 
+	// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 begin
+	#ifdef ORIGINAL_VERSION
     property_get("persist.camera.longshot.save", prop, "0");
     mUseSaveProc = atoi(prop) > 0 ? true : false;
+	#endif
+	// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 end
 
     m_dataProcTh.sendCmd(CAMERA_CMD_TYPE_START_DATA_PROC, FALSE, FALSE);
     m_parent->m_cbNotifier.startSnapshots();
 
     mMultipleStages = false;
+
+	// Gionee <wutangzhi> <2013-09-13> modify for CR00899328 begin
+	#ifdef ORIGINAL_VERSION
+	#else
+    mGnNeedBurstCount = m_parent->gnGetBurstCount();
+	mReceiveFrameCnt = 0;
+	#endif
+    // Gionee <wutangzhi> <2013-09-13> modify for CR00899328 end
+
 
     // Create Jpeg session
     if ( !m_parent->mParameters.getRecordingHintValue() &&
@@ -378,8 +411,17 @@ int32_t QCameraPostProcessor::getJpegEncodingConfig(mm_jpeg_encode_params_t& enc
 
     encode_parm.jpeg_cb = mJpegCB;
     encode_parm.userdata = mJpegUserData;
-
+// Gionee <zhuangxiaojian> <2014-05-28> modify for CR01261494 begin
+#ifdef ORIGINAL_VERSION
     m_bThumbnailNeeded = TRUE; // need encode thumbnail by default
+#else
+if (m_parent->gnNeedRotationReprocess()) {
+	m_bThumbnailNeeded = FALSE; 
+} else {
+	m_bThumbnailNeeded = TRUE;
+}
+#endif
+// Gionee <zhuangxiaojian> <2014-05-28> modify for CR01261494 end
     cam_dimension_t thumbnailSize;
     memset(&thumbnailSize, 0, sizeof(cam_dimension_t));
     m_parent->getThumbnailSize(thumbnailSize);
@@ -649,6 +691,15 @@ int32_t QCameraPostProcessor::processData(mm_camera_super_buf_t *frame)
         //play shutter sound
         if(!m_parent->m_stateMachine.isNonZSLCaptureRunning())
             m_parent->playShutter();
+		
+	    // Gionee <wutangzhi> <2013-10-28> modify for CR00906596 begin
+	    #ifdef ORIGINAL_VERSION
+	    #else
+	    if (m_parent->isLongshotEnabled()) {
+            m_longshotProcTh.sendCmd(CAMERA_CMD_TYPE_DO_NEXT_JOB, FALSE, FALSE);
+        }
+	    #endif
+	    // Gionee <wutangzhi> <2013-10-28> modify for CR00906596 end
 
         ALOGD("%s: no need offline reprocess, sending to jpeg encoding", __func__);
         qcamera_jpeg_data_t *jpeg_job =
@@ -876,6 +927,12 @@ int32_t QCameraPostProcessor::processPPData(mm_camera_super_buf_t *frame)
          !getMultipleStages() &&
          !m_parent->isCaptureShutterEnabled()) {
         m_parent->playShutter();
+		// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 begin
+		#ifdef ORIGINAL_VERSION
+		#else
+		m_longshotProcTh.sendCmd(CAMERA_CMD_TYPE_DO_NEXT_JOB, FALSE, FALSE);
+		#endif
+		// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 end
     }
 
     qcamera_jpeg_data_t *jpeg_job =
@@ -1497,8 +1554,45 @@ int32_t QCameraPostProcessor::encodeData(qcamera_jpeg_data_t *jpeg_job_data,
         return NO_MEMORY;
     }
 
+//Gionee <zhuangxiaojian> <2013-08-20> modify for CR00867956 begin
+#ifdef ORIGINAL_VERSION
+#else
+    m_parent->gnProcessRaw(main_frame->buffer, main_frame->frame_len);
+	memObj->cacheOps(main_frame->buf_idx, ION_IOC_CLEAN_CACHES);
+#endif
+//Gionee <zhuangxiaojian> <2013-08-20> modify for CR00867956 end
+
+// Gionee <wutangzhi> <2013-09-13> modify for CR00899328 begin
+#ifdef ORIGINAL_VERSION
+#else
+	if (mGnNeedBurstCount > 1) {
+		return NO_ERROR;
+	}
+#endif
+// Gionee <wutangzhi> <2013-09-13> modify for CR00899328 end
+
     // dump snapshot frame if enabled
     m_parent->dumpFrameToFile(main_stream, main_frame, QCAMERA_DUMP_FRM_SNAPSHOT);
+
+// Gionee <wutangzhi> <2013-09-13> modify for CR00911795 begin
+#ifdef ORIGINAL_VERSION
+#else
+	if (NULL != m_parent->mDataCb 
+		&& m_parent->msgTypeEnabledWithLock(CAMERA_MSG_POSTVIEW_FRAME) > 0
+		&& thumb_frame != NULL) {
+		QCameraMemory *thumbMemObj = (QCameraMemory *)thumb_frame->mem_info;
+		if (thumbMemObj != NULL) {
+			qcamera_callback_argm_t cbArg;
+	        memset(&cbArg, 0, sizeof(qcamera_callback_argm_t));
+	        cbArg.cb_type = QCAMERA_DATA_CALLBACK;
+	        cbArg.msg_type = CAMERA_MSG_POSTVIEW_FRAME;
+	        cbArg.data = thumbMemObj->getMemory(thumb_frame->buf_idx, false);
+	        cbArg.index = 0;
+	        m_parent->m_cbNotifier.notifyCallback(cbArg);
+		}
+	}
+#endif
+// Gionee <wutangzhi> <2013-09-13> modify for CR00911795 end
 
     // send upperlayer callback for raw image
     camera_memory_t *mem = memObj->getMemory(main_frame->buf_idx, false);
@@ -1650,12 +1744,16 @@ int32_t QCameraPostProcessor::encodeData(qcamera_jpeg_data_t *jpeg_job_data,
             // we use the main stream/frame to encode thumbnail
             thumb_stream = main_stream;
             thumb_frame = main_frame;
-
+			//Gionee <zhuangxiaojian> <2014-08-08> modify for CR01345291 begin
+			#ifdef ORIGINAL_VERSION
             if ((90 == m_parent->getJpegRotation())
                     || (270 == m_parent->getJpegRotation())) {
                 IMG_SWAP(jpg_job.encode_job.thumb_dim.dst_dim.width,
                         jpg_job.encode_job.thumb_dim.dst_dim.height);
             }
+			#else
+			#endif
+			//Gionee <zhuangxiaojian> <2014-08-08> modify for CR01345291 end
         }
 
         memset(&src_dim, 0, sizeof(cam_dimension_t));
@@ -1736,6 +1834,15 @@ int32_t QCameraPostProcessor::processRawImageImpl(mm_camera_super_buf_t *recvd_f
     QCameraChannel *pChannel = m_parent->getChannelByHandle(recvd_frame->ch_id);
     QCameraStream *pStream = NULL;
     mm_camera_buf_def_t *frame = NULL;
+	
+// Gionee <wutangzhi> <2013-09-13> modify for CR00911795 begin
+#ifdef ORIGINAL_VERSION
+#else
+	QCameraStream *thumb_stream = NULL;
+    mm_camera_buf_def_t *thumb_frame = NULL;
+#endif
+// Gionee <wutangzhi> <2013-09-13> modify for CR00911795 end
+
     // check reprocess channel if not found
     if (pChannel == NULL) {
         if (m_pReprocChannel != NULL &&
@@ -1762,6 +1869,18 @@ int32_t QCameraPostProcessor::processRawImageImpl(mm_camera_super_buf_t *recvd_f
                 frame = recvd_frame->bufs[i];
                 break;
             }
+// Gionee <wutangzhi> <2013-09-13> modify for CR00911795 begin
+#ifdef ORIGINAL_VERSION
+#else
+			else if (pCurStream->isTypeOf(CAM_STREAM_TYPE_PREVIEW) ||
+                       pCurStream->isTypeOf(CAM_STREAM_TYPE_POSTVIEW) ||
+                       pCurStream->isOrignalTypeOf(CAM_STREAM_TYPE_PREVIEW) ||
+                       pCurStream->isOrignalTypeOf(CAM_STREAM_TYPE_POSTVIEW)) {
+                thumb_stream = pCurStream;
+                thumb_frame = recvd_frame->bufs[i];
+            }
+#endif
+// Gionee <wutangzhi> <2013-09-13> modify for CR00911795 end
         }
     }
 
@@ -1799,6 +1918,27 @@ int32_t QCameraPostProcessor::processRawImageImpl(mm_camera_super_buf_t *recvd_f
         } else {
             m_parent->dumpFrameToFile(pStream, frame, QCAMERA_DUMP_FRM_RAW);
         }
+
+		// Gionee <wutangzhi> <2013-09-13> modify for CR00911795 begin
+		#ifdef ORIGINAL_VERSION
+		#else
+		// send data callback for postview
+		if (NULL != m_parent->mDataCb 
+			&& m_parent->msgTypeEnabledWithLock(CAMERA_MSG_POSTVIEW_FRAME) > 0
+			&& thumb_frame != NULL) {
+			QCameraMemory *thumbMemObj = (QCameraMemory *)thumb_frame->mem_info;
+			if (thumbMemObj != NULL) {
+				qcamera_callback_argm_t cbArg;
+		        memset(&cbArg, 0, sizeof(qcamera_callback_argm_t));
+		        cbArg.cb_type = QCAMERA_DATA_CALLBACK;
+		        cbArg.msg_type = CAMERA_MSG_POSTVIEW_FRAME;
+		        cbArg.data = thumbMemObj->getMemory(thumb_frame->buf_idx, false);
+		        cbArg.index = 0;
+		        m_parent->m_cbNotifier.notifyCallback(cbArg);
+			}
+		}
+		#endif
+		// Gionee <wutangzhi> <2013-09-13> modify for CR00911795 end
 
         // send data callback / notify for RAW_IMAGE
         if (NULL != m_parent->mDataCb &&
@@ -1846,6 +1986,74 @@ int32_t QCameraPostProcessor::processRawImageImpl(mm_camera_super_buf_t *recvd_f
 
     return rc;
 }
+
+// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 begin
+#ifdef ORIGINAL_VERSION
+#else
+void *QCameraPostProcessor::longshotRoutine(void *data)
+{
+    int running = 1;
+    int ret;
+    uint8_t is_active = FALSE;
+    QCameraPostProcessor *pme = (QCameraPostProcessor *)data;
+    QCameraCmdThread *cmdThread = &pme->m_longshotProcTh;
+
+    ALOGD("%s: E", __func__);
+    do {
+        do {
+            ret = cam_sem_wait(&cmdThread->cmd_sem);
+            if (ret != 0 && errno != EINVAL) {
+                ALOGE("%s: cam_sem_wait error (%s)",
+                           __func__, strerror(errno));
+                return NULL;
+            }
+        } while (ret != 0);
+
+        // we got notified about new cmd avail in cmd queue
+        camera_cmd_type_t cmd = cmdThread->getCmd();
+        switch (cmd) {
+        case CAMERA_CMD_TYPE_START_DATA_PROC:
+            ALOGD("%s: start data proc", __func__);
+			//Gionee <zhangpj> <2013-11-1> modify for CR00943177 begin  
+			#ifdef ORIGINAL_VERSION
+			#else
+	        if (!pme->m_parent->isLongshotEnabled()) 
+			{
+		        //play shutter sound
+		        pme->m_parent->playShutter();
+	        }
+			#endif
+			//Gionee <zhangpj> <2013-11-1> modify for CR00943177 end		
+            is_active = TRUE;
+            break;
+        case CAMERA_CMD_TYPE_STOP_DATA_PROC:
+            ALOGD("%s: stop data proc", __func__);
+            is_active = FALSE;
+
+            // signal cmd is completed
+            cam_sem_post(&cmdThread->sync_sem);
+			
+            break;
+        case CAMERA_CMD_TYPE_DO_NEXT_JOB:
+			if (pme->m_parent->isLongshotEnabled()) {
+				pme->m_parent->longShot();
+			} 
+			
+            break;
+        case CAMERA_CMD_TYPE_EXIT:
+            ALOGD("%s : save thread exit", __func__);
+            running = 0;
+            break;
+        default:
+            break;
+        }
+    } while (running);
+	
+    ALOGD("%s: X", __func__);
+    return NULL;
+}
+#endif
+// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 end
 
 /*===========================================================================
  * FUNCTION   : dataSaveRoutine
@@ -2017,6 +2225,17 @@ void *QCameraPostProcessor::dataProcessRoutine(void *data)
             pme->m_saveProcTh.sendCmd(CAMERA_CMD_TYPE_START_DATA_PROC,
                                       FALSE,
                                       FALSE);
+			// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 begin
+			#ifdef ORIGINAL_VERSION
+			#else
+			if (pme->m_parent->isLongshotEnabled()) {
+				pme->m_parent->mParameters.setBurstLEDFlashLevel(CAM_LED_FLASH_LOW);
+				pme->m_longshotProcTh.sendCmd(CAMERA_CMD_TYPE_START_DATA_PROC,
+	                                      FALSE,
+	                                      FALSE);
+			}
+			#endif
+			// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 end
             break;
         case CAMERA_CMD_TYPE_STOP_DATA_PROC:
             {
@@ -2026,6 +2245,18 @@ void *QCameraPostProcessor::dataProcessRoutine(void *data)
                 pme->m_saveProcTh.sendCmd(CAMERA_CMD_TYPE_STOP_DATA_PROC,
                                            TRUE,
                                            TRUE);
+				// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 begin
+				#ifdef ORIGINAL_VERSION
+				#else
+				if (pme->m_parent->isLongshotEnabled()) {
+					pme->m_parent->mParameters.setBurstLEDFlashLevel(CAM_LED_FLASH_DEFAULT);
+					pme->m_longshotProcTh.sendCmd(CAMERA_CMD_TYPE_STOP_DATA_PROC,
+		                                      FALSE,
+		                                      FALSE);
+				}
+				#endif
+				// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 end
+				
                 // cancel all ongoing jpeg jobs
                 qcamera_jpeg_data_t *jpeg_job =
                     (qcamera_jpeg_data_t *)pme->m_ongoingJpegQ.dequeue();
@@ -2087,12 +2318,20 @@ void *QCameraPostProcessor::dataProcessRoutine(void *data)
 
                     if (NULL != jpeg_job) {
                         pme->syncStreamParams(jpeg_job->src_frame);
-
+					  // Gionee <wutangzhi> <2013-09-13> modify for CR00899328 begin
+					  #ifdef ORIGINAL_VERSION
                       if (pme->m_parent->numOfSnapshotsExpected() == 1 &&
                               !pme->m_parent->isLongshotEnabled() &&
                               !pme->m_parent->mParameters.getRecordingHintValue() &&
                               !pme->m_parent->isZSLMode()) {
-
+					  #else
+                      if (pme->m_parent->numOfSnapshotsExpected() == 1 &&
+                              !pme->m_parent->isLongshotEnabled() &&
+                              !pme->m_parent->mParameters.getRecordingHintValue() &&
+                              !pme->m_parent->isZSLMode() &&
+                              pme->mGnNeedBurstCount <= 1) {
+					  #endif
+					  // Gionee <wutangzhi> <2013-09-13> modify for CR00899328 end
                           if ((NULL != jpeg_job->src_reproc_frame) &&
                                   (0 < jpeg_job->src_reproc_frame->num_bufs)) {
                               mm_camera_buf_def_t *bufs = NULL;
@@ -2141,6 +2380,8 @@ void *QCameraPostProcessor::dataProcessRoutine(void *data)
 
                       // add into ongoing jpeg job Q
                       pme->m_ongoingJpegQ.enqueue((void *)jpeg_job);
+					  // Gionee <wutangzhi> <2013-09-13> modify for CR00899328 begin
+					  #ifdef ORIGINAL_VERSION
                       ret = pme->encodeData(jpeg_job,
                               pme->mNewJpegSessionNeeded);
                       if (NO_ERROR != ret) {
@@ -2150,6 +2391,30 @@ void *QCameraPostProcessor::dataProcessRoutine(void *data)
                         free(jpeg_job);
                         pme->sendEvtNotify(CAMERA_MSG_ERROR, UNKNOWN_ERROR, 0);
                       }
+					  #else
+					  pme->mReceiveFrameCnt++;
+					  if (pme->m_parent->gnGetBurstCount() > 1 && pme->mReceiveFrameCnt > pme->m_parent->gnGetBurstCount()) {
+					  	  pme->m_ongoingJpegQ.dequeue(false);
+                          pme->releaseJpegJobData(jpeg_job);
+                          free(jpeg_job);
+					  } else {
+						  ret = pme->encodeData(jpeg_job, pme->mNewJpegSessionNeeded);
+						  if (NO_ERROR != ret) {
+	                          // dequeue the last one
+	                      	  pme->m_ongoingJpegQ.dequeue(false);
+	                          pme->releaseJpegJobData(jpeg_job);
+	                          free(jpeg_job);
+	                          pme->sendEvtNotify(CAMERA_MSG_ERROR, UNKNOWN_ERROR, 0);
+	                      } else if(pme->mGnNeedBurstCount > 1) {
+						  	  pme->mGnNeedBurstCount--;
+						  	  pme->m_ongoingJpegQ.dequeue(false);
+
+	                          pme->releaseJpegJobData(jpeg_job);
+	                          free(jpeg_job);
+						  }
+					  }
+					  #endif
+					  // Gionee <wutangzhi> <2013-09-13> modify for CR00899328 end
                     }
 
 
@@ -2160,6 +2425,16 @@ void *QCameraPostProcessor::dataProcessRoutine(void *data)
                     if (NULL != super_buf) {
                         //play shutter sound
                         pme->m_parent->playShutter();
+						
+						// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 begin
+						#ifdef ORIGINAL_VERSION
+						#else
+						if ( pme->m_parent->isLongshotEnabled() ) {
+							pme->m_longshotProcTh.sendCmd(CAMERA_CMD_TYPE_DO_NEXT_JOB, FALSE, FALSE);
+					    }
+						#endif
+						// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 end
+						
                         ret = pme->processRawImageImpl(super_buf);
                         if (NO_ERROR != ret) {
                             pme->releaseSuperBuf(super_buf);

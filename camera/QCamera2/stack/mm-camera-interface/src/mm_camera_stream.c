@@ -164,15 +164,6 @@ void mm_stream_handle_rcvd_buf(mm_stream_t *my_obj,
         }
     }
 
-    if (my_obj->ch_obj->previewSkipCnt &&
-            my_obj->stream_info->stream_type == CAM_STREAM_TYPE_PREVIEW) {
-        my_obj->ch_obj->previewSkipCnt--;
-        CDBG_HIGH("%s: Skipping preview frame, pending skip count %d", __func__,
-                my_obj->ch_obj->previewSkipCnt);
-        mm_stream_buf_done(my_obj, buf_info->buf);
-        return;
-    }
-
     if(has_cb) {
         mm_camera_cmdcb_t* node = NULL;
 
@@ -1009,7 +1000,7 @@ int32_t mm_stream_read_msm_frame(mm_stream_t * my_obj,
           (vb.reserved == V4L2_PIX_FMT_NV14 || vb.reserved == V4L2_PIX_FMT_NV41);
 #endif
 
-        CDBG("%s: VIDIOC_DQBUF buf_index %d, frame_idx %d, stream type %d\n",
+        CDBG_HIGH("%s: VIDIOC_DQBUF buf_index %d, frame_idx %d, stream type %d\n",
              __func__, vb.index, buf_info->buf->frame_idx, my_obj->stream_info->stream_type);
         if ( NULL != my_obj->mem_vtbl.clean_invalidate_buf ) {
             rc = my_obj->mem_vtbl.clean_invalidate_buf(idx,

@@ -48,8 +48,6 @@
 #define MM_CAMERA_DEV_OPEN_TRIES 2
 #define MM_CAMERA_DEV_OPEN_RETRY_SLEEP 20
 
-#define MM_CAMERA_POST_FLASH_PREVIEW_SKIP_CNT 3
-
 #ifndef TRUE
 #define TRUE 1
 #endif
@@ -72,6 +70,13 @@ typedef enum
     MM_CAMERA_CMD_TYPE_REQ_DATA_CB,/* request data */
     MM_CAMERA_CMD_TYPE_SUPER_BUF_DATA_CB,    /* superbuf dataB CMD */
     MM_CAMERA_CMD_TYPE_CONFIG_NOTIFY, /* configure notify mode */
+    //Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
+    #ifdef ORIGINAL_VERSION
+	#else
+    MM_CAMERA_CMD_TYPE_START_ZSL, /* start zsl snapshot for channel */
+    MM_CAMERA_CMD_TYPE_STOP_ZSL, /* stop zsl snapshot for channel */
+    #endif
+    //Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 end
     MM_CAMERA_CMD_TYPE_FLUSH_QUEUE, /* flush queue */
     MM_CAMERA_CMD_TYPE_GENERAL,  /* general cmd */
     MM_CAMERA_CMD_TYPE_MAX
@@ -278,6 +283,13 @@ typedef enum {
     MM_CHANNEL_EVT_AE_BRACKETING,
     MM_CHANNEL_EVT_FLASH_BRACKETING,
     MM_CHANNEL_EVT_ZOOM_1X,
+//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
+#ifdef ORIGINAL_VERSION
+#else
+    MM_CHANNEL_EVT_START_ZSL_SNAPSHOT,
+    MM_CHANNEL_EVT_STOP_ZSL_SNAPSHOT,
+#endif
+//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 end
 } mm_channel_evt_type_t;
 
 typedef struct {
@@ -368,11 +380,16 @@ typedef struct mm_channel {
     /* control for zsl led */
     uint8_t startZSlSnapshotCalled;
     uint8_t needLEDFlash;
-    uint8_t previewSkipCnt;
 
     uint8_t need3ABracketing;
     uint8_t isFlashBracketingEnabled;
     uint8_t isZoom1xFrameRequested;
+//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
+#ifdef ORIGINAL_VERSION
+#else
+	uint8_t longshotEnabled;
+#endif
+//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 end
 } mm_channel_t;
 
 /* struct to store information about pp cookie*/
@@ -498,6 +515,16 @@ extern int32_t mm_camera_start_channel(mm_camera_obj_t *my_obj,
                                        uint32_t ch_id);
 extern int32_t mm_camera_stop_channel(mm_camera_obj_t *my_obj,
                                       uint32_t ch_id);
+//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
+#ifdef ORIGINAL_VERSION
+#else
+extern int32_t mm_camera_start_zsl_snapshot_ch(mm_camera_obj_t *my_obj,
+        uint32_t ch_id);
+extern int32_t mm_camera_stop_zsl_snapshot_ch(mm_camera_obj_t *my_obj,
+        uint32_t ch_id);
+#endif
+//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 end
+
 extern int32_t mm_camera_request_super_buf(mm_camera_obj_t *my_obj,
                                            uint32_t ch_id,
                                            uint32_t num_buf_requested);

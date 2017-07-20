@@ -76,6 +76,13 @@ int32_t mm_channel_get_stream_parm(mm_channel_t *my_obj,
                                    mm_evt_paylod_set_get_stream_parms_t *payload);
 int32_t mm_channel_do_stream_action(mm_channel_t *my_obj,
                                     mm_evt_paylod_do_stream_action_t *payload);
+//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
+#ifdef ORIGINAL_VERSION
+#else
+int32_t mm_channel_start_zsl_snapshot(mm_channel_t *my_obj);
+int32_t mm_channel_stop_zsl_snapshot(mm_channel_t *my_obj);
+#endif
+//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 end
 int32_t mm_channel_map_stream_buf(mm_channel_t *my_obj,
                                   mm_evt_paylod_map_stream_buf_t *payload);
 int32_t mm_channel_unmap_stream_buf(mm_channel_t *my_obj,
@@ -218,7 +225,6 @@ static void mm_channel_process_stream_buf(mm_camera_cmdcb_t * cmd_cb,
             mm_camera_start_zsl_snapshot(ch_obj->cam_obj);
             ch_obj->startZSlSnapshotCalled = TRUE;
             ch_obj->needLEDFlash = FALSE;
-            ch_obj->previewSkipCnt = 0;
         } else if (ch_obj->pending_cnt == 0 && ch_obj->startZSlSnapshotCalled == TRUE) {
             CDBG_HIGH("%s: got picture cancelled, stop zsl snapshot", __func__);
             mm_camera_stop_zsl_snapshot(ch_obj->cam_obj);
@@ -226,6 +232,15 @@ static void mm_channel_process_stream_buf(mm_camera_cmdcb_t * cmd_cb,
             ch_obj->needLEDFlash = FALSE;
             ch_obj->need3ABracketing = FALSE;
         }
+	//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
+	#ifdef ORIGINAL_VERSION
+	#else
+    } else if (MM_CAMERA_CMD_TYPE_START_ZSL == cmd_cb->cmd_type) {
+    		ch_obj->longshotEnabled = TRUE;
+    } else if (MM_CAMERA_CMD_TYPE_STOP_ZSL == cmd_cb->cmd_type) {
+    		ch_obj->longshotEnabled = FALSE;
+	#endif
+	//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 end
     } else if (MM_CAMERA_CMD_TYPE_CONFIG_NOTIFY == cmd_cb->cmd_type) {
            ch_obj->bundle.superbuf_queue.attr.notify_mode = cmd_cb->u.notify_mode;
     } else if (MM_CAMERA_CMD_TYPE_FLUSH_QUEUE  == cmd_cb->cmd_type) {
@@ -300,13 +315,23 @@ static void mm_channel_process_stream_buf(mm_camera_cmdcb_t * cmd_cb,
                  __func__, ch_obj->pending_cnt);
             if (MM_CAMERA_SUPER_BUF_NOTIFY_BURST == notify_mode) {
                 ch_obj->pending_cnt--;
-
+				//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
+				#ifdef ORIGINAL_VERSION
                 if (ch_obj->pending_cnt == 0 && ch_obj->startZSlSnapshotCalled == TRUE) {
                     CDBG_HIGH("%s: received all frames requested, stop zsl snapshot", __func__);
-                    ch_obj->previewSkipCnt = MM_CAMERA_POST_FLASH_PREVIEW_SKIP_CNT;
                     mm_camera_stop_zsl_snapshot(ch_obj->cam_obj);
                     ch_obj->startZSlSnapshotCalled = FALSE;
                 }
+				#else
+                if (ch_obj->pending_cnt == 0 && ch_obj->startZSlSnapshotCalled == TRUE
+					&& ch_obj->longshotEnabled == FALSE) {
+                    CDBG_HIGH("%s: received all frames requested, stop zsl snapshot", __func__);
+                    mm_camera_stop_zsl_snapshot(ch_obj->cam_obj);
+                    ch_obj->startZSlSnapshotCalled = FALSE;
+                }
+
+				#endif
+				//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 end
             }
 
             /* dispatch superbuf */
@@ -690,6 +715,21 @@ int32_t mm_channel_fsm_fn_active(mm_channel_t *my_obj,
             rc = mm_channel_proc_general_cmd(my_obj, &gen_cmd);
         }
         break;
+//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
+#ifdef ORIGINAL_VERSION
+#else
+    case MM_CHANNEL_EVT_START_ZSL_SNAPSHOT:
+        {
+            rc = mm_channel_start_zsl_snapshot(my_obj);
+        }
+        break;
+    case MM_CHANNEL_EVT_STOP_ZSL_SNAPSHOT:
+        {
+            rc = mm_channel_stop_zsl_snapshot(my_obj);
+        }
+        break;
+#endif
+//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 end
      default:
         CDBG_ERROR("%s: invalid state (%d) for evt (%d), in(%p), out(%p)",
                    __func__, my_obj->state, evt, in_val, out_val);
@@ -1463,6 +1503,81 @@ int32_t mm_channel_do_stream_action(mm_channel_t *my_obj,
     return rc;
 }
 
+//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
+#ifdef ORIGINAL_VERSION
+#else
+/*===========================================================================
+ * FUNCTION   : mm_channel_start_zsl_snapshot
+ *
+ * DESCRIPTION: start zsl snapshot
+ *
+ * PARAMETERS :
+ *   @my_obj  : channel object
+ *
+ * RETURN     : int32_t type of status
+ *              0  -- success
+ *              -1 -- failure
+ *==========================================================================*/
+int32_t mm_channel_start_zsl_snapshot(mm_channel_t *my_obj)
+{
+    int32_t rc = 0;
+    mm_camera_cmdcb_t* node = NULL;
+
+    node = (mm_camera_cmdcb_t *)malloc(sizeof(mm_camera_cmdcb_t));
+    if (NULL != node) {
+        memset(node, 0, sizeof(mm_camera_cmdcb_t));
+        node->cmd_type = MM_CAMERA_CMD_TYPE_START_ZSL;
+
+        /* enqueue to cmd thread */
+        cam_queue_enq(&(my_obj->cmd_thread.cmd_queue), node);
+
+        /* wake up cmd thread */
+        cam_sem_post(&(my_obj->cmd_thread.cmd_sem));
+    } else {
+        CDBG_ERROR("%s: No memory for mm_camera_node_t", __func__);
+        rc = -1;
+    }
+
+    return rc;
+}
+
+/*===========================================================================
+ * FUNCTION   : mm_channel_stop_zsl_snapshot
+ *
+ * DESCRIPTION: stop zsl snapshot
+ *
+ * PARAMETERS :
+ *   @my_obj  : channel object
+ *
+ * RETURN     : int32_t type of status
+ *              0  -- success
+ *              -1 -- failure
+ *==========================================================================*/
+int32_t mm_channel_stop_zsl_snapshot(mm_channel_t *my_obj)
+{
+    int32_t rc = 0;
+    mm_camera_cmdcb_t* node = NULL;
+
+    node = (mm_camera_cmdcb_t *)malloc(sizeof(mm_camera_cmdcb_t));
+    if (NULL != node) {
+        memset(node, 0, sizeof(mm_camera_cmdcb_t));
+        node->cmd_type = MM_CAMERA_CMD_TYPE_STOP_ZSL;
+
+        /* enqueue to cmd thread */
+        cam_queue_enq(&(my_obj->cmd_thread.cmd_queue), node);
+
+        /* wake up cmd thread */
+        cam_sem_post(&(my_obj->cmd_thread.cmd_sem));
+    } else {
+        CDBG_ERROR("%s: No memory for mm_camera_node_t", __func__);
+        rc = -1;
+    }
+
+    return rc;
+}
+#endif
+//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 end
+
 /*===========================================================================
  * FUNCTION   : mm_channel_map_stream_buf
  *
@@ -1609,9 +1724,6 @@ int32_t mm_channel_handle_metadata(
     uint8_t is_crop_1x_found = 0;
     uint32_t snapshot_stream_id = 0;
     uint32_t i;
-    /* Set expected frame id to a future frame idx, large enough to wait
-    * for good_frame_idx_range, and small enough to still capture an image */
-    const int max_future_frame_offset = 100;
 
     stream_obj = mm_channel_util_get_stream_by_handler(ch_obj,
                 buf_info->stream_id);
@@ -1672,7 +1784,7 @@ int32_t mm_channel_handle_metadata(
                 ch_obj->isZoom1xFrameRequested = 0;
                 queue->expected_frame_id = buf_info->frame_idx + 1;
             } else {
-                queue->expected_frame_id += max_future_frame_offset;
+                queue->expected_frame_id += 100;
                 /* Flush unwanted frames */
                 mm_channel_superbuf_flush_matched(ch_obj, queue);
             }
@@ -1681,6 +1793,9 @@ int32_t mm_channel_handle_metadata(
 
         if (metadata->is_prep_snapshot_done_valid) {
             if (metadata->prep_snapshot_done_state == NEED_FUTURE_FRAME) {
+                /* Set expected frame id to a future frame idx, large enough to wait
+                 * for good_frame_idx_range, and small enough to still capture an image */
+                const int max_future_frame_offset = 100;
                 queue->expected_frame_id += max_future_frame_offset;
 
                 mm_channel_superbuf_flush(ch_obj, queue);
@@ -1698,11 +1813,10 @@ int32_t mm_channel_handle_metadata(
             }
             queue->expected_frame_id =
                 metadata->good_frame_idx_range.min_frame_idx;
-        } else if (ch_obj->need3ABracketing &&
+        } else if(ch_obj->need3ABracketing &&
                    !metadata->is_good_frame_idx_range_valid) {
                /* Flush unwanted frames */
                mm_channel_superbuf_flush_matched(ch_obj, queue);
-               queue->expected_frame_id += max_future_frame_offset;
         }
         if (ch_obj->isFlashBracketingEnabled &&
             metadata->is_good_frame_idx_range_valid) {

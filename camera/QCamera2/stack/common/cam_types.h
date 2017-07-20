@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2016, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -34,8 +34,6 @@
 #include <pthread.h>
 #include <inttypes.h>
 #include <media/msmb_camera.h>
-#include <stdlib.h>
-#include <string.h>
 
 #define CAM_MAX_NUM_BUFS_PER_STREAM 24
 #define MAX_METADATA_PAYLOAD_SIZE 1024
@@ -74,7 +72,7 @@
   } \
 })
 
-#define MAX_ZOOMS_CNT 61
+#define MAX_ZOOMS_CNT 79
 #define MAX_SIZES_CNT 24
 #define MAX_EXP_BRACKETING_LENGTH 32
 #define MAX_ROI 5
@@ -82,7 +80,7 @@
 #define MAX_NUM_STREAMS          8
 #define CHROMATIX_SIZE 21292
 #define COMMONCHROMATIX_SIZE 42044
-#define AFTUNE_SIZE 4000  //sizeof(actuator_driver_params_t) + sizeof(af_algo_tune_parms_t)
+#define AFTUNE_SIZE 2000
 #define MAX_SCALE_SIZES_CNT 8
 #define MAX_SAMP_DECISION_CNT     64
 
@@ -511,6 +509,13 @@ typedef enum {
     CAM_SCENE_MODE_FACE_PRIORITY,
     CAM_SCENE_MODE_BARCODE,
     CAM_SCENE_MODE_HDR,
+//Gionee <zhuangxiaojian> <2013-09-28> modify for CR00912139 begin
+#ifdef ORIGINAL_VERSION
+#else
+    CAM_SCENE_MODE_GESTURE,
+    CAM_SCENE_MODE_FOOD,
+#endif
+//Gionee <zhuangxiaojian> <2013-09-28> modify for CR00912139 end
     CAM_SCENE_MODE_MAX
 } cam_scene_mode_type;
 
@@ -580,7 +585,6 @@ typedef struct  {
 typedef enum {
     CAM_STREAMING_MODE_CONTINUOUS, /* continous streaming */
     CAM_STREAMING_MODE_BURST,      /* burst streaming */
-    CAM_STREAMING_MODE_BATCH,      /* stream frames in batches */
     CAM_STREAMING_MODE_MAX
 } cam_streaming_mode_t;
 
@@ -789,8 +793,7 @@ typedef enum {
 typedef enum {
     CAM_AF_SCANNING,
     CAM_AF_FOCUSED,
-    CAM_AF_NOT_FOCUSED,
-    CAM_AF_INACTIVE
+    CAM_AF_NOT_FOCUSED
 } cam_autofocus_state_t;
 
 typedef struct {
@@ -831,11 +834,6 @@ typedef enum {
   S_PORTRAIT_BACKLIGHT,
   S_SCENERY_BACKLIGHT,
   S_BACKLIGHT,
-  S_NIGHT,
-  S_MACRO,
-  S_SPORTS,
-  S_MIXED_LIGHT,
-  S_INDOOR,
   S_MAX,
 } cam_auto_scene_t;
 
@@ -856,7 +854,6 @@ typedef struct {
     int settled;
     uint32_t exp_index;
     uint32_t line_count;
-    uint32_t unknown[4];
 } cam_ae_params_t;
 
 typedef struct {
@@ -943,10 +940,6 @@ typedef  struct {
     uint8_t is_meta_valid;
     cam_meta_valid_t meta_valid_params;
 
-    /* Meta valid params */
-    uint8_t is_preview_frame_skip_valid;
-    cam_frame_idx_range_t preview_frame_skip_idx_range;
-
     /*Tuning Data*/
     uint8_t is_tuning_params_valid;
     tuning_params_t tuning_params;
@@ -1021,7 +1014,6 @@ typedef enum {
     CAM_INTF_PARM_ZSL_MODE,  /* indicating if it's running in ZSL mode */
     CAM_INTF_PARM_HDR_NEED_1X, /* if HDR needs 1x output */ /* 40 */
     CAM_INTF_PARM_VIDEO_HDR,
-    CAM_INTF_PARM_SNAPSHOT_HDR,
     CAM_INTF_PARM_ROTATION,
     CAM_INTF_PARM_SCALE,
     CAM_INTF_PARM_VT, /* indicating if it's a Video Call Apllication */
@@ -1046,6 +1038,14 @@ typedef enum {
     CAM_INTF_PARM_GET_OUTPUT_CROP,
 
     CAM_INTF_PARM_EZTUNE_CMD,
+//Gionee <zhuangxiaojian> <2012-10-23> modify for CR00933024 begin
+#ifdef ORIGINAL_VERSION
+#else
+	/* LED flash level*/
+	CAM_INTF_PARM_LED_FLASH_BURST_LEVEL,
+	CAM_INTF_PARM_OIS_MODE,
+#endif
+//Gionee <zhuangxiaojian> <2012-10-23> modify for CR00933024 end
 
     /* specific to HAL3 */
     /* Whether the metadata maps to a valid frame number */
@@ -1189,7 +1189,6 @@ typedef enum {
     CAM_INTF_PARM_FLASH_BRACKETING,
     CAM_INTF_PARM_GET_IMG_PROP,
 
-    CAM_INTF_PARM_UNKNOWN, // Increment CAM_INTF_PARM_MAX by 1
     CAM_INTF_PARM_MAX
 } cam_intf_parm_type_t;
 
@@ -1354,7 +1353,6 @@ typedef struct {
 #define CAM_QCOM_FEATURE_UBIFOCUS       (1<<12)
 #define CAM_QCOM_FEATURE_CHROMA_FLASH   (1<<13)
 #define CAM_QCOM_FEATURE_OPTIZOOM       (1<<14)
-#define CAM_QCOM_FEATURE_SNAPSHOT_HDR   (1<<15)
 
 // Counter clock wise
 typedef enum {
@@ -1524,5 +1522,97 @@ typedef enum {
     CAM_AWB_STATE_CONVERGED,
     CAM_AWB_STATE_LOCKED
 } cam_awb_state_t;
+
+//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
+#ifdef ORIGINAL_VERSION
+#else
+typedef enum {
+    CAM_CAPTURE_MODE_NORMAL,
+    CAM_CAPTURE_MODE_BURST,
+    CAM_CAPTURE_MODE_NIGHTSHOT,
+    CAM_CAPTURE_MODE_PICZOOM,
+    CAM_CAPTURE_MODE_MAX
+} cam_capture_mode_t;
+
+typedef enum {
+    CAM_GESTURE_EVENT_NONE,
+    CAM_GESTURE_EVENT_OPEN_HAND_PRESENCE,
+    CAM_GESTURE_EVENT_FIST_PRESENCE,
+    CAM_GESTURE_EVENT_FACE_PRESENCE,
+    CAM_GESTURE_EVENT_MAX
+} cam_gesture_event_t;
+
+typedef enum {
+	CAM_LED_FLASH_DEFAULT,
+	CAM_LED_FLASH_LOW,
+} cam_led_flash_burst_level;
+
+typedef enum {
+	CAM_LIVE_EFFECT_NONE,
+	CAM_LIVE_EFFECT_ANTIQUE,
+	CAM_LIVE_EFFECT_CARTOON,
+	CAM_LIVE_EFFECT_EMBOSS,
+	CAM_LIVE_EFFECT_FLIP,
+	CAM_LIVE_EFFECT_FOG,
+	CAM_LIVE_EFFECT_GRAYSCALE,
+	CAM_LIVE_EFFECT_LOMO_BLUE,
+	CAM_LIVE_EFFECT_LOMO_GREEN,
+	CAM_LIVE_EFFECT_LOMO_NEUTRAL,
+	CAM_LIVE_EFFECT_LOMO_RED,
+	CAM_LIVE_EFFECT_LOMO_YELLOW,
+	CAM_LIVE_EFFECT_MAGICPEN,
+	CAM_LIVE_EFFECT_MILKY,
+	CAM_LIVE_EFFECT_MIRROR,
+	CAM_LIVE_EFFECT_NEGATIVE,
+	CAM_LIVE_EFFECT_OILY,
+	CAM_LIVE_EFFECT_PAINT,
+	CAM_LIVE_EFFECT_SEPIA,
+	CAM_LIVE_EFFECT_SKETCH_COLOR,
+	CAM_LIVE_EFFECT_SKETCH_GRAY,
+	CAM_LIVE_EFFECT_SOLARIZE,
+	CAM_LIVE_EFFECT_STAMP,
+	CAM_LIVE_EFFECT_DOF,
+	CAM_LIVE_EFFECT_VIGNETTING,
+	CAM_LIVE_EFFECT_WARP_FISHEYE,
+	CAM_LIVE_EFFECT_WARP_ALIENSCUM,
+	CAM_LIVE_EFFECT_WARP_BIGBUPPA,
+	CAM_LIVE_EFFECT_WARP_BOOZIEBOWL,
+	CAM_LIVE_EFFECT_WARP_CONEHEAD,
+	CAM_LIVE_EFFECT_WARP_FUNKYFRESH,
+	CAM_LIVE_EFFECT_WARP_JELLYBELLY,
+	CAM_LIVE_EFFECT_WARP_PETTYPETIT,
+	CAM_LIVE_EFFECT_WARP_EYEBALLEDEVY,
+	CAM_LIVE_EFFECT_WARP_SPEEDYWEED,
+	CAM_LIVE_EFFECT_MOSAIC,
+	CAM_LIVE_EFFECT_FROST,
+	CAM_LIVE_EFFECT_MOON_LIGHT,
+	CAM_LIVE_EFFECT_NOISE,
+	CAM_LIVE_EFFECT_WATER_COLOR,
+	CAM_LIVE_EFFECT_FLEETINGTIME,
+	CAM_LIVE_EFFECT_CRAYON,
+	CAM_LIVE_EFFECT_SNOWFLAKES,
+	CAM_LIVE_EFFECT_LIGHTBEAM,
+	CAM_LIVE_EFFECT_REFLECTION,
+	CAM_LIVE_EFFECT_SUNSET,
+	CAM_LIVE_EFFECT_REVERSAL,
+	CAM_LIVE_EFFECT_WARMLOMO,
+	CAM_LIVE_EFFECT_COLDLOMO,
+	CAM_LIVE_EFFECT_SOFTPINK,
+	CAM_LIVE_EFFECT_JAPANBACKLIGHT,
+	CAM_LIVE_EFFECT_COSMETOLOGY_BACKLIGHT,
+	CAM_LIVE_EFFECT_FINEFOOD,
+	CAM_LIVE_EFFECT_BLACKWHITE,
+	CAM_LIVE_EFFECT_MAX
+} cam_live_effect_t;
+
+typedef enum {
+	CAM_OIS_MODE_PREVIEW,
+	CAM_OIS_MODE_SNAPSHOT,
+	CAM_OIS_MODE_VIDEO,
+	CAM_OIS_MODE_MAX
+} cam_ois_mode_t;
+
+#endif
+//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 end
 
 #endif /* __QCAMERA_TYPES_H__ */

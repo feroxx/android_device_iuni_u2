@@ -108,11 +108,6 @@ typedef struct {
     };
 } qcamera_api_result_t;
 
-typedef struct api_result_list {
-   qcamera_api_result_t result;
-   struct api_result_list *next;
-}api_result_list;
-
 // definition for payload type of setting callback
 typedef struct {
     camera_notify_callback notify_cb;
@@ -168,9 +163,14 @@ public:
     int32_t procEvt(qcamera_sm_evt_enum_t evt, void *evt_payload);
 
     bool isPreviewRunning(); // check if preview is running
-    bool isPreviewReady(); // check if preview is ready
     bool isCaptureRunning(); // check if image capture is running
     bool isNonZSLCaptureRunning(); // check if image capture is running in non ZSL mode
+//Gionee <zhuangxiaojian> <2014-06-26> modify for CR01310542 begin
+#ifdef ORIGINAL_VERSION
+#else
+    bool isRecordingRunning();
+#endif
+//Gionee <zhuangxiaojian> <2014-06-26> modify for CR01310542 end
 
 private:
     typedef enum {

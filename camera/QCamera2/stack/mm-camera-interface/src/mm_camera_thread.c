@@ -553,6 +553,13 @@ static void *mm_camera_cmd_thread(void *data)
             case MM_CAMERA_CMD_TYPE_CONFIG_NOTIFY:
             case MM_CAMERA_CMD_TYPE_GENERAL:
             case MM_CAMERA_CMD_TYPE_FLUSH_QUEUE:
+			//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
+			#ifdef ORIGINAL_VERSION
+			#else
+			case MM_CAMERA_CMD_TYPE_START_ZSL:
+			case MM_CAMERA_CMD_TYPE_STOP_ZSL:
+			#endif
+			//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 end
                 if (NULL != cmd_thread->cb) {
                     cmd_thread->cb(node, cmd_thread->user_data);
                 }

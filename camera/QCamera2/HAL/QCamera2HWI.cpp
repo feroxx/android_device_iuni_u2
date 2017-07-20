@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2016, The Linux Foundataion. All rights reserved.
+/* Copyright (c) 2012-2014, The Linux Foundataion. All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions are
@@ -41,13 +41,17 @@
 
 #define MAP_TO_DRIVER_COORDINATE(val, base, scale, offset) (val * scale / base + offset)
 #define CAMERA_MIN_STREAMING_BUFFERS     3
-#define EXTRA_ZSL_PREVIEW_STREAM_BUF     3
 #define CAMERA_MIN_JPEG_ENCODING_BUFFERS 2
 #define CAMERA_MIN_VIDEO_BUFFERS         9
 
 #define HDR_CONFIDENCE_THRESHOLD 0.4
 
-#define ARRAY_SIZE(a) (sizeof(a)/sizeof((a)[0]))
+// Gionee <zhuangxiaojian> <2014-09-04> modify for CR01345272 begin
+#ifdef ORIGINAL_VERSION
+#else
+#define MAX_EXTRA_MATADATA_BUF 10
+#endif
+// Gionee <zhuangxiaojian> <2014-09-04> modify for CR01345272 end
 
 namespace qcamera {
 
@@ -125,11 +129,10 @@ int QCamera2HardwareInterface::set_preview_window(struct camera_device *device,
     }
 
     hw->lockAPI();
-    qcamera_api_result_t apiResult;
     rc = hw->processAPI(QCAMERA_SM_EVT_SET_PREVIEW_WINDOW, (void *)window);
     if (rc == NO_ERROR) {
-        hw->waitAPIResult(QCAMERA_SM_EVT_SET_PREVIEW_WINDOW, &apiResult);
-        rc = apiResult.status;
+        hw->waitAPIResult(QCAMERA_SM_EVT_SET_PREVIEW_WINDOW);
+        rc = hw->m_apiResult.status;
     }
     hw->unlockAPI();
 
@@ -173,10 +176,9 @@ void QCamera2HardwareInterface::set_CallBacks(struct camera_device *device,
     payload.user = user;
 
     hw->lockAPI();
-    qcamera_api_result_t apiResult;
     int32_t rc = hw->processAPI(QCAMERA_SM_EVT_SET_CALLBACKS, (void *)&payload);
     if (rc == NO_ERROR) {
-        hw->waitAPIResult(QCAMERA_SM_EVT_SET_CALLBACKS, &apiResult);
+        hw->waitAPIResult(QCAMERA_SM_EVT_SET_CALLBACKS);
     }
     hw->unlockAPI();
 }
@@ -201,10 +203,9 @@ void QCamera2HardwareInterface::enable_msg_type(struct camera_device *device, in
         return;
     }
     hw->lockAPI();
-    qcamera_api_result_t apiResult;
     int32_t rc = hw->processAPI(QCAMERA_SM_EVT_ENABLE_MSG_TYPE, (void *)msg_type);
     if (rc == NO_ERROR) {
-        hw->waitAPIResult(QCAMERA_SM_EVT_ENABLE_MSG_TYPE, &apiResult);
+        hw->waitAPIResult(QCAMERA_SM_EVT_ENABLE_MSG_TYPE);
     }
     hw->unlockAPI();
 }
@@ -229,10 +230,9 @@ void QCamera2HardwareInterface::disable_msg_type(struct camera_device *device, i
         return;
     }
     hw->lockAPI();
-    qcamera_api_result_t apiResult;
     int32_t rc = hw->processAPI(QCAMERA_SM_EVT_DISABLE_MSG_TYPE, (void *)msg_type);
     if (rc == NO_ERROR) {
-        hw->waitAPIResult(QCAMERA_SM_EVT_DISABLE_MSG_TYPE, &apiResult);
+        hw->waitAPIResult(QCAMERA_SM_EVT_DISABLE_MSG_TYPE);
     }
     hw->unlockAPI();
 }
@@ -259,11 +259,10 @@ int QCamera2HardwareInterface::msg_type_enabled(struct camera_device *device, in
         return BAD_VALUE;
     }
     hw->lockAPI();
-    qcamera_api_result_t apiResult;
     ret = hw->processAPI(QCAMERA_SM_EVT_MSG_TYPE_ENABLED, (void *)msg_type);
     if (ret == NO_ERROR) {
-        hw->waitAPIResult(QCAMERA_SM_EVT_MSG_TYPE_ENABLED, &apiResult);
-        ret = apiResult.enabled;
+        hw->waitAPIResult(QCAMERA_SM_EVT_MSG_TYPE_ENABLED);
+        ret = hw->m_apiResult.enabled;
     }
     hw->unlockAPI();
 
@@ -293,15 +292,14 @@ int QCamera2HardwareInterface::start_preview(struct camera_device *device)
     }
     ALOGE("[KPI Perf] %s: E PROFILE_START_PREVIEW", __func__);
     hw->lockAPI();
-    qcamera_api_result_t apiResult;
     qcamera_sm_evt_enum_t evt = QCAMERA_SM_EVT_START_PREVIEW;
     if (hw->isNoDisplayMode()) {
         evt = QCAMERA_SM_EVT_START_NODISPLAY_PREVIEW;
     }
     ret = hw->processAPI(evt, NULL);
     if (ret == NO_ERROR) {
-        hw->waitAPIResult(evt, &apiResult);
-        ret = apiResult.status;
+        hw->waitAPIResult(evt);
+        ret = hw->m_apiResult.status;
     }
     hw->unlockAPI();
     hw->m_bPreviewStarted = true;
@@ -328,11 +326,20 @@ void QCamera2HardwareInterface::stop_preview(struct camera_device *device)
         return;
     }
     ALOGE("[KPI Perf] %s: E PROFILE_STOP_PREVIEW", __func__);
+//Gionee <wutangzhi> <2013-12-12> modify for CR00959091 begin
+#ifdef ORIGINAL_VERSION
+#else
+	int times = 0;
+	while (hw->m_stateMachine.isCaptureRunning() && times <= 20) {
+		times++;
+		usleep(100000); //sleep 100ms
+	}
+#endif
+//Gionee <wutangzhi> <2013-12-12> modify for CR00959091 end
     hw->lockAPI();
-    qcamera_api_result_t apiResult;
     int32_t ret = hw->processAPI(QCAMERA_SM_EVT_STOP_PREVIEW, NULL);
     if (ret == NO_ERROR) {
-        hw->waitAPIResult(QCAMERA_SM_EVT_STOP_PREVIEW, &apiResult);
+        hw->waitAPIResult(QCAMERA_SM_EVT_STOP_PREVIEW);
     }
     hw->unlockAPI();
     ALOGD("[KPI Perf] %s: X", __func__);
@@ -360,11 +367,10 @@ int QCamera2HardwareInterface::preview_enabled(struct camera_device *device)
     }
 
     hw->lockAPI();
-    qcamera_api_result_t apiResult;
     ret = hw->processAPI(QCAMERA_SM_EVT_PREVIEW_ENABLED, NULL);
     if (ret == NO_ERROR) {
-        hw->waitAPIResult(QCAMERA_SM_EVT_PREVIEW_ENABLED, &apiResult);
-        ret = apiResult.enabled;
+        hw->waitAPIResult(QCAMERA_SM_EVT_PREVIEW_ENABLED);
+        ret = hw->m_apiResult.enabled;
     }
     hw->unlockAPI();
 
@@ -396,11 +402,10 @@ int QCamera2HardwareInterface::store_meta_data_in_buffers(
     }
 
     hw->lockAPI();
-    qcamera_api_result_t apiResult;
     ret = hw->processAPI(QCAMERA_SM_EVT_STORE_METADATA_IN_BUFS, (void *)enable);
     if (ret == NO_ERROR) {
-        hw->waitAPIResult(QCAMERA_SM_EVT_STORE_METADATA_IN_BUFS, &apiResult);
-        ret = apiResult.status;
+        hw->waitAPIResult(QCAMERA_SM_EVT_STORE_METADATA_IN_BUFS);
+        ret = hw->m_apiResult.status;
     }
     hw->unlockAPI();
 
@@ -422,50 +427,18 @@ int QCamera2HardwareInterface::store_meta_data_in_buffers(
 int QCamera2HardwareInterface::start_recording(struct camera_device *device)
 {
     int ret = NO_ERROR;
-    int width, height;
     QCamera2HardwareInterface *hw =
         reinterpret_cast<QCamera2HardwareInterface *>(device->priv);
     if (!hw) {
         ALOGE("NULL camera device");
         return BAD_VALUE;
     }
-    // Preview window changes for 720p and higher
-    hw->mParameters.getVideoSize(&width, &height);
-    if ((width * height) >= (1280 * 720)) {
-        char *orig_params = hw->getParameters();
-        if (orig_params) {
-            android::CameraParameters params;
-            params.unflatten(android::String8(orig_params));
-            hw->putParameters(orig_params);
-
-            // Set preview size to video size
-            char video_dim[10];
-            snprintf(video_dim, sizeof(video_dim), "%dx%d", width, height);
-            params.set("preview-size", video_dim);
-
-            const char *hfrStr = params.get("video-hfr");
-            const char *hsrStr = params.get("video-hsr");
-
-            // Use yuv420sp for high framerates
-            if ((hfrStr != NULL && strcmp(hfrStr, "off")) ||
-                (hsrStr != NULL && strcmp(hsrStr, "off")))
-                params.set("preview-format", "yuv420sp");
-            else
-                params.set("preview-format", "nv12-venus");
-
-            hw->set_parameters(device, params.flatten().string());
-            // Restart preview to propagate changes to preview window
-            hw->stop_preview(device);
-            hw->start_preview(device);
-        }
-    }
     ALOGE("[KPI Perf] %s: E PROFILE_START_RECORDING", __func__);
     hw->lockAPI();
-    qcamera_api_result_t apiResult;
     ret = hw->processAPI(QCAMERA_SM_EVT_START_RECORDING, NULL);
     if (ret == NO_ERROR) {
-        hw->waitAPIResult(QCAMERA_SM_EVT_START_RECORDING, &apiResult);
-        ret = apiResult.status;
+        hw->waitAPIResult(QCAMERA_SM_EVT_START_RECORDING);
+        ret = hw->m_apiResult.status;
     }
     hw->unlockAPI();
     hw->m_bRecordStarted = true;
@@ -493,10 +466,9 @@ void QCamera2HardwareInterface::stop_recording(struct camera_device *device)
     }
     ALOGE("[KPI Perf] %s: E PROFILE_STOP_RECORDING", __func__);
     hw->lockAPI();
-    qcamera_api_result_t apiResult;
     int32_t ret = hw->processAPI(QCAMERA_SM_EVT_STOP_RECORDING, NULL);
     if (ret == NO_ERROR) {
-        hw->waitAPIResult(QCAMERA_SM_EVT_STOP_RECORDING, &apiResult);
+        hw->waitAPIResult(QCAMERA_SM_EVT_STOP_RECORDING);
     }
     hw->unlockAPI();
     ALOGD("[KPI Perf] %s: X", __func__);
@@ -523,11 +495,10 @@ int QCamera2HardwareInterface::recording_enabled(struct camera_device *device)
         return BAD_VALUE;
     }
     hw->lockAPI();
-    qcamera_api_result_t apiResult;
     ret = hw->processAPI(QCAMERA_SM_EVT_RECORDING_ENABLED, NULL);
     if (ret == NO_ERROR) {
-        hw->waitAPIResult(QCAMERA_SM_EVT_RECORDING_ENABLED, &apiResult);
-        ret = apiResult.enabled;
+        hw->waitAPIResult(QCAMERA_SM_EVT_RECORDING_ENABLED);
+        ret = hw->m_apiResult.enabled;
     }
     hw->unlockAPI();
 
@@ -548,7 +519,6 @@ int QCamera2HardwareInterface::recording_enabled(struct camera_device *device)
 void QCamera2HardwareInterface::release_recording_frame(
             struct camera_device *device, const void *opaque)
 {
-    int32_t ret = NO_ERROR;
     QCamera2HardwareInterface *hw =
         reinterpret_cast<QCamera2HardwareInterface *>(device->priv);
     if (!hw) {
@@ -556,12 +526,10 @@ void QCamera2HardwareInterface::release_recording_frame(
         return;
     }
     ALOGD("%s: E", __func__);
-
     hw->lockAPI();
-    qcamera_api_result_t apiResult;
-    ret = hw->processAPI(QCAMERA_SM_EVT_RELEASE_RECORIDNG_FRAME, (void *)opaque);
+    int32_t ret = hw->processAPI(QCAMERA_SM_EVT_RELEASE_RECORIDNG_FRAME, (void *)opaque);
     if (ret == NO_ERROR) {
-        hw->waitAPIResult(QCAMERA_SM_EVT_RELEASE_RECORIDNG_FRAME, &apiResult);
+        hw->waitAPIResult(QCAMERA_SM_EVT_RELEASE_RECORIDNG_FRAME);
     }
     hw->unlockAPI();
     ALOGD("%s: X", __func__);
@@ -590,11 +558,10 @@ int QCamera2HardwareInterface::auto_focus(struct camera_device *device)
     }
     ALOGE("[KPI Perf] %s : E PROFILE_AUTO_FOCUS", __func__);
     hw->lockAPI();
-    qcamera_api_result_t apiResult;
     ret = hw->processAPI(QCAMERA_SM_EVT_START_AUTO_FOCUS, NULL);
     if (ret == NO_ERROR) {
-        hw->waitAPIResult(QCAMERA_SM_EVT_START_AUTO_FOCUS, &apiResult);
-        ret = apiResult.status;
+        hw->waitAPIResult(QCAMERA_SM_EVT_START_AUTO_FOCUS);
+        ret = hw->m_apiResult.status;
     }
     hw->unlockAPI();
     ALOGD("[KPI Perf] %s : X", __func__);
@@ -624,11 +591,10 @@ int QCamera2HardwareInterface::cancel_auto_focus(struct camera_device *device)
         return BAD_VALUE;
     }
     hw->lockAPI();
-    qcamera_api_result_t apiResult;
     ret = hw->processAPI(QCAMERA_SM_EVT_STOP_AUTO_FOCUS, NULL);
     if (ret == NO_ERROR) {
-        hw->waitAPIResult(QCAMERA_SM_EVT_STOP_AUTO_FOCUS, &apiResult);
-        ret = apiResult.status;
+        hw->waitAPIResult(QCAMERA_SM_EVT_STOP_AUTO_FOCUS);
+        ret = hw->m_apiResult.status;
     }
     hw->unlockAPI();
 
@@ -658,14 +624,13 @@ int QCamera2HardwareInterface::take_picture(struct camera_device *device)
     }
     ALOGE("[KPI Perf] %s: E PROFILE_TAKE_PICTURE", __func__);
     hw->lockAPI();
-    qcamera_api_result_t apiResult;
 
     /* Prepare snapshot in case LED needs to be flashed */
     if (hw->mFlashNeeded == 1 || hw->mParameters.isChromaFlashEnabled()) {
         ret = hw->processAPI(QCAMERA_SM_EVT_PREPARE_SNAPSHOT, NULL);
         if (ret == NO_ERROR) {
-            hw->waitAPIResult(QCAMERA_SM_EVT_PREPARE_SNAPSHOT, &apiResult);
-            ret = apiResult.status;
+            hw->waitAPIResult(QCAMERA_SM_EVT_PREPARE_SNAPSHOT);
+            ret = hw->m_apiResult.status;
         }
     }
 
@@ -676,13 +641,11 @@ int QCamera2HardwareInterface::take_picture(struct camera_device *device)
     /* capture */
     ret = hw->processAPI(QCAMERA_SM_EVT_TAKE_PICTURE, NULL);
     if (ret == NO_ERROR) {
-        hw->waitAPIResult(QCAMERA_SM_EVT_TAKE_PICTURE, &apiResult);
-        ret = apiResult.status;
+        hw->waitAPIResult(QCAMERA_SM_EVT_TAKE_PICTURE);
+        ret = hw->m_apiResult.status;
     }
 
     hw->unlockAPI();
-    hw->mLastCaptureTime = systemTime();
-
     ALOGD("[KPI Perf] %s: X", __func__);
     return ret;
 }
@@ -709,11 +672,10 @@ int QCamera2HardwareInterface::cancel_picture(struct camera_device *device)
         return BAD_VALUE;
     }
     hw->lockAPI();
-    qcamera_api_result_t apiResult;
     ret = hw->processAPI(QCAMERA_SM_EVT_CANCEL_PICTURE, NULL);
     if (ret == NO_ERROR) {
-        hw->waitAPIResult(QCAMERA_SM_EVT_CANCEL_PICTURE, &apiResult);
-        ret = apiResult.status;
+        hw->waitAPIResult(QCAMERA_SM_EVT_CANCEL_PICTURE);
+        ret = hw->m_apiResult.status;
     }
     hw->unlockAPI();
 
@@ -744,11 +706,10 @@ int QCamera2HardwareInterface::set_parameters(struct camera_device *device,
         return BAD_VALUE;
     }
     hw->lockAPI();
-    qcamera_api_result_t apiResult;
     ret = hw->processAPI(QCAMERA_SM_EVT_SET_PARAMS, (void *)parms);
     if (ret == NO_ERROR) {
-        hw->waitAPIResult(QCAMERA_SM_EVT_SET_PARAMS, &apiResult);
-        ret = apiResult.status;
+        hw->waitAPIResult(QCAMERA_SM_EVT_SET_PARAMS);
+        ret = hw->m_apiResult.status;
     }
     hw->unlockAPI();
 
@@ -775,27 +736,10 @@ char* QCamera2HardwareInterface::get_parameters(struct camera_device *device)
         return NULL;
     }
     hw->lockAPI();
-    qcamera_api_result_t apiResult;
     int32_t rc = hw->processAPI(QCAMERA_SM_EVT_GET_PARAMS, NULL);
     if (rc == NO_ERROR) {
-        hw->waitAPIResult(QCAMERA_SM_EVT_GET_PARAMS, &apiResult);
-
-        if (apiResult.params) {
-            android::CameraParameters params;
-            params.unflatten(android::String8(apiResult.params));
-            hw->putParameters(apiResult.params);
-
-            // Hide nv12-venus from userspace to prevent framework crash
-            const char *fmt = params.get("preview-format");
-            if (fmt && !strcmp(fmt, "nv12-venus")) {
-                params.set("preview-format", "yuv420sp");
-            }
-
-            // Set exposure-time-values param for CameraNext slow-shutter
-            params.set("exposure-time-values", "0");
-
-            ret = strdup(params.flatten().string());
-        }
+        hw->waitAPIResult(QCAMERA_SM_EVT_GET_PARAMS);
+        ret = hw->m_apiResult.params;
     }
     hw->unlockAPI();
 
@@ -823,10 +767,9 @@ void QCamera2HardwareInterface::put_parameters(struct camera_device *device,
         return;
     }
     hw->lockAPI();
-    qcamera_api_result_t apiResult;
     int32_t ret = hw->processAPI(QCAMERA_SM_EVT_PUT_PARAMS, (void *)parm);
     if (ret == NO_ERROR) {
-        hw->waitAPIResult(QCAMERA_SM_EVT_PUT_PARAMS, &apiResult);
+        hw->waitAPIResult(QCAMERA_SM_EVT_PUT_PARAMS);
     }
     hw->unlockAPI();
 }
@@ -865,11 +808,10 @@ int QCamera2HardwareInterface::send_command(struct camera_device *device,
     payload.arg1 = arg1;
     payload.arg2 = arg2;
     hw->lockAPI();
-    qcamera_api_result_t apiResult;
     ret = hw->processAPI(QCAMERA_SM_EVT_SEND_COMMAND, (void *)&payload);
     if (ret == NO_ERROR) {
-        hw->waitAPIResult(QCAMERA_SM_EVT_SEND_COMMAND, &apiResult);
-        ret = apiResult.status;
+        hw->waitAPIResult(QCAMERA_SM_EVT_SEND_COMMAND);
+        ret = hw->m_apiResult.status;
     }
     hw->unlockAPI();
 
@@ -895,10 +837,9 @@ void QCamera2HardwareInterface::release(struct camera_device *device)
         return;
     }
     hw->lockAPI();
-    qcamera_api_result_t apiResult;
     int32_t ret = hw->processAPI(QCAMERA_SM_EVT_RELEASE, NULL);
     if (ret == NO_ERROR) {
-        hw->waitAPIResult(QCAMERA_SM_EVT_RELEASE, &apiResult);
+        hw->waitAPIResult(QCAMERA_SM_EVT_RELEASE);
     }
     hw->unlockAPI();
 }
@@ -926,11 +867,10 @@ int QCamera2HardwareInterface::dump(struct camera_device *device, int fd)
         return BAD_VALUE;
     }
     hw->lockAPI();
-    qcamera_api_result_t apiResult;
     ret = hw->processAPI(QCAMERA_SM_EVT_DUMP, (void *)fd);
     if (ret == NO_ERROR) {
-        hw->waitAPIResult(QCAMERA_SM_EVT_DUMP, &apiResult);
-        ret = apiResult.status;
+        hw->waitAPIResult(QCAMERA_SM_EVT_DUMP);
+        ret = hw->m_apiResult.status;
     }
     hw->unlockAPI();
 
@@ -995,11 +935,10 @@ int QCamera2HardwareInterface::register_face_image(struct camera_device *device,
     payload.img_ptr = img_ptr;
     payload.config = config;
     hw->lockAPI();
-    qcamera_api_result_t apiResult;
     ret = hw->processAPI(QCAMERA_SM_EVT_REG_FACE_IMAGE, (void *)&payload);
     if (ret == NO_ERROR) {
-        hw->waitAPIResult(QCAMERA_SM_EVT_REG_FACE_IMAGE, &apiResult);
-        ret = apiResult.handle;
+        hw->waitAPIResult(QCAMERA_SM_EVT_REG_FACE_IMAGE);
+        ret = hw->m_apiResult.handle;
     }
     hw->unlockAPI();
 
@@ -1035,9 +974,14 @@ QCamera2HardwareInterface::QCamera2HardwareInterface(int cameraId)
       mDumpFrmCnt(0),
       mDumpSkipCnt(0),
       mThermalLevel(QCAMERA_THERMAL_NO_ADJUSTMENT),
-      mCancelAutoFocus(false),
       m_HDRSceneEnabled(false),
       mLongshotEnabled(false),
+      //Gionee <wutangzhi> <2013-12-12> modify for CR00959091 begin
+      #ifdef ORIGINAL_VERSION
+	  #else
+      mCancelLongshot(false),
+      #endif
+	  //Gionee <wutangzhi> <2013-12-12> modify for CR00959091 end
       m_max_pic_width(0),
       m_max_pic_height(0),
       mLiveSnapshotThread(0),
@@ -1048,10 +992,14 @@ QCamera2HardwareInterface::QCamera2HardwareInterface(int cameraId)
       mSnapshotJob(-1),
       mPostviewJob(-1),
       mMetadataJob(-1),
-      mReprocJob(-1),
-      mPreviewFrameSkipValid(0),
-      mLastAFScanTime(0),
-      mLastCaptureTime(0)
+      mReprocJob(-1)
+	  //Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
+      #ifdef ORIGINAL_VERSION
+   	  #else
+      ,mpGNCameraFeature(NULL)
+      ,mpGNListener(NULL)
+   	  #endif  
+      //Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
 {
     mCameraDevice.common.tag = HARDWARE_DEVICE_TAG;
     mCameraDevice.common.version = HARDWARE_DEVICE_API_VERSION(1, 0);
@@ -1059,10 +1007,29 @@ QCamera2HardwareInterface::QCamera2HardwareInterface(int cameraId)
     mCameraDevice.ops = &mCameraOps;
     mCameraDevice.priv = this;
 
+//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
+#ifdef ORIGINAL_VERSION
+#else
+	mpGNCameraFeature = GNCameraFeature::createInstance();
+	if (mpGNCameraFeature == NULL) {
+		ALOGE("Failed to create GNCameraFeature.");
+	}else {
+		mpGNListener = new GNListener(&m_cbNotifier);
+		
+        mpGNCameraFeature->init();
+        mpGNCameraFeature->setCameraType(mCameraId == 1? GN_CAMERA_TYPE_BACK : GN_CAMERA_TYPE_FRONT);
+		mpGNCameraFeature->setCameraListener(mpGNListener);
+    }
+	
+	//Init Longshot paramters
+    memset(&mtvLastJpegStart, 0, sizeof(mtvLastJpegStart));
+	mShotSpeed = 100;
+#endif
+//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 end
+
     pthread_mutex_init(&m_lock, NULL);
     pthread_cond_init(&m_cond, NULL);
-
-    m_apiResultList = NULL;
+    memset(&m_apiResult, 0, sizeof(qcamera_api_result_t));
 
     pthread_mutex_init(&m_evtLock, NULL);
     pthread_cond_init(&m_evtCond, NULL);
@@ -1080,9 +1047,6 @@ QCamera2HardwareInterface::QCamera2HardwareInterface(int cameraId)
 
     memset(mDeffOngoingJobs, 0, sizeof(mDeffOngoingJobs));
 
-    //reset preview frame skip
-    memset(&mPreviewFrameSkipIdxRange, 0, sizeof(cam_frame_idx_range_t));
-
     mDefferedWorkThread.launch(defferedWorkRoutine, this);
     mDefferedWorkThread.sendCmd(CAMERA_CMD_TYPE_START_DATA_PROC, FALSE, FALSE);
 }
@@ -1098,6 +1062,23 @@ QCamera2HardwareInterface::QCamera2HardwareInterface(int cameraId)
  *==========================================================================*/
 QCamera2HardwareInterface::~QCamera2HardwareInterface()
 {
+//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
+#ifdef ORIGINAL_VERSION
+#else
+	if (mpGNCameraFeature != NULL) {
+		mpGNCameraFeature->deinit();
+		mpGNCameraFeature->destroyInstance();
+
+		mpGNCameraFeature = NULL;
+	}
+
+	if (mpGNListener != NULL) {
+		delete mpGNListener;
+		mpGNListener = NULL;
+	}
+#endif	
+//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 end
+
     mDefferedWorkThread.sendCmd(CAMERA_CMD_TYPE_STOP_DATA_PROC, TRUE, TRUE);
     mDefferedWorkThread.exit();
 
@@ -1132,9 +1113,9 @@ int QCamera2HardwareInterface::openCamera(struct hw_device_t **hw_device)
     rc = openCamera();
     if (rc == NO_ERROR){
         *hw_device = &mCameraDevice.common;
-        //if (m_thermalAdapter.init(this) != 0) {
-        //  ALOGE("Init thermal adapter failed");
-        //}
+        if (m_thermalAdapter.init(this) != 0) {
+          ALOGE("Init thermal adapter failed");
+        }
     }
     else
         *hw_device = NULL;
@@ -1200,8 +1181,8 @@ int QCamera2HardwareInterface::openCamera()
 
     //check if video size 4k x 2k support is enabled
     property_get("persist.camera.4k2k.enable", value, "0");
-    enable_4k2k = 1; //atoi(value) > 0 ? 1 : 0;
-    //ALOGD("%s: enable_4k2k is %d", __func__, enable_4k2k);
+    enable_4k2k = atoi(value) > 0 ? 1 : 0;
+    ALOGD("%s: enable_4k2k is %d", __func__, enable_4k2k);
     if (!enable_4k2k) {
        //if the 4kx2k size exists in the supported preview size or
        //supported video size remove it
@@ -1266,10 +1247,10 @@ int QCamera2HardwareInterface::openCamera()
 
     mParameters.init(gCamCapability[mCameraId], mCameraHandle, this, this);
 
-    //rc = m_thermalAdapter.init(this);
-    //if (rc != 0) {
-    //    ALOGE("Init thermal adapter failed");
-    //}
+    rc = m_thermalAdapter.init(this);
+    if (rc != 0) {
+        ALOGE("Init thermal adapter failed");
+    }
 
     mCameraOpened = true;
 
@@ -1313,18 +1294,7 @@ int QCamera2HardwareInterface::closeCamera()
     m_postprocessor.stop();
     m_postprocessor.deinit();
 
-    //free all pending api results here
-    if(m_apiResultList != NULL) {
-        api_result_list *apiResultList = m_apiResultList;
-        api_result_list *apiResultListNext;
-        while (apiResultList != NULL) {
-            apiResultListNext = apiResultList->next;
-            free(apiResultList);
-            apiResultList = apiResultListNext;
-        }
-    }
-
-    //m_thermalAdapter.deinit();
+    m_thermalAdapter.deinit();
 
     // delete all channels if not already deleted
     for (i = 0; i < QCAMERA_CH_TYPE_MAX; i++) {
@@ -1340,74 +1310,6 @@ int QCamera2HardwareInterface::closeCamera()
 
     return rc;
 }
-
-static cam_dimension_t new_pic_sizes_cam0[] = {
-    {4208, 3120},
-    {4160, 3120},
-    {4160, 2340},
-    {4000, 3000},
-    {4096, 2160},
-    {3200, 2400},
-    {3200, 1800},
-    {2592, 1944},
-    {2048, 1536},
-    {1920, 1080},
-    {1600, 1200},
-    {1280, 768},
-    {1280, 720},
-    {1024, 768},
-    {800, 600},
-    {800, 480},
-    {720, 480},
-    {640, 480},
-    {320, 240}
-};
-
-static cam_dimension_t new_vid_sizes_cam0[] = {
-    {4096, 2160},
-    {3840, 2160},
-    {2560, 1440},
-    {1920, 1080},
-    {1280, 720},
-    {800, 480},
-    {720, 480},
-    {640, 480},
-    {320, 240}
-};
-
-static cam_dimension_t new_prvw_sizes_cam0[] = {
-    {4096, 2160},
-    {3840, 2160},
-    {2560, 1440},
-    {1920, 1080},
-    {1440, 1080},
-    {1280, 720},
-    {720, 480},
-    {640, 480},
-    {320, 240}
-};
-
-static cam_dimension_t new_vid_sizes_cam1[] = {
-    {2560, 1440},
-    {1920, 1080},
-    {1280, 720},
-    {864, 480},
-    {800, 480},
-    {720, 480},
-    {640, 480},
-    {320, 240}
-};
-
-static cam_dimension_t new_prvw_sizes_cam1[] = {
-    {2560, 1440},
-    {1920, 1080},
-    {1440, 1080},
-    {1280, 720},
-    {720, 480},
-    {640, 480},
-    {576, 432},
-    {320, 240}
-};
 
 #define DATA_PTR(MEM_OBJ,INDEX) MEM_OBJ->getPtr( INDEX )
 
@@ -1427,7 +1329,6 @@ int QCamera2HardwareInterface::initCapabilities(int cameraId,mm_camera_vtbl_t *c
 {
     int rc = NO_ERROR;
     QCameraHeapMemory *capabilityHeap = NULL;
-    size_t i, x;
 
     /* Allocate memory for capability buffer */
     capabilityHeap = new QCameraHeapMemory(QCAMERA_ION_USE_CACHE);
@@ -1461,54 +1362,6 @@ int QCamera2HardwareInterface::initCapabilities(int cameraId,mm_camera_vtbl_t *c
     }
     memcpy(gCamCapability[cameraId], DATA_PTR(capabilityHeap,0),
                                         sizeof(cam_capability_t));
-
-    // Re-order HDR exposure sequence to prevent screen flash on last frame
-    gCamCapability[cameraId]->hdr_bracketing_setting.exp_val.values[0] = -6;
-    gCamCapability[cameraId]->hdr_bracketing_setting.exp_val.values[1] = 6;
-    gCamCapability[cameraId]->hdr_bracketing_setting.exp_val.values[2] = 0;
-
-    // Inject modified video/preview size tables
-    if (gCamCapability[cameraId]->position == CAM_POSITION_BACK) {
-        for (i = 0; i < ARRAY_SIZE(new_pic_sizes_cam0); i++)
-            gCamCapability[cameraId]->picture_sizes_tbl[i] = new_pic_sizes_cam0[i];
-        gCamCapability[cameraId]->picture_sizes_tbl_cnt = ARRAY_SIZE(new_pic_sizes_cam0);
-
-        for (i = 0; i < ARRAY_SIZE(new_vid_sizes_cam0); i++)
-            gCamCapability[cameraId]->video_sizes_tbl[i] = new_vid_sizes_cam0[i];
-        gCamCapability[cameraId]->video_sizes_tbl_cnt = ARRAY_SIZE(new_vid_sizes_cam0);
-
-        for (i = 0; i < ARRAY_SIZE(new_vid_sizes_cam0); i++)
-            gCamCapability[cameraId]->livesnapshot_sizes_tbl[i] = new_vid_sizes_cam0[i];
-        gCamCapability[cameraId]->livesnapshot_sizes_tbl_cnt = ARRAY_SIZE(new_vid_sizes_cam0);
-
-        for (i = 0; i < ARRAY_SIZE(new_prvw_sizes_cam0); i++)
-            gCamCapability[cameraId]->preview_sizes_tbl[i] = new_prvw_sizes_cam0[i];
-        gCamCapability[cameraId]->preview_sizes_tbl_cnt = ARRAY_SIZE(new_prvw_sizes_cam0);
-
-        // Add 90FPS HFR mode up to 720p
-        x = CAM_HFR_MODE_90FPS;
-        gCamCapability[cameraId]->hfr_tbl[x].mode = (cam_hfr_mode_t)x;
-        gCamCapability[cameraId]->hfr_tbl[x].dim = (cam_dimension_t){1280, 720};
-        gCamCapability[cameraId]->hfr_tbl[x].frame_skip = 0;
-        gCamCapability[cameraId]->hfr_tbl[x].livesnapshot_sizes_tbl_cnt =
-                                        gCamCapability[cameraId]->hfr_tbl[CAM_HFR_MODE_120FPS].livesnapshot_sizes_tbl_cnt;
-        for (i = 0; i < gCamCapability[cameraId]->hfr_tbl[x].livesnapshot_sizes_tbl_cnt; i++)
-            gCamCapability[cameraId]->hfr_tbl[x].livesnapshot_sizes_tbl[i] =
-                                        gCamCapability[cameraId]->hfr_tbl[CAM_HFR_MODE_60FPS].livesnapshot_sizes_tbl[i];
-        gCamCapability[cameraId]->hfr_tbl_cnt = 3;
-    } else if (gCamCapability[cameraId]->position == CAM_POSITION_FRONT) {
-        for (i = 0; i < ARRAY_SIZE(new_vid_sizes_cam1); i++)
-            gCamCapability[cameraId]->video_sizes_tbl[i] = new_vid_sizes_cam1[i];
-        gCamCapability[cameraId]->video_sizes_tbl_cnt = ARRAY_SIZE(new_vid_sizes_cam1);
-
-        for (i = 0; i < ARRAY_SIZE(new_prvw_sizes_cam1); i++)
-            gCamCapability[cameraId]->preview_sizes_tbl[i] = new_prvw_sizes_cam1[i];
-        gCamCapability[cameraId]->preview_sizes_tbl_cnt = ARRAY_SIZE(new_prvw_sizes_cam1);
-
-        for (i = 0; i < ARRAY_SIZE(new_vid_sizes_cam1); i++)
-            gCamCapability[cameraId]->livesnapshot_sizes_tbl[i] = new_vid_sizes_cam1[i];
-        gCamCapability[cameraId]->livesnapshot_sizes_tbl_cnt = ARRAY_SIZE(new_vid_sizes_cam1);
-    }
 
     //copy the preview sizes and video sizes lists because they
     //might be changed later
@@ -1573,10 +1426,8 @@ int QCamera2HardwareInterface::prepareTorchCamera()
     int rc = NO_ERROR;
 
     if ( ( !m_stateMachine.isPreviewRunning() ) &&
-            !m_stateMachine.isPreviewReady() &&
-            ( m_channels[QCAMERA_CH_TYPE_PREVIEW] == NULL ) ) {
+         ( m_channels[QCAMERA_CH_TYPE_PREVIEW] == NULL ) ) {
         rc = addChannel(QCAMERA_CH_TYPE_PREVIEW);
-        waitDefferedWork(mMetadataJob);
     }
 
     return rc;
@@ -1597,8 +1448,7 @@ int QCamera2HardwareInterface::prepareTorchCamera()
 int QCamera2HardwareInterface::releaseTorchCamera()
 {
     if ( !m_stateMachine.isPreviewRunning() &&
-            !m_stateMachine.isPreviewReady() &&
-            ( m_channels[QCAMERA_CH_TYPE_PREVIEW] != NULL ) ) {
+         ( m_channels[QCAMERA_CH_TYPE_PREVIEW] != NULL ) ) {
         delete m_channels[QCAMERA_CH_TYPE_PREVIEW];
         m_channels[QCAMERA_CH_TYPE_PREVIEW] = NULL;
     }
@@ -1642,11 +1492,7 @@ uint8_t QCamera2HardwareInterface::getBufNumRequired(cam_stream_type_t stream_ty
         } else {
             //preview window might not be set at this point. So, query directly
             //from BufferQueue implementation of gralloc buffers.
-#ifdef USE_KK_CODE
             minUndequeCount = BufferQueue::MIN_UNDEQUEUED_BUFFERS;
-#else
-            minUndequeCount = 2;
-#endif
         }
     }
 
@@ -1655,15 +1501,8 @@ uint8_t QCamera2HardwareInterface::getBufNumRequired(cam_stream_type_t stream_ty
     case CAM_STREAM_TYPE_PREVIEW:
         {
             if (mParameters.isZSLMode()) {
-                /* We need to add two extra streming buffers to add
-                  flexibility in forming matched super buf in ZSL queue.
-                  with number being 'zslQBuffers + minCircularBufNum'
-                  we see preview buffers sometimes get dropped at CPP
-                  and super buf is not forming in ZSL Q for long time. */
-
                 bufferCnt = zslQBuffers + minCircularBufNum +
-                        mParameters.getNumOfExtraBuffersForImageProc() +
-                        EXTRA_ZSL_PREVIEW_STREAM_BUF;
+                            mParameters.getNumOfExtraBuffersForImageProc();
             } else {
                 bufferCnt = CAMERA_MIN_STREAMING_BUFFERS +
                             mParameters.getMaxUnmatchedFramesInQueue();
@@ -1673,11 +1512,23 @@ uint8_t QCamera2HardwareInterface::getBufNumRequired(cam_stream_type_t stream_ty
         break;
     case CAM_STREAM_TYPE_POSTVIEW:
         {
+			//Gionee <wutangzhi> <20130-11-02> modify for CR00943611 begin
+			#ifdef ORIGINAL_VERSION
             bufferCnt = minCaptureBuffers +
                         mParameters.getNumOfExtraHDRInBufsIfNeeded() -
                         mParameters.getNumOfExtraHDROutBufsIfNeeded() +
                         minPPBufs +
                         mParameters.getNumOfExtraBuffersForImageProc();
+			#else
+            bufferCnt = minCaptureBuffers +
+                        mParameters.getNumOfExtraHDRInBufsIfNeeded() -
+                        mParameters.getNumOfExtraHDROutBufsIfNeeded() +
+                        mParameters.getNumOfExtraNightShotInBufsIfNeeded() -
+                        mParameters.getNumOfExtraNightShotOutBufsIfNeeded()+
+                        minPPBufs +
+                        mParameters.getNumOfExtraBuffersForImageProc();
+			#endif
+			//Gionee <wutangzhi> <20130-11-02> modify for CR00943611 end
 
             if (bufferCnt > maxStreamBuf) {
                 bufferCnt = maxStreamBuf;
@@ -1699,11 +1550,23 @@ uint8_t QCamera2HardwareInterface::getBufNumRequired(cam_stream_type_t stream_ty
                             mParameters.getNumOfExtraBuffersForImageProc();
                 }
             } else {
+            	//Gionee <wutangzhi> <20130-11-02> modify for CR00943611 begin
+            	#ifdef ORIGINAL_VERSION
                 bufferCnt = minCaptureBuffers +
                             mParameters.getNumOfExtraHDRInBufsIfNeeded() -
                             mParameters.getNumOfExtraHDROutBufsIfNeeded() +
                             minPPBufs +
                             mParameters.getNumOfExtraBuffersForImageProc();
+				#else
+				bufferCnt = minCaptureBuffers +
+							mParameters.getNumOfExtraHDRInBufsIfNeeded() -
+							mParameters.getNumOfExtraHDROutBufsIfNeeded() +
+							mParameters.getNumOfExtraNightShotInBufsIfNeeded() -
+							mParameters.getNumOfExtraNightShotOutBufsIfNeeded()+
+							minPPBufs +
+							mParameters.getNumOfExtraBuffersForImageProc();
+				#endif
+				//Gionee <wutangzhi> <20130-11-02> modify for CR00943611 end
 
                 if (bufferCnt > maxStreamBuf) {
                     bufferCnt = maxStreamBuf;
@@ -1715,11 +1578,23 @@ uint8_t QCamera2HardwareInterface::getBufNumRequired(cam_stream_type_t stream_ty
         if (mParameters.isZSLMode()) {
             bufferCnt = zslQBuffers + minCircularBufNum;
         } else {
+        	//Gionee <wutangzhi> <20130-11-02> modify for CR00943611 begin
+        	#ifdef ORIGINAL_VERSION
             bufferCnt = minCaptureBuffers +
                         mParameters.getNumOfExtraHDRInBufsIfNeeded() -
                         mParameters.getNumOfExtraHDROutBufsIfNeeded() +
                         minPPBufs +
                         mParameters.getNumOfExtraBuffersForImageProc();
+			#else
+			bufferCnt = minCaptureBuffers +
+						mParameters.getNumOfExtraHDRInBufsIfNeeded() -
+						mParameters.getNumOfExtraHDROutBufsIfNeeded() +
+						mParameters.getNumOfExtraNightShotInBufsIfNeeded() -
+						mParameters.getNumOfExtraNightShotOutBufsIfNeeded()+
+						minPPBufs +
+						mParameters.getNumOfExtraBuffersForImageProc();
+			#endif
+			//Gionee <wutangzhi> <20130-11-02> modify for CR00943611 end
 
             if (bufferCnt > maxStreamBuf) {
                 bufferCnt = maxStreamBuf;
@@ -1734,19 +1609,41 @@ uint8_t QCamera2HardwareInterface::getBufNumRequired(cam_stream_type_t stream_ty
     case CAM_STREAM_TYPE_METADATA:
         {
             if (mParameters.isZSLMode()) {
-                // MetaData buffers should be >= (Preview buffers-minUndequeCount)
+				// Gionee <zhuangxiaojian> <2014-09-04> modify for CR01345272 begin
+				#ifdef ORIGINAL_VERSION
                 bufferCnt = zslQBuffers + minCircularBufNum +
                             mParameters.getNumOfExtraHDRInBufsIfNeeded() -
                             mParameters.getNumOfExtraHDROutBufsIfNeeded() +
-                            mParameters.getNumOfExtraBuffersForImageProc() +
-                            EXTRA_ZSL_PREVIEW_STREAM_BUF;
+                            mParameters.getNumOfExtraBuffersForImageProc();
+				#else
+				maxStreamBuf = maxStreamBuf + MAX_EXTRA_MATADATA_BUF;
+                bufferCnt = zslQBuffers + minCircularBufNum +
+                            mParameters.getNumOfExtraHDRInBufsIfNeeded() -
+                            mParameters.getNumOfExtraHDROutBufsIfNeeded() +
+                            mParameters.getNumOfExtraBuffersForImageProc() + 5;
+				#endif
+				// Gionee <zhuangxiaojian> <2014-09-04> modify for CR01345272 end
             } else {
+            	//Gionee <wutangzhi> <20130-11-02> modify for CR00943611 begin
+            	#ifdef ORIGINAL_VERSION
                 bufferCnt = minCaptureBuffers +
                             mParameters.getNumOfExtraHDRInBufsIfNeeded() -
                             mParameters.getNumOfExtraHDROutBufsIfNeeded() +
                             mParameters.getMaxUnmatchedFramesInQueue() +
                             CAMERA_MIN_STREAMING_BUFFERS +
                             mParameters.getNumOfExtraBuffersForImageProc();
+				#else
+                bufferCnt = minCaptureBuffers +
+                            mParameters.getNumOfExtraHDRInBufsIfNeeded() -
+                            mParameters.getNumOfExtraHDROutBufsIfNeeded() +
+                            mParameters.getMaxUnmatchedFramesInQueue() +
+                            CAMERA_MIN_STREAMING_BUFFERS +
+                            mParameters.getNumOfExtraBuffersForImageProc() +
+                            mParameters.getNumOfExtraNightShotInBufsIfNeeded() -
+                            mParameters.getNumOfExtraNightShotOutBufsIfNeeded();
+
+				#endif
+				//Gionee <wutangzhi> <20130-11-02> modify for CR00943611 end
             }
             if (bufferCnt > maxStreamBuf) {
                 bufferCnt = maxStreamBuf;
@@ -1810,6 +1707,12 @@ QCameraMemory *QCamera2HardwareInterface::allocateStreamBuf(cam_stream_type_t st
                     new QCameraGrallocMemory(mGetMemory);
 
                 mParameters.getStreamDimension(stream_type, dim);
+				//Gionee <zhuangxiaojian> <2014-10-31> modify for CR01404903 begin
+				#ifdef ORIGINAL_VERSION
+				#else
+				mpGNListener->updateDisplayDimension(dim);
+				#endif
+				//Gionee <zhuangxiaojian> <2014-10-31> modify for CR01404903 end
                 if (grallocMemory)
                     grallocMemory->setWindowInfo(mPreviewWindow, dim.width,
                         dim.height, stride, scanline,
@@ -1857,13 +1760,7 @@ QCameraMemory *QCamera2HardwareInterface::allocateStreamBuf(cam_stream_type_t st
                 bCachedMem = QCAMERA_ION_USE_NOCACHE;
             }
             ALOGD("%s: vidoe buf using cached memory = %d", __func__, bCachedMem);
-            QCameraVideoMemory *videoMemory = new QCameraVideoMemory(mGetMemory, bCachedMem);
-            int usage = 0;
-            cam_format_t fmt;
-            mParameters.getStreamFormat(CAM_STREAM_TYPE_VIDEO,fmt);
-            videoMemory->setVideoInfo(usage, fmt);
-
-            mem = videoMemory;
+            mem = new QCameraVideoMemory(mGetMemory, bCachedMem);
         }
         break;
     case CAM_STREAM_TYPE_DEFAULT:
@@ -1960,10 +1857,20 @@ QCameraHeapMemory *QCamera2HardwareInterface::allocateStreamInfoBuf(
             streamInfo->streaming_mode = CAM_STREAMING_MODE_CONTINUOUS;
         } else {
             streamInfo->streaming_mode = CAM_STREAMING_MODE_BURST;
+			//Gionee <wutangzhi> <20130-11-02> modify for CR00943611 begin
+			#ifdef ORIGINAL_VERSION
             streamInfo->num_of_burst = mParameters.getNumOfSnapshots()
                 + mParameters.getNumOfExtraHDRInBufsIfNeeded()
                 - mParameters.getNumOfExtraHDROutBufsIfNeeded()
                 + mParameters.getNumOfExtraBuffersForImageProc();
+			#else
+            streamInfo->num_of_burst = mParameters.getNumOfSnapshots()
+                + mParameters.getNumOfExtraHDRInBufsIfNeeded()
+                - mParameters.getNumOfExtraHDROutBufsIfNeeded()
+                + mParameters.getNumOfExtraBuffersForImageProc()
+                + mParameters.getNumOfExtraNightShotBurst();
+			#endif
+			//Gionee <wutangzhi> <20130-11-02> modify for CR00943611 end
         }
         break;
     case CAM_STREAM_TYPE_POSTVIEW:
@@ -1971,15 +1878,24 @@ QCameraHeapMemory *QCamera2HardwareInterface::allocateStreamInfoBuf(
             streamInfo->streaming_mode = CAM_STREAMING_MODE_CONTINUOUS;
         } else {
             streamInfo->streaming_mode = CAM_STREAMING_MODE_BURST;
+			//Gionee <wutangzhi> <20130-11-02> modify for CR00943611 begin
+			#ifdef ORIGINAL_VERSION
             streamInfo->num_of_burst = mParameters.getNumOfSnapshots()
                 + mParameters.getNumOfExtraHDRInBufsIfNeeded()
                 - mParameters.getNumOfExtraHDROutBufsIfNeeded()
                 + mParameters.getNumOfExtraBuffersForImageProc();
+			#else
+            streamInfo->num_of_burst = mParameters.getNumOfSnapshots()
+                + mParameters.getNumOfExtraHDRInBufsIfNeeded()
+                - mParameters.getNumOfExtraHDROutBufsIfNeeded()
+                + mParameters.getNumOfExtraBuffersForImageProc()
+                + mParameters.getNumOfExtraNightShotBurst();
+			#endif
+			//Gionee <wutangzhi> <20130-11-02> modify for CR00943611 end
         }
         break;
     case CAM_STREAM_TYPE_VIDEO:
         streamInfo->useAVTimer = mParameters.isAVTimerEnabled();
-        streamInfo->dis_enable = mParameters.isDISEnabled();
     case CAM_STREAM_TYPE_PREVIEW:
         if (mParameters.getRecordingHintValue()) {
             const char* dis_param = mParameters.get(QCameraParameters::KEY_QC_DIS);
@@ -2077,6 +1993,12 @@ int QCamera2HardwareInterface::setCallBacks(camera_notify_callback notify_cb,
     mGetMemory       = get_memory;
     mCallbackCookie  = user;
     m_cbNotifier.setCallbacks(notify_cb, data_cb, data_cb_timestamp, user);
+//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin 
+#ifdef ORIGINAL_VERSION
+#else
+	mpGNListener->setMemoryAllocInterface(mGetMemory);
+#endif
+//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 end 
     return NO_ERROR;
 }
 
@@ -2167,20 +2089,17 @@ int QCamera2HardwareInterface::startPreview()
 {
     int32_t rc = NO_ERROR;
     ALOGD("%s: E", __func__);
+	//Gionee <zhuangxiaojian> <2014-06-26> modify for CR01310542 begin
+	#ifdef ORIGINAL_VERSION
+	#else
+	mParameters.setOisMode(CAM_OIS_MODE_PREVIEW);
+	#endif
+	//Gionee <zhuangxiaojian> <2014-06-26> modify for CR01310542 end
     // start preview stream
     if (mParameters.isZSLMode() && mParameters.getRecordingHintValue() !=true) {
         rc = startChannel(QCAMERA_CH_TYPE_ZSL);
     } else {
         rc = startChannel(QCAMERA_CH_TYPE_PREVIEW);
-        /*
-          CAF needs cancel auto focus to resume after snapshot.
-          Focus should be locked till take picture is done.
-          In Non-zsl case if focus mode is CAF then calling cancel auto focus
-          to resume CAF.
-		*/
-		cam_focus_mode_type focusMode = mParameters.getFocusMode();
-		if (focusMode == CAM_FOCUS_MODE_CONTINOUS_PICTURE)
-			mCameraHandle->ops->cancel_auto_focus(mCameraHandle->camera_handle);
     }
     ALOGD("%s: X", __func__);
     return rc;
@@ -2203,10 +2122,6 @@ int QCamera2HardwareInterface::stopPreview()
     // stop preview stream
     stopChannel(QCAMERA_CH_TYPE_ZSL);
     stopChannel(QCAMERA_CH_TYPE_PREVIEW);
-
-    //reset preview frame skip
-    mPreviewFrameSkipValid = 0;
-    memset(&mPreviewFrameSkipIdxRange, 0, sizeof(cam_frame_idx_range_t));
 
     // delete all channels from preparePreview
     unpreparePreview();
@@ -2265,6 +2180,14 @@ int QCamera2HardwareInterface::startRecording()
 
 #ifdef HAS_MULTIMEDIA_HINTS
     if (rc == NO_ERROR) {
+		//Gionee <zhuangxiaojian> <2014-06-26> modify for CR01310542 begin
+		#ifdef ORIGINAL_VERSION
+		#else
+		if (m_stateMachine.isPreviewRunning()) {
+			mParameters.setOisMode(CAM_OIS_MODE_VIDEO);
+		}
+		#endif
+		//Gionee <zhuangxiaojian> <2014-06-26> modify for CR01310542 end
         if (m_pPowerModule) {
             if (m_pPowerModule->powerHint) {
                 m_pPowerModule->powerHint(m_pPowerModule, POWER_HINT_VIDEO_ENCODE, (void *)"state=1");
@@ -2291,7 +2214,14 @@ int QCamera2HardwareInterface::stopRecording()
 {
     int rc = stopChannel(QCAMERA_CH_TYPE_VIDEO);
     ALOGD("%s: E", __func__);
-    m_cbNotifier.flushVideoNotifications();
+	//Gionee <zhuangxiaojian> <2014-06-26> modify for CR01310542 begin
+	#ifdef ORIGINAL_VERSION
+	#else
+	if (m_stateMachine.isPreviewRunning()) {
+		mParameters.setOisMode(CAM_OIS_MODE_PREVIEW);
+	}
+	#endif
+	//Gionee <zhuangxiaojian> <2014-06-26> modify for CR01310542 end
 #ifdef HAS_MULTIMEDIA_HINTS
     if (m_pPowerModule) {
         if (m_pPowerModule->powerHint) {
@@ -2341,7 +2271,6 @@ int QCamera2HardwareInterface::releaseRecordingFrame(const void * opaque)
 int QCamera2HardwareInterface::autoFocus()
 {
     int rc = NO_ERROR;
-    setCancelAutoFocus(false);
     cam_focus_mode_type focusMode = mParameters.getFocusMode();
 
     switch (focusMode) {
@@ -2376,7 +2305,6 @@ int QCamera2HardwareInterface::autoFocus()
 int QCamera2HardwareInterface::cancelAutoFocus()
 {
     int rc = NO_ERROR;
-    setCancelAutoFocus(true);
     cam_focus_mode_type focusMode = mParameters.getFocusMode();
 
     switch (focusMode) {
@@ -2732,7 +2660,12 @@ int QCamera2HardwareInterface::takePicture()
         }
     }
     ALOGE("%s: numSnapshot = %d",__func__, numSnapshots);
-
+	//Gionee <zhuangxiaojian> <2014-06-26> modify for CR01310542 begin
+	#ifdef ORIGINAL_VERSION
+	#else
+	mParameters.setOisMode(CAM_OIS_MODE_SNAPSHOT);
+	#endif
+	//Gionee <zhuangxiaojian> <2014-06-26> modify for CR01310542 end
     getOrientation();
     ALOGD("%s: E", __func__);
     if (mParameters.isZSLMode()) {
@@ -2756,6 +2689,16 @@ int QCamera2HardwareInterface::takePicture()
                     return rc;
                 }
             }
+			//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
+			#ifdef ORIGINAL_VERSION
+			#else
+			if ( mLongshotEnabled ) {
+				mCameraHandle->ops->start_zsl_snapshot(
+					mCameraHandle->camera_handle,
+					pZSLChannel->getMyHandle());
+			}
+			#endif
+			//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 end
             rc = pZSLChannel->takePicture(numSnapshots);
             if (rc != NO_ERROR) {
                 ALOGE("%s: cannot take ZSL picture", __func__);
@@ -2963,6 +2906,20 @@ int QCamera2HardwareInterface::cancelPicture()
     ALOGD("%s:%d] ",__func__, __LINE__);
     waitDefferedWork(mReprocJob);
 
+//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 begin
+#ifdef ORIGINAL_VERSION
+#else
+	if (isLongshotEnabled()) {
+		QCameraChannel *pZSLChannel = m_channels[QCAMERA_CH_TYPE_ZSL];
+		if (isZSLMode() && (NULL != pZSLChannel)) {
+			mCameraHandle->ops->stop_zsl_snapshot(
+				mCameraHandle->camera_handle,
+				pZSLChannel->getMyHandle());
+		}
+	}
+#endif
+//Gionee <zhuangxiaojian> <2014-07-21> modify for CR01325046 end
+
     //stop post processor
     m_postprocessor.stop();
 
@@ -2998,26 +2955,11 @@ int QCamera2HardwareInterface::cancelPicture()
     if (mParameters.isUbiFocusEnabled()) {
         configureAFBracketing(false);
     }
-    return NO_ERROR;
-}
-
-/*===========================================================================
- * FUNCTION   : captureDone
- *
- * DESCRIPTION: Function called when the capture is completed before encoding
- *
- * PARAMETERS : none
- *
- * RETURN     : none
- *==========================================================================*/
-void QCamera2HardwareInterface::captureDone()
-{
-    if (mParameters.isOptiZoomEnabled() &&
-        ++mOutputCount >= mParameters.getBurstCountForAdvancedCapture()) {
-        ALOGE("%s: Restoring previous zoom value!!",__func__);
+    if(mParameters.isOptiZoomEnabled()) {
+        ALOGD("%s: Restoring previous zoom value!!",__func__);
         mParameters.setAndCommitZoom(mZoomLevel);
-        mOutputCount = 0;
     }
+    return NO_ERROR;
 }
 
 /*===========================================================================
@@ -3199,11 +3141,19 @@ int QCamera2HardwareInterface::putParameters(char *parms)
  *              NO_ERROR  -- success
  *              none-zero failure code
  *==========================================================================*/
-int QCamera2HardwareInterface::sendCommand(int32_t command, int32_t /*arg1*/, int32_t /*arg2*/)
+int QCamera2HardwareInterface::sendCommand(int32_t command, int32_t arg1, int32_t /*arg2*/)
 {
     int rc = NO_ERROR;
+//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin	
+#ifdef ORIGINAL_VERSION
+#else
+	int32_t value = arg1;
+#endif
+//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 end
 
     switch (command) {
+//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
+#if ORIGINAL_VERSION
     case CAMERA_CMD_LONGSHOT_ON:
         // Longshot can only be enabled when image capture
         // is not active.
@@ -3220,6 +3170,8 @@ int QCamera2HardwareInterface::sendCommand(int32_t command, int32_t /*arg1*/, in
         }
         mLongshotEnabled = false;
         break;
+#endif
+//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 end
     case CAMERA_CMD_HISTOGRAM_ON:
     case CAMERA_CMD_HISTOGRAM_OFF:
         rc = setHistogram(command == CAMERA_CMD_HISTOGRAM_ON? true : false);
@@ -3228,6 +3180,20 @@ int QCamera2HardwareInterface::sendCommand(int32_t command, int32_t /*arg1*/, in
     case CAMERA_CMD_STOP_FACE_DETECTION:
         rc = setFaceDetection(command == CAMERA_CMD_START_FACE_DETECTION? true : false);
         break;
+//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
+#ifdef ORIGINAL_VERSION
+#else
+	case CAMERA_CMD_SLOW_CONTINUOUS_SHOT:
+		rc = setContinuousShotSpeed(2);
+		break;
+	case CAMERA_CMD_SET_CSHOT_SPEED:
+		rc = setContinuousShotSpeed(value);
+		break;
+	case CAMERA_CMD_CANCEL_CSHOT:
+		mCancelLongshot = true;
+		break;
+#endif
+//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 end
     case CAMERA_CMD_HISTOGRAM_SEND_DATA:
     default:
         rc = NO_ERROR;
@@ -3577,13 +3543,7 @@ int32_t QCamera2HardwareInterface::processAutoFocusEvent(cam_auto_focus_data_t &
     switch (focusMode) {
     case CAM_FOCUS_MODE_AUTO:
     case CAM_FOCUS_MODE_MACRO:
-        if (getCancelAutoFocus()) {
-            // auto focus has canceled, just ignore it
-            break;
-        }
-
-        if (focus_data.focus_state == CAM_AF_SCANNING ||
-            focus_data.focus_state == CAM_AF_INACTIVE) {
+        if (focus_data.focus_state == CAM_AF_SCANNING) {
             // in the middle of focusing, just ignore it
             break;
         }
@@ -3716,7 +3676,7 @@ int32_t QCamera2HardwareInterface::processHDRData(cam_asd_hdr_scene_data_t hdr_s
         }
     }
 
-    ALOGD("%s : hdr_scene_data: processHDRData: %d %f",
+    ALOGE("%s : hdr_scene_data: processHDRData: %d %f",
           __func__,
           hdr_scene.is_hdr_scene,
           hdr_scene.hdr_confidence);
@@ -3884,36 +3844,15 @@ void QCamera2HardwareInterface::lockAPI()
  *
  * RETURN     : none
  *==========================================================================*/
-void QCamera2HardwareInterface::waitAPIResult(qcamera_sm_evt_enum_t api_evt,
-        qcamera_api_result_t *apiResult)
+void QCamera2HardwareInterface::waitAPIResult(qcamera_sm_evt_enum_t api_evt)
 {
     ALOGV("%s: wait for API result of evt (%d)", __func__, api_evt);
-    int resultReceived = 0;
-    while  (!resultReceived) {
+    do {
         pthread_cond_wait(&m_cond, &m_lock);
-        if (m_apiResultList != NULL) {
-            api_result_list *apiResultList = m_apiResultList;
-            api_result_list *apiResultListPrevious = m_apiResultList;
-            while (apiResultList != NULL) {
-                if (apiResultList->result.request_api == api_evt) {
-                    resultReceived = 1;
-                    *apiResult = apiResultList->result;
-                    apiResultListPrevious->next = apiResultList->next;
-                    if (apiResultList == m_apiResultList) {
-                        m_apiResultList = apiResultList->next;
-                    }
-                    free(apiResultList);
-                    break;
-                }
-                else {
-                    apiResultListPrevious = apiResultList;
-                    apiResultList = apiResultList->next;
-                }
-            }
-        }
-    }
+    } while (m_apiResult.request_api != api_evt);
+
     ALOGV("%s: return (%d) from API result wait for evt (%d)",
-          __func__, apiResult->status, api_evt);
+          __func__, m_apiResult.status, api_evt);
 }
 
 
@@ -3945,21 +3884,7 @@ void QCamera2HardwareInterface::signalAPIResult(qcamera_api_result_t *result)
 {
 
     pthread_mutex_lock(&m_lock);
-    api_result_list *apiResult = (api_result_list *)malloc(sizeof(api_result_list));
-    if (apiResult == NULL) {
-        ALOGE("%s: ERROR: malloc for api result failed", __func__);
-        ALOGE("%s: ERROR: api thread will wait forever fot this lost result", __func__);
-        goto malloc_failed;
-    }
-    apiResult->result = *result;
-    apiResult->next = NULL;
-    if (m_apiResultList == NULL) m_apiResultList = apiResult;
-    else {
-        api_result_list *apiResultList = m_apiResultList;
-        while(apiResultList->next != NULL) apiResultList = apiResultList->next;
-        apiResultList->next = apiResult;
-    }
-malloc_failed:
+    m_apiResult = *result;
     pthread_cond_broadcast(&m_cond);
     pthread_mutex_unlock(&m_lock);
 }
@@ -4015,9 +3940,6 @@ int32_t QCamera2HardwareInterface::prepareRawStream(QCameraChannel *curChannel)
     for (int i = 0; i < curChannel->getNumOfStreams();i++) {
         QCameraStream *pStream = curChannel->getStreamByIndex(i);
         if (pStream != NULL) {
-            if (pStream->isTypeOf(CAM_STREAM_TYPE_METADATA)) {
-                continue;
-            }
             pStream->getFrameDimension(str_dim);
             if (str_dim.width > max_dim.width) {
                 max_dim.width = str_dim.width;
@@ -4147,9 +4069,11 @@ int32_t QCamera2HardwareInterface::addPreviewChannel()
     bool raw_yuv = false;
 
     if (m_channels[QCAMERA_CH_TYPE_PREVIEW] != NULL) {
-        ALOGD("%s : Preview Channel already added and so delete it", __func__);
-        delete m_channels[QCAMERA_CH_TYPE_PREVIEW];
-        m_channels[QCAMERA_CH_TYPE_PREVIEW] = NULL;
+        // Using the no preview torch WA it is possible
+        // to already have a preview channel present before
+        // start preview gets called.
+        ALOGD(" %s : Preview Channel already added!", __func__);
+        return NO_ERROR;
     }
 
     pChannel = new QCameraChannel(mCameraHandle->camera_handle,
@@ -4757,6 +4681,17 @@ QCameraReprocessChannel *QCamera2HardwareInterface::addOnlineReprocChannel(
     } else {
         pp_config.feature_mask &= ~CAM_QCOM_FEATURE_OPTIZOOM;
     }
+
+// Gionee <zhuangxiaojian> <2014-11-24> modify for CR01415653 begin
+#ifdef ORIGINAL_VERSION
+#else
+	if (mPiczoomEnabled) {
+		pp_config.feature_mask &= ~CAM_QCOM_FEATURE_CROP;
+	} else {
+		pp_config.feature_mask |= CAM_QCOM_FEATURE_CROP;
+	}
+#endif
+// Gionee <zhuangxiaojian> <2014-11-24> modify for CR01415653 end
 
     //WNR and HDR happen inline. No extra buffers needed.
     uint32_t temp_feature_mask = pp_config.feature_mask;
@@ -5614,8 +5549,36 @@ int QCamera2HardwareInterface::updateParameters(const char *parms, bool &needRes
     int rc = NO_ERROR;
     pthread_mutex_lock(&m_parm_lock);
     String8 str = String8(parms);
+//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
+#ifdef ORIGINAL_VERSION
     QCameraParameters param(str);
+#else
+	GNCameraParameters param(str);
+#endif
+//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 end
+
     rc =  mParameters.updateParameters(param, needRestart);
+
+//Gionee <zhuangxiaojian> <2014-09-10> modify for CR01371937 begin
+#ifdef ORIGINAL_VERSION
+#else
+	if (mParameters.isContinuousShotMode()) {
+		mLongshotEnabled = true;
+		mCancelLongshot = false;
+	} else {
+		mLongshotEnabled = false;
+		mCancelLongshot = false;
+	}
+#endif
+//Gionee <zhuangxiaojian> <2014-09-10> modify for CR01371937 end
+
+//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
+#ifdef ORIGINAL_VERSION
+#else
+	//Update paramters for gionee camera feature
+	gnUpdateFeatureParameters();
+#endif	
+//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 end
 
     // update stream based parameter settings
     for (int i = 0; i < QCAMERA_CH_TYPE_MAX; i++) {
@@ -5732,6 +5695,16 @@ bool QCamera2HardwareInterface::needReprocess()
         return false;
     }
 
+//Gionee <wutangzhi> <2013-11-16> modify for CR00951873 begin
+#ifdef ORIGINAL_VERSION
+#else
+	if (mLongshotEnabled) {
+		pthread_mutex_unlock(&m_parm_lock);
+		return true;
+	}
+#endif
+//Gionee <wutangzhi> <2013-11-16> modify for CR00951873 end
+
     if (mParameters.isHDREnabled()) {
         ALOGD("%s: need do reprocess for HDR", __func__);
         pthread_mutex_unlock(&m_parm_lock);
@@ -5809,6 +5782,16 @@ bool QCamera2HardwareInterface::needRotationReprocess()
         pthread_mutex_unlock(&m_parm_lock);
         return false;
     }
+
+//Gionee <wutangzhi> <2013-11-16> modify for CR00951873 begin
+#ifdef ORIGINAL_VERSION
+#else
+	if (mLongshotEnabled) {
+		pthread_mutex_unlock(&m_parm_lock);
+		return true;
+	}
+#endif
+//Gionee <wutangzhi> <2013-11-16> modify for CR00951873 end
 
         if ((gCamCapability[mCameraId]->qcom_supported_feature_mask & CAM_QCOM_FEATURE_ROTATION) > 0 &&
             (getJpegRotation() > 0) && (mParameters.getRecordingHintValue() == false)) {
@@ -6094,6 +6077,18 @@ int32_t QCamera2HardwareInterface::setFaceDetection(bool enabled)
 {
     return mParameters.setFaceDetection(enabled);
 }
+
+//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
+#ifdef ORIGINAL_VERSION
+#else
+int32_t QCamera2HardwareInterface::setContinuousShotSpeed(int32_t speed)
+{
+	mShotSpeed = speed;
+
+	return NO_ERROR;
+}
+#endif
+//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 end
 
 /*===========================================================================
  * FUNCTION   : needProcessPreviewFrame
@@ -6392,5 +6387,579 @@ int32_t QCamera2HardwareInterface::waitDefferedWork(int32_t &job_id)
     job_id = MAX_ONGOING_JOBS;
     return NO_ERROR;
 }
+
+//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 begin
+#ifdef ORIGINAL_VERSION
+#else
+int32_t QCamera2HardwareInterface::gnParseVector(const char *str, int *data, int N, char delim = ',')
+{
+    char* start = NULL;
+	char* end = NULL;
+	
+    if (data == NULL) {
+        ALOGE("%s: Invalid output array (data == NULL)", __func__);
+        return BAD_VALUE;
+    }
+
+    //check if string starts and ends with parantheses
+    if(str[0] != '(' || str[strlen(str)-1] != ')') {
+        ALOGE("%s: Invalid format of string %s",__func__, str);
+        return BAD_VALUE;
+    }
+	
+    start = (char*) str;
+    start++;
+	
+    for(int i = 0; i < N; i++) {
+        *(data + i) = (int) strtol(start, &end, 10);
+        if(*end != delim && i < N-1) {
+            ALOGE("%s: Cannot find delimeter '%c' in string \"%s\". end = %c",
+                  __func__, delim, str, *end);
+            return -1;
+        }
+        start = end+1;
+    }
+    return NO_ERROR;
+
+}
+
+//Use to parse string like "(1,2,...), (1,2,...)"
+int32_t QCamera2HardwareInterface::gnParseFaceBeautyParamString(const char *str,
+																	int max_num_face,
+																	AgeGenderParam_t* faceBautyParam,
+																	int* faceNum)
+{
+    char faceParamStr[32] = {0};
+    const char* start = NULL;
+	const char* end = NULL;
+	const char* p = NULL;
+    int values[2] = {0};
+	int index = 0;
+
+    start = str;
+    memset(values, 0, sizeof(values));
+    while(start != NULL) {
+       if(*start != '(') {
+            ALOGE("%s: error(1) age-gender-param string %s", __func__, str);
+            return BAD_VALUE;
+       }
+	   
+       end = strchr(start, ')');
+       if(end == NULL) {
+            ALOGE("%s: error(2) age-gender-param string: %s", __func__, str);
+            return BAD_VALUE;
+       }
+	   
+       int i;
+       for (i = 0, p = start; p <= end; p++, i++) {
+           faceParamStr[i] = *p;
+       }
+	   
+       faceParamStr[i] = '\0';
+	   
+       if(gnParseVector(faceParamStr, values, 2) < 0){
+            ALOGE("%s: error: Failed to parse the ageGender param string: %s", __func__, faceParamStr);
+            return BAD_VALUE;
+       }
+	   
+       if(index >= max_num_face) {
+            ALOGE("%s: error: too many areas specified %s", __func__, str);
+            return BAD_VALUE;
+       }
+
+	   faceBautyParam[index].faceId = values[0];
+	   faceBautyParam[index].feautyLevel = values[1];
+
+       index++;
+
+	   *faceNum = index;
+	   
+       start = strchr(end, '('); // serach for next '('
+    }
+
+    return 0;
+
+}
+
+void QCamera2HardwareInterface::gnUpdateFeatureParameters()
+{	
+	gnUpdatePreviewSize();
+	gnUpdatePictureFrame();
+	gnUpdateGestureShotMode();
+	gnUpdateGestureDetection();
+	gnUpdateMirror();
+	gnSetFaceBeauty();
+	gnUpdateSceneDetection();
+	gnUpdateNightShotMode();
+	gnUpdatePicZoomMode();
+	gnUpdateLiveEffect();
+	gnUpdateAgeGenderDetection();
+}
+
+void QCamera2HardwareInterface::gnUpdatePreviewSize()
+{
+	if (mParameters.isInitPreviewSizeNeeded() && (mpGNCameraFeature != NULL)) {
+		int previewWidth = 0;
+		int previewHeight = 0;
+		mParameters.getPreviewSize(&previewWidth, &previewHeight);
+		mpGNCameraFeature->initPreviewSize(previewWidth, previewHeight, GN_IMG_FORMAT_NV21);
+
+		mParameters.updateInitPreviewSizeState(false);
+	}
+	mpGNCameraFeature->setOrientation(mParameters.getInt(QCameraParameters::KEY_ROTATION));
+}
+
+void QCamera2HardwareInterface::gnUpdatePictureFrame()
+{
+	String8 const values = mParameters.getStr(GNCameraParameters::KEY_PICTURE_FRAME);
+	char* frameName = NULL;
+
+	ALOGD("%s : values = %s", __func__, values.string());
+
+	if (values.string() != NULL && strcmp(values.string(), GNCameraParameters::PICTURE_FRAME_NORMAL) != 0) {
+		frameName = (char*) values.string();
+	} 
+
+	if (mpGNCameraFeature != NULL) {
+		mpGNCameraFeature->setPictureFrame(frameName);
+	}
+}
+
+void QCamera2HardwareInterface::gnUpdateGestureShotMode()
+{
+	String8 const value = mParameters.getStr(GNCameraParameters::KEY_GESTURE_MODE);
+	GNGestureShot_t mode = GN_GESTURE_SHOT_OFF;
+
+	if (value.string() != NULL && strcmp(value.string(), GNCameraParameters::GESTURE_MODE_ON) == 0) {
+		mode = GN_GESTURE_SHOT_ON;
+	} else {
+		mode = GN_GESTURE_SHOT_OFF;
+	}
+
+	if (mpGNCameraFeature != NULL) {
+		mpGNCameraFeature->setGestureShot(mode);
+	}
+}
+
+void QCamera2HardwareInterface::gnUpdateGestureDetection()
+{
+	String8 const value = mParameters.getStr(GNCameraParameters::KEY_GESTURE_EVENT_TYPE);
+	GNGestureDetection_t mode = GN_GESTURE_DETECTION_NONE;
+
+	if (value.string() == NULL) {
+		return;
+	}
+
+	if (strcmp(value.string(), GNCameraParameters::GESTURE_EVENT_OPEN_HAND_PRESENCE) == 0) {
+		mode = GN_GESTURE_DETECTION_OPEN_HAND_PRESENCE;
+	} else if (strcmp(value.string(), GNCameraParameters::GESTURE_EVENT_FACE_PRESENCE) == 0) {
+		mode = GN_GESTURE_DETECTION_FACE_PRESENCE;
+	} else if (strcmp(value.string(), GNCameraParameters::GESTURE_EVENT_FIST_PRESENCE) == 0) {
+		mode = GN_GESTURE_DETECTION_FIST_PRESENCE;
+	}
+
+	if (mpGNCameraFeature != NULL) {
+		mpGNCameraFeature->setGestureDetection(mode);
+	}
+}
+
+
+void QCamera2HardwareInterface::gnUpdateMirror()
+{
+	String8 const values = mParameters.getStr(GNCameraParameters::KEY_MIRROR_MODE);
+	GNMirror_t mirrorMode = GN_MIRROR_OFF;
+
+	if (values.string() != NULL && strcmp(values.string(), GNCameraParameters::MIRROR_MODE_ON) == 0) {
+		mirrorMode = GN_MIRROR_ON;
+	}  
+
+	if (mpGNCameraFeature != NULL) {
+		mpGNCameraFeature->setMirror(mirrorMode);
+	}
+}
+
+void QCamera2HardwareInterface::gnUpdateSceneDetection()
+{
+	String8 const values = mParameters.getStr(GNCameraParameters::KEY_SCENE_DETECTION_MODE);
+	GNSceneDetection_t sceneDetectionMode = GN_SCENE_DETECTION_OFF;
+
+	if (values.string() != NULL && strcmp(values.string(), GNCameraParameters::SCENE_DETECTION_ON) == 0) {
+		sceneDetectionMode = GN_SCENE_DETECTION_ON;
+	}  
+
+	if (mpGNCameraFeature != NULL) {
+		mpGNCameraFeature->setSceneDetection(sceneDetectionMode);
+	}
+}
+
+void QCamera2HardwareInterface::gnUpdateNightShotMode()
+{
+	String8 const values = mParameters.getStr(GNCameraParameters::KEY_CAPTURE_MODE);
+	GNNightShot_t nightShotMode = GN_NIGHT_SHOT_OFF;
+
+	if (values.string() != NULL && strcmp(values.string(), GNCameraParameters::CAPTURE_MODE_NIGHTSHOT_SHOT) == 0) {
+		nightShotMode = GN_NIGHT_SHOT_ON;
+	}  
+
+	if (mpGNCameraFeature != NULL) {
+		mpGNCameraFeature->setNightShot(nightShotMode);
+	}
+}
+
+void QCamera2HardwareInterface::gnUpdatePicZoomMode()
+{
+	String8 const values = mParameters.getStr(GNCameraParameters::KEY_CAPTURE_MODE);
+	PicZoomParam PicZoomParam = {0};
+
+	PicZoomParam.picZoomMode = GN_PIC_ZOOM_OFF;
+
+	if (values.string() != NULL && strcmp(values.string(), GNCameraParameters::CAPTURE_MODE_PICZOOM_SHOT) == 0) {
+		PicZoomParam.picZoomMode = GN_PIC_ZOOM_ON;
+		PicZoomParam.scaleRatio = mParameters.getScaleRatio();
+		mPiczoomEnabled = true;
+	} else {
+		mPiczoomEnabled = false;
+	}
+	
+	if (mpGNCameraFeature != NULL) {
+		mpGNCameraFeature->setPicZoom(PicZoomParam);
+	}
+}
+
+void QCamera2HardwareInterface::gnUpdateLiveEffect()
+{
+	GNLiveEffect_t liveEffect = GN_LIVE_EFFECT_NONE;
+
+	liveEffect = (GNLiveEffect_t)mParameters.getLiveEffect();
+
+	if (mpGNCameraFeature != NULL) {
+		mpGNCameraFeature->setEffect(liveEffect);
+	}
+}
+
+
+void QCamera2HardwareInterface::gnProcessPreview(void* inputBuffer, int size)
+{
+    int mask = GN_CAMERA_FEATURE_FACE_BEAUTY | GN_CAMERA_FEATURE_GESTURE_SHOT
+    		| GN_CAMERA_FEATURE_GESTURE_DETECTION | GN_CAMERA_FEATUER_SCENE_DETECTION
+    		| GN_CAMERA_FEATURE_EFFECT | GN_CAMERA_FEATUER_AGEGENDER_DETECTION;		
+
+    if (mpGNCameraFeature != NULL && (mpGNCameraFeature->getFeatureMask() & mask)){
+        mpGNCameraFeature->processPreview(inputBuffer, size, mask);
+    }
+}
+
+/********************************************************************************************
+*@brief:
+* FaceBeauty Engine has both ageGender detection and face beauty feature.
+* We may work in different modes:
+*	   AgeGender Detection	 |  Face Beauty   |  faceBeautyState	   |		discription
+* ------------------------------------------------------------------------------------------
+*  (1)		disable 		   	disable		GN_FACEBEAUTY_OFF	Disable FaceBeauty Engine
+*  (2)		disable 		   	enable		GN_FACEBEAUTY_ON	FACE_BEAUTY_DEFAULT_MODE
+*  (3)		enable		   	disable		GN_FACEBEAUTY_ON	AgeGender Detect without FaceBeauty
+*  (4)		enable			enable		GN_FACEBEAUTY_ON	FACE_BEAUTY_AGEGENDER_MODE
+* ------------------------------------------------------------------------------------------
+********************************************************************************************/
+void QCamera2HardwareInterface::gnSetFaceBeauty(void)
+{
+    if (mpGNCameraFeature != NULL) {
+		FaceBeautyParam param;	
+		FaceBeautyLevelParam_t* levelParam = &param.faceBeautyLevelParam;
+		
+	    String8 const value = mParameters.getStr(GNCameraParameters::KEY_FACE_BEAUTY_MODE);
+
+		memset(&param, 0, sizeof(param));
+		
+  	    if (value.string() != NULL && strcmp(value.string(), GNCameraParameters::FACE_BEAUTY_ON) == 0) {
+  		    param.faceBeautyState = GN_FACEBEAUTY_ON;
+  	    } else {
+  		    param.faceBeautyState = GN_FACEBEAUTY_OFF;
+  	    }		
+
+		if (param.faceBeautyState == GN_FACEBEAUTY_ON) {
+			//Check Face Beauty sub-mode
+			String8 const mode = mParameters.getStr(GNCameraParameters::KEY_FACE_BEAUTY_SUB_MODE);
+			if (mode.string() != NULL && strcmp(mode.string(), GNCameraParameters::FACE_BEAUTY_DEFAULT_MODE) == 0) {
+				//Face Beauty default mode, compatible with the old version.
+				levelParam->faceBeautyLevel = mParameters.getInt(GNCameraParameters::KEY_FACE_BEAUTY_LEVEL);
+				
+				if (levelParam->faceBeautyLevel == 0) {
+					//The following codes is compatible for the old version.
+					levelParam->faceBeautyLevel = GN_FACEBEAUTY_MEDIUM;
+				} else if (levelParam->faceBeautyLevel < 0) {
+					levelParam->eyeEnlargmentLevel = mParameters.getInt(GNCameraParameters::KEY_EYE_ENLARGMENT_LEVEL);
+					levelParam->slenderFaceLevel = mParameters.getInt(GNCameraParameters::KEY_SLENDER_FACE_LEVEL);
+					levelParam->skinSoftenLevel = mParameters.getInt(GNCameraParameters::KEY_SKIN_SOFTEN_LEVEL);
+				}
+
+				param.faceBeautyMode = GN_FACEBEAUTY_MODE_DEFAULT;
+				
+			} else if (mode.string() != NULL 
+				&& strcmp(mode.string(), GNCameraParameters::FACE_BEAUTY_AGEGENDER_MODE) == 0) {
+				/* Face Beauty AgeGender mode, support different face beauty level(SlenderFace, Skine Soften, Eye Enlargmen) */
+				String8 const ageGenderlevel = mParameters.getStr(GNCameraParameters::KEY_FACE_BEAUTY_AGEGENDER_LEVEL);
+				if (ageGenderlevel.string() != NULL) {
+					int rc = gnParseFaceBeautyParamString(ageGenderlevel.string(), 
+														  MAX_MULTI_FACE_NUM, 
+														  param.ageGenderParam,
+														  &param.faceNum);
+					if (rc != 0) {
+						//If parse string faile,should not return,just enable AgeGenderr detection
+						ALOGE("%s: Invalid Params %s", __func__, ageGenderlevel.string());
+					}
+			
+					for(int i = 0; i < param.faceNum; i ++) {
+						ALOGE("%s ageGenderParam faceId %d, feautyLevel %d", __func__, 
+							param.ageGenderParam[i].faceId,
+							param.ageGenderParam[i].feautyLevel);
+					}
+				}
+
+				//In face beauty AgeGender mode, enabe AgeGender detection.
+				param.faceBeautyMode = GN_FACEBEAUTY_MODE_AGEGENDER;
+				
+			} else {
+				param.faceBeautyMode = GN_FACEBEATUY_MODE_NONE;
+				ALOGE("%s Invalid Face Beauty Mode", __func__);
+
+				return;
+			}
+		}
+
+		mpGNCameraFeature->setFaceBeauty(param);
+	}
+}
+
+void QCamera2HardwareInterface::gnUpdateAgeGenderDetection()
+{
+	String8 const values = mParameters.getStr(GNCameraParameters::KEY_AGEGENDER_DETECTION_MODE);
+	GNAgeGenderDetection_t ageGenderMode = GN_AGEGENDER_DETECTION_OFF;
+
+	if (values.string() != NULL && strcmp(values.string(), GNCameraParameters::AGEGENDER_DETECTION_ON) == 0) {
+		ageGenderMode = GN_AGEGENDER_DETECTION_ON;
+	}  
+
+	if (mpGNCameraFeature != NULL) {
+		mpGNCameraFeature->setAgeGenderDetection(ageGenderMode);
+	}
+}
+
+void QCamera2HardwareInterface::gnProcessRaw(void * inputBuffer, int size)
+{
+	int picWidth = 0;
+    int picHeight = 0;
+	int curFeatureMask = 0;
+    int mask = GN_CAMERA_FEATURE_FACE_BEAUTY | GN_CAMERA_FEATURE_EFFECT 
+        | GN_CAMERA_FEATUER_MIRROR | GN_CAMERA_FEATURE_PICTURE_FREAME 
+        | GN_CAMERA_FEATUER_NIGHT_SHOT | GN_CAMERA_FEATUER_AGEGENDER_DETECTION
+        | GN_CAMERA_FEATURE_PIC_ZOOM;
+	
+
+	curFeatureMask = mpGNCameraFeature->getFeatureMask();
+	ALOGD("gnProcessRaw:curFeatureMask = %x",curFeatureMask);
+	if ((mpGNCameraFeature != NULL) && (curFeatureMask & mask)) {
+
+		mParameters.getPictureSize(&picWidth, &picHeight);
+		ALOGD("gnProcessRaw:picWidth=%d, picHeight=%d", picWidth,picHeight);
+
+	    int rotation = mParameters.getInt(CameraParameters::KEY_ROTATION);
+		ALOGD("gnProcessRaw:rotation = %d",rotation);
+
+	    if (rotation == 90 || rotation == 270) {
+	        picWidth = picWidth + picHeight;
+	        picHeight = picWidth - picHeight;
+	        picWidth = picWidth - picHeight;
+	    }	
+			
+		// handle order:  night shot ->face beauty -> live effect -> mirror -> picture frame
+		if (curFeatureMask & GN_CAMERA_FEATUER_NIGHT_SHOT) {
+			mpGNCameraFeature->processRaw((void*) inputBuffer, size,
+				picWidth, picHeight, GN_IMG_FORMAT_NV21, GN_CAMERA_FEATUER_NIGHT_SHOT);
+		}
+
+		if (curFeatureMask & GN_CAMERA_FEATUER_AGEGENDER_DETECTION) {
+			mpGNCameraFeature->processRaw((void*) inputBuffer, size,
+				picWidth, picHeight, GN_IMG_FORMAT_NV21, GN_CAMERA_FEATUER_AGEGENDER_DETECTION);
+		}
+		
+		if (curFeatureMask & GN_CAMERA_FEATURE_FACE_BEAUTY) {
+			mpGNCameraFeature->processRaw((void*) inputBuffer, size,
+				picWidth, picHeight, GN_IMG_FORMAT_NV21, GN_CAMERA_FEATURE_FACE_BEAUTY);
+		}
+
+		if (curFeatureMask & GN_CAMERA_FEATURE_EFFECT) {
+			mpGNCameraFeature->processRaw((void*) inputBuffer, size,
+				picWidth, picHeight, GN_IMG_FORMAT_NV21, GN_CAMERA_FEATURE_EFFECT);
+		}
+
+		if (curFeatureMask & GN_CAMERA_FEATUER_MIRROR) {
+			mpGNCameraFeature->processRaw((void*) inputBuffer, size,
+				picWidth, picHeight, GN_IMG_FORMAT_NV21, GN_CAMERA_FEATUER_MIRROR);
+		}
+
+		if (curFeatureMask & GN_CAMERA_FEATURE_PICTURE_FREAME) {
+			mpGNCameraFeature->setOrientation(rotation);
+			mpGNCameraFeature->processRaw((void*) inputBuffer, size,
+				picWidth, picHeight, GN_IMG_FORMAT_NV21, GN_CAMERA_FEATURE_PICTURE_FREAME);
+		} 
+
+		if (curFeatureMask & GN_CAMERA_FEATURE_PIC_ZOOM) {
+			mpGNCameraFeature->processRaw((void*) inputBuffer, size,
+				picWidth, picHeight, GN_IMG_FORMAT_NV21, GN_CAMERA_FEATURE_PIC_ZOOM);
+		}
+	}
+}
+
+void QCamera2HardwareInterface::gnProcessPicture(void* inputBuffer, int* size)
+{
+	//TODO
+}
+
+bool QCamera2HardwareInterface::gnNeedRotationReprocess()
+{
+	bool ret = false;
+	int mask = GN_CAMERA_FEATURE_FACE_BEAUTY | GN_CAMERA_FEATURE_EFFECT 
+        | GN_CAMERA_FEATUER_MIRROR | GN_CAMERA_FEATURE_PICTURE_FREAME 
+        | GN_CAMERA_FEATUER_NIGHT_SHOT;
+
+	if (mpGNCameraFeature != NULL && (mpGNCameraFeature->getFeatureMask() & mask)) {
+		ret = true;
+	}
+
+	return ret;
+}
+
+uint32_t QCamera2HardwareInterface::gnGetBurstCount() 
+{
+	uint32_t ret = 0;
+
+	int mask = GN_CAMERA_FEATUER_NIGHT_SHOT | GN_CAMERA_FEATURE_PIC_ZOOM;
+
+	if (mpGNCameraFeature != NULL) {
+		if (mpGNCameraFeature->getFeatureMask() & GN_CAMERA_FEATUER_NIGHT_SHOT) {
+			ret = mpGNCameraFeature->getBurstCnt(GN_CAMERA_FEATUER_NIGHT_SHOT);
+		}
+
+		if (mpGNCameraFeature->getFeatureMask() & GN_CAMERA_FEATURE_PIC_ZOOM) {
+			ret = mpGNCameraFeature->getBurstCnt(GN_CAMERA_FEATURE_PIC_ZOOM);
+		}
+	}
+
+	return ret;
+}
+
+void QCamera2HardwareInterface::GNListener::notify(GNCameraMsgType_t msgType, int32 ext1, int32 ext2, int32 ext3 = 0, void* ext4 = 0) 
+{
+	ALOGD("GNListener: msgType = %x", msgType);
+
+	switch (msgType) {
+		case GN_CAMERA_SMG_TYPE_GESTURE_SHOT:
+			if (mpCbNotifier != NULL) {
+				qcamera_callback_argm_t cbArg;
+        		memset(&cbArg, 0, sizeof(qcamera_callback_argm_t));
+
+				cbArg.cb_type 	= QCAMERA_NOTIFY_CALLBACK;
+			    cbArg.msg_type 	= CAMERA_MSG_GESTURE;
+			    cbArg.ext1 		= 0;
+				cbArg.ext2 		= 0;
+			    
+				mpCbNotifier->notifyCallback(cbArg);
+			}
+			break;
+		case GN_CAMERA_MSG_TYPE_SCENE_DETECTION:
+			if (mpCbNotifier != NULL) {
+				qcamera_callback_argm_t cbArg;
+        		memset(&cbArg, 0, sizeof(qcamera_callback_argm_t));
+
+				cbArg.cb_type 	= QCAMERA_NOTIFY_CALLBACK;
+			    cbArg.msg_type 	= CAMERA_MSG_SCENE_DETECTION;
+			    cbArg.ext1 		= ext1;
+				cbArg.ext2 		= 0;
+			    
+				mpCbNotifier->notifyCallback(cbArg);
+			}
+			break;
+		case GN_CAMERA_MSG_TYPE_GESTURE_DETECTION:
+			if (mpCbNotifier != NULL) {
+				qcamera_callback_argm_t cbArg;
+        		memset(&cbArg, 0, sizeof(qcamera_callback_argm_t));
+				if (mAllocMemory) {
+					camera_memory_t *pmem = mAllocMemory(-1, 6 * sizeof(int32_t), 1, NULL);
+					uint32_t* const pCBData = reinterpret_cast<uint32_t*>(pmem->data);
+					
+					pCBData[0] = ext1 >> 24;						//gesture type
+					pCBData[1] = (ext1 >> 16) & 0x000000FF; 		//gesture action
+					pCBData[2] = ext1 & 0x0000FFFF; 				//objectId
+					pCBData[3] = ext2;								//gesture x
+					pCBData[4] = ext3;								//gesture y
+					pCBData[5] = (int)ext4;								//gesture z
+
+					cbArg.cb_type 	= QCAMERA_DATA_CALLBACK;
+				    cbArg.msg_type 	= CAMERA_MSG_GESTURE_DETECTION;
+				    cbArg.data 		= pmem;
+
+					mpCbNotifier->notifyCallback(cbArg);
+				}
+			}
+            break;
+		case GN_CAMERA_MSG_TYPE_AGEGENDER_DETECTION:
+			if (mpCbNotifier != NULL) {
+				AgeGenderResult_t* res = (AgeGenderResult_t*)ext4;
+				qcamera_callback_argm_t cbArg;
+        		memset(&cbArg, 0, sizeof(qcamera_callback_argm_t));
+
+				if (mAllocMemory) {
+					int i = 0;
+					int faceNum = res->faceNumber;
+					unsigned char *faceData = NULL;
+					size_t faceResultSize = sizeof(camera_frame_metadata_t);
+					
+					faceResultSize += sizeof(camera_face_t) * MAX_MULTI_FACE_NUM;
+					camera_memory_t *pmem = mAllocMemory(-1, sizeof(faceResultSize), 1, NULL);
+					if (pmem == NULL) {
+						ALOGE("%s failed to alloc memory", __func__);
+						return;
+					}
+					
+					unsigned char* pFaceResult = reinterpret_cast<unsigned char*>(pmem->data);
+					memset(pFaceResult, 0, faceResultSize);
+					
+					faceData = pFaceResult;
+					
+					camera_frame_metadata_t *roiData = (camera_frame_metadata_t*)faceData;
+					camera_face_t *faces = (camera_face_t *) ( faceData + sizeof(camera_frame_metadata_t) );
+					
+					roiData->number_of_faces = faceNum;
+					roiData->faces = faces;
+
+					for (i = 0; i < faceNum; i ++) {
+						faces[i].id = i;
+						faces[i].rect[0] = MAP_TO_DRIVER_COORDINATE(res->faceRect[i].left, mDisplayDim.width, 2000, -1000);//res[i].faceRect[i].left;
+						faces[i].rect[1] = MAP_TO_DRIVER_COORDINATE(res->faceRect[i].top, mDisplayDim.height, 2000, -1000);;//res[i].faceRect[i].top;
+						faces[i].rect[2] = faces[i].rect[0] + MAP_TO_DRIVER_COORDINATE(res->faceRect[i].right, mDisplayDim.width, 2000, 0);//res[i].faceRect[i].right;
+						faces[i].rect[3] = faces[i].rect[1] + MAP_TO_DRIVER_COORDINATE(res->faceRect[i].bottom, mDisplayDim.height, 2000, 0);//res[i].faceRect[i].bottom;
+						faces[i].age = res->ageResult[i];
+						faces[i].gender = res->genderResult[i];
+					}
+					
+					cbArg.cb_type	= QCAMERA_DATA_CALLBACK;
+					cbArg.msg_type	= CAMERA_MSG_AGEGENDER_DETECTION;
+					cbArg.data 		= pmem;
+					cbArg.metadata = roiData;
+					cbArg.user_data = pmem;
+					cbArg.cookie = this;
+					cbArg.release_cb = releaseCameraMemory;
+
+					mpCbNotifier->notifyCallback(cbArg);
+				}
+			}
+			break;
+        default:
+            break;
+    }
+}
+#endif //ORIGINAL_VERSION
+//Gionee <zhuangxiaojian> <2014-05-20> modify for CR01261494 end
 
 }; // namespace qcamera
