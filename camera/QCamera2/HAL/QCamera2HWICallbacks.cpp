@@ -1734,7 +1734,6 @@ void * QCameraCbNotifier::cbNotifyRoutine(void * data)
 
 				// Gionee <wutangzhi> <2013-10-28> modify for CR00906596 begin
 				#ifdef ORIGINAL_VERSION
-				#else
 				if (longShotEnabled) {
 					pme->mParent->sendEvtNotify(CAMERA_MSG_NOTIFY_CONTINUOUS_SHOT, 
 											0, numOfSnapshotRcvd);

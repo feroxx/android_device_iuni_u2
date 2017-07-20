@@ -333,6 +333,11 @@ const char QCameraParameters::CDS_MODE_AUTO[] = "auto";
 
 const char QCameraParameters::KEY_SELECTED_AUTO_SCENE[] = "selected-auto-scene";
 
+#define FOCUS_MODE_MANUAL_POSITION "manual"
+#define WHITE_BALANCE_MANUAL_CCT "manual-cct"
+#define SCENE_MODE_GESTURE "gesture"
+#define SCENE_MODE_FOOD "food"
+
 static const char* portrait = "portrait";
 static const char* landscape = "landscape";
 
@@ -6747,7 +6752,6 @@ int32_t QCameraParameters::enableFlash(bool enableFlash, bool commitSettings)
         str);
 
     if (value != NAME_NOT_FOUND) {
-        ALOGV("%s: Setting Flash value %s", __func__, flashStr);
 
         rc = AddSetParmEntryToBatch(m_pParamBuf,
                                       CAM_INTF_PARM_LED_MODE,

@@ -166,7 +166,6 @@ public:
 	int32_t getNumOfExtraNightShotOutBufsIfNeeded();
 	int32_t getNumOfExtraNightShotBurst();
 	int32_t getLiveEffect() {return m_nLiveEffect;};
-	const char *getStr(const char *key) const;
 	
 
 private:
@@ -184,6 +183,7 @@ private:
 
     int 	lookupAttr(const QCameraMap arr[], int len, const char *name);
 	String8 createValuesStringFromMap(const QCameraMap *map, int map_len);
+	String8 getStr(const char *key);
 
     // Map from strings to values
 	static const QCameraMap CAPTURE_MODES_MAP[];
