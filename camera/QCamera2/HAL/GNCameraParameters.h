@@ -166,7 +166,6 @@ public:
 	int32_t getNumOfExtraNightShotOutBufsIfNeeded();
 	int32_t getNumOfExtraNightShotBurst();
 	int32_t getLiveEffect() {return m_nLiveEffect;};
-	String8 getStr(const GNCameraParameters&);
 	
 
 private:
@@ -183,6 +182,7 @@ private:
 	int32_t setPicZoomMode(const GNCameraParameters&);
 
     int 	lookupAttr(const QCameraMap arr[], int len, const char *name);
+	String8 getStr(const GNCameraParameters&);
 	String8 createValuesStringFromMap(const QCameraMap *map, int map_len);
 
     // Map from strings to values
