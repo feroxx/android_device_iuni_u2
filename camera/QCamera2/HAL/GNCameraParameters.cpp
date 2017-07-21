@@ -710,17 +710,9 @@ GNCameraParameters::lookupAttr(const QCameraMap arr[], int len, const char *name
 }
 
 String8 
-GNCameraParameters::getStr(const char *value)
+GNCameraParameters::getStr(const GNCameraParameters& params)
 {
-    String8 str;
 
-        if (NULL != value[i].desc) {
-            if (i > 0) {
-                str.append(",");
-            }
-            str.append(value[i].desc);
-        }
-    return str;
 }
 
 String8 
