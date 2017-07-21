@@ -1,7 +1,5 @@
 LOCAL_PATH:= $(call my-dir)
 
-LOCAL_CLANG_CFLAGS += -Wno-unused-parameter -Wno-tautological-pointer-compare
-
 include $(CLEAR_VARS)
 LOCAL_SRC_FILES := \
         QCamera2Factory.cpp \
