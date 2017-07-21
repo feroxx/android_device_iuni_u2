@@ -166,7 +166,7 @@ public:
 	int32_t getNumOfExtraNightShotOutBufsIfNeeded();
 	int32_t getNumOfExtraNightShotBurst();
 	int32_t getLiveEffect() {return m_nLiveEffect;};
-	int32_t getStr(const char GNCameraParameters&);
+	int32_t getStr(const GNCameraParameters&);
 
 private:
 	int32_t setDefaultParameters();
