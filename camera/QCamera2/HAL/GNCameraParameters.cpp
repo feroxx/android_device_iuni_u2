@@ -506,8 +506,8 @@ GNCameraParameters::setFaceBeautyMode(const GNCameraParameters& params)
 		}
 
 		if (m_bFaceBeautyMode) {
-			set(KEY_FACE_BEAUTY_SUB_MODE, params.getStr(KEY_FACE_BEAUTY_SUB_MODE));
-			set(KEY_FACE_BEAUTY_AGEGENDER_LEVEL, params.getStr(KEY_FACE_BEAUTY_AGEGENDER_LEVEL));
+			set(KEY_FACE_BEAUTY_SUB_MODE, params.get(KEY_FACE_BEAUTY_SUB_MODE));
+			set(KEY_FACE_BEAUTY_AGEGENDER_LEVEL, params.get(KEY_FACE_BEAUTY_AGEGENDER_LEVEL));
 
 			set(KEY_FACE_BEAUTY_LEVEL, params.getInt(KEY_FACE_BEAUTY_LEVEL));
 			set(KEY_SLENDER_FACE_LEVEL, params.getInt(KEY_SLENDER_FACE_LEVEL));
@@ -539,7 +539,7 @@ GNCameraParameters::setAgeGenderDetectionMode(const GNCameraParameters& params)
 		}
 
 		if (m_bFaceBeautyMode) {
-			set(KEY_AGEGENDER_DETECTION_MODE, params.getStr(KEY_AGEGENDER_DETECTION_MODE));
+			set(KEY_AGEGENDER_DETECTION_MODE, params.get(KEY_AGEGENDER_DETECTION_MODE));
 		}
     }
 
