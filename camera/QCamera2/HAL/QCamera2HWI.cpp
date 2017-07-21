@@ -6518,10 +6518,10 @@ void QCamera2HardwareInterface::gnUpdatePictureFrame()
 	values = mParameters.get(GNCameraParameters::KEY_PICTURE_FRAME);
 	char* frameName = NULL;
 
-	ALOGD("%s : values = %s", __func__, values.string());
+	ALOGD("%s : values = %s", __func__);
 
-	if (values.string() != NULL && strcmp(values.string(), GNCameraParameters::PICTURE_FRAME_NORMAL) != 0) {
-		frameName = (char*) values.string();
+	if (values != NULL && strcmp(values, GNCameraParameters::PICTURE_FRAME_NORMAL) != 0) {
+		frameName = (char*) values;
 	} 
 
 	if (mpGNCameraFeature != NULL) {
@@ -6535,7 +6535,7 @@ void QCamera2HardwareInterface::gnUpdateGestureShotMode()
 	value = mParameters.get(GNCameraParameters::KEY_GESTURE_MODE);
 	GNGestureShot_t mode = GN_GESTURE_SHOT_OFF;
 
-	if (value.string() != NULL && strcmp(value.string(), GNCameraParameters::GESTURE_MODE_ON) == 0) {
+	if (value != NULL && strcmp(value), GNCameraParameters::GESTURE_MODE_ON) == 0) {
 		mode = GN_GESTURE_SHOT_ON;
 	} else {
 		mode = GN_GESTURE_SHOT_OFF;
@@ -6552,15 +6552,15 @@ void QCamera2HardwareInterface::gnUpdateGestureDetection()
 	value = mParameters.get(GNCameraParameters::KEY_GESTURE_EVENT_TYPE);
 	GNGestureDetection_t mode = GN_GESTURE_DETECTION_NONE;
 
-	if (value.string() == NULL) {
+	if (value == NULL) {
 		return;
 	}
 
-	if (strcmp(value.string(), GNCameraParameters::GESTURE_EVENT_OPEN_HAND_PRESENCE) == 0) {
+	if (strcmp(value, GNCameraParameters::GESTURE_EVENT_OPEN_HAND_PRESENCE) == 0) {
 		mode = GN_GESTURE_DETECTION_OPEN_HAND_PRESENCE;
-	} else if (strcmp(value.string(), GNCameraParameters::GESTURE_EVENT_FACE_PRESENCE) == 0) {
+	} else if (strcmp(value, GNCameraParameters::GESTURE_EVENT_FACE_PRESENCE) == 0) {
 		mode = GN_GESTURE_DETECTION_FACE_PRESENCE;
-	} else if (strcmp(value.string(), GNCameraParameters::GESTURE_EVENT_FIST_PRESENCE) == 0) {
+	} else if (strcmp(value, GNCameraParameters::GESTURE_EVENT_FIST_PRESENCE) == 0) {
 		mode = GN_GESTURE_DETECTION_FIST_PRESENCE;
 	}
 
@@ -6576,7 +6576,7 @@ void QCamera2HardwareInterface::gnUpdateMirror()
 	values = mParameters.get(GNCameraParameters::KEY_MIRROR_MODE);
 	GNMirror_t mirrorMode = GN_MIRROR_OFF;
 
-	if (values.string() != NULL && strcmp(values.string(), GNCameraParameters::MIRROR_MODE_ON) == 0) {
+	if (values != NULL && strcmp(values, GNCameraParameters::MIRROR_MODE_ON) == 0) {
 		mirrorMode = GN_MIRROR_ON;
 	}  
 
@@ -6591,7 +6591,7 @@ void QCamera2HardwareInterface::gnUpdateSceneDetection()
 	values = mParameters.get(GNCameraParameters::KEY_SCENE_DETECTION_MODE);
 	GNSceneDetection_t sceneDetectionMode = GN_SCENE_DETECTION_OFF;
 
-	if (values.string() != NULL && strcmp(values.string(), GNCameraParameters::SCENE_DETECTION_ON) == 0) {
+	if (values != NULL && strcmp(values, GNCameraParameters::SCENE_DETECTION_ON) == 0) {
 		sceneDetectionMode = GN_SCENE_DETECTION_ON;
 	}  
 
@@ -6606,7 +6606,7 @@ void QCamera2HardwareInterface::gnUpdateNightShotMode()
 	values = mParameters.get(GNCameraParameters::KEY_CAPTURE_MODE);
 	GNNightShot_t nightShotMode = GN_NIGHT_SHOT_OFF;
 
-	if (values.string() != NULL && strcmp(values.string(), GNCameraParameters::CAPTURE_MODE_NIGHTSHOT_SHOT) == 0) {
+	if (values != NULL && strcmp(values, GNCameraParameters::CAPTURE_MODE_NIGHTSHOT_SHOT) == 0) {
 		nightShotMode = GN_NIGHT_SHOT_ON;
 	}  
 
@@ -6623,7 +6623,7 @@ void QCamera2HardwareInterface::gnUpdatePicZoomMode()
 
 	PicZoomParam.picZoomMode = GN_PIC_ZOOM_OFF;
 
-	if (values.string() != NULL && strcmp(values.string(), GNCameraParameters::CAPTURE_MODE_PICZOOM_SHOT) == 0) {
+	if (values != NULL && strcmp(values, GNCameraParameters::CAPTURE_MODE_PICZOOM_SHOT) == 0) {
 		PicZoomParam.picZoomMode = GN_PIC_ZOOM_ON;
 		PicZoomParam.scaleRatio = mParameters.getScaleRatio();
 		mPiczoomEnabled = true;
@@ -6684,7 +6684,7 @@ void QCamera2HardwareInterface::gnSetFaceBeauty(void)
 
 		memset(&param, 0, sizeof(param));
 		
-  	    if (value.string() != NULL && strcmp(value.string(), GNCameraParameters::FACE_BEAUTY_ON) == 0) {
+  	    if (value != NULL && strcmp(value, GNCameraParameters::FACE_BEAUTY_ON) == 0) {
   		    param.faceBeautyState = GN_FACEBEAUTY_ON;
   	    } else {
   		    param.faceBeautyState = GN_FACEBEAUTY_OFF;
@@ -6693,7 +6693,7 @@ void QCamera2HardwareInterface::gnSetFaceBeauty(void)
 		if (param.faceBeautyState == GN_FACEBEAUTY_ON) {
 			//Check Face Beauty sub-mode
 			mode = mParameters.get(GNCameraParameters::KEY_FACE_BEAUTY_SUB_MODE);
-			if (mode.string() != NULL && strcmp(mode.string(), GNCameraParameters::FACE_BEAUTY_DEFAULT_MODE) == 0) {
+			if (mode != NULL && strcmp(mode, GNCameraParameters::FACE_BEAUTY_DEFAULT_MODE) == 0) {
 				//Face Beauty default mode, compatible with the old version.
 				levelParam->faceBeautyLevel = mParameters.getInt(GNCameraParameters::KEY_FACE_BEAUTY_LEVEL);
 				
@@ -6708,18 +6708,18 @@ void QCamera2HardwareInterface::gnSetFaceBeauty(void)
 
 				param.faceBeautyMode = GN_FACEBEAUTY_MODE_DEFAULT;
 				
-			} else if (mode.string() != NULL 
-				&& strcmp(mode.string(), GNCameraParameters::FACE_BEAUTY_AGEGENDER_MODE) == 0) {
+			} else if (mode != NULL 
+				&& strcmp(mode, GNCameraParameters::FACE_BEAUTY_AGEGENDER_MODE) == 0) {
 				/* Face Beauty AgeGender mode, support different face beauty level(SlenderFace, Skine Soften, Eye Enlargmen) */
 				ageGenderlevel = mParameters.get(GNCameraParameters::KEY_FACE_BEAUTY_AGEGENDER_LEVEL);
-				if (ageGenderlevel.string() != NULL) {
-					int rc = gnParseFaceBeautyParamString(ageGenderlevel.string(), 
+				if (ageGenderlevel != NULL) {
+					int rc = gnParseFaceBeautyParamString(ageGenderlevel, 
 														  MAX_MULTI_FACE_NUM, 
 														  param.ageGenderParam,
 														  &param.faceNum);
 					if (rc != 0) {
 						//If parse string faile,should not return,just enable AgeGenderr detection
-						ALOGE("%s: Invalid Params %s", __func__, ageGenderlevel.string());
+						ALOGE("%s: Invalid Params %s", __func__));
 					}
 			
 					for(int i = 0; i < param.faceNum; i ++) {
@@ -6750,7 +6750,7 @@ void QCamera2HardwareInterface::gnUpdateAgeGenderDetection()
 	values = mParameters.get(GNCameraParameters::KEY_AGEGENDER_DETECTION_MODE);
 	GNAgeGenderDetection_t ageGenderMode = GN_AGEGENDER_DETECTION_OFF;
 
-	if (values.string() != NULL && strcmp(values.string(), GNCameraParameters::AGEGENDER_DETECTION_ON) == 0) {
+	if (values != NULL && strcmp(values, GNCameraParameters::AGEGENDER_DETECTION_ON) == 0) {
 		ageGenderMode = GN_AGEGENDER_DETECTION_ON;
 	}  
 
