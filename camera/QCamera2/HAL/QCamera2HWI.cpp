@@ -6518,7 +6518,7 @@ void QCamera2HardwareInterface::gnUpdatePictureFrame()
 	values = mParameters.get(GNCameraParameters::KEY_PICTURE_FRAME);
 	char* frameName = NULL;
 
-	ALOGD("%s : values = %s", __func__);
+	ALOGD("%s : values = %s", __func__, values);
 
 	if (values != NULL && strcmp(values, GNCameraParameters::PICTURE_FRAME_NORMAL) != 0) {
 		frameName = (char*) values;
@@ -6535,7 +6535,7 @@ void QCamera2HardwareInterface::gnUpdateGestureShotMode()
 	value = mParameters.get(GNCameraParameters::KEY_GESTURE_MODE);
 	GNGestureShot_t mode = GN_GESTURE_SHOT_OFF;
 
-	if (value != NULL && strcmp(value), GNCameraParameters::GESTURE_MODE_ON) == 0) {
+	if (value != NULL && strcmp(value, GNCameraParameters::GESTURE_MODE_ON) == 0) {
 		mode = GN_GESTURE_SHOT_ON;
 	} else {
 		mode = GN_GESTURE_SHOT_OFF;
@@ -6719,7 +6719,7 @@ void QCamera2HardwareInterface::gnSetFaceBeauty(void)
 														  &param.faceNum);
 					if (rc != 0) {
 						//If parse string faile,should not return,just enable AgeGenderr detection
-						ALOGE("%s: Invalid Params %s", __func__));
+						ALOGE("%s: Invalid Params %s", __func__, ageGenderlevel);
 					}
 			
 					for(int i = 0; i < param.faceNum; i ++) {
