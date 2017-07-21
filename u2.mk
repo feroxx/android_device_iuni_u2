@@ -136,10 +136,7 @@ PRODUCT_PACKAGES += \
 
 #GNCamera
 PRODUCT_PACKAGES += \
-    libgn_camera_feature \
-    libarcsoft \
-    libcrunchfish \
-    libscalado
+    libgn_camera_feature
     
 # Display
 PRODUCT_PACKAGES += \
