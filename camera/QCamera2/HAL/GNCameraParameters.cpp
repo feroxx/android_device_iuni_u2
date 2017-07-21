@@ -709,7 +709,7 @@ GNCameraParameters::lookupAttr(const QCameraMap arr[], int len, const char *name
     return NAME_NOT_FOUND;
 }
 
-String8 
+int32_t 
 GNCameraParameters::getStr(const char GNCameraParameters& params)
 {
 
