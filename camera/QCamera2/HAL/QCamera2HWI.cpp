@@ -6863,7 +6863,7 @@ void QCamera2HardwareInterface::GNListener::notify(GNCameraMsgType_t msgType, in
         		memset(&cbArg, 0, sizeof(qcamera_callback_argm_t));
 
 				cbArg.cb_type 	= QCAMERA_NOTIFY_CALLBACK;
-			    cbArg.msg_type 	= CAMERA_MSG_GESTURE;
+			    cbArg.msg_type 	= GN_CAMERA_SMG_TYPE_GESTURE_SHOT;
 			    cbArg.ext1 		= 0;
 				cbArg.ext2 		= 0;
 			    
@@ -6876,7 +6876,7 @@ void QCamera2HardwareInterface::GNListener::notify(GNCameraMsgType_t msgType, in
         		memset(&cbArg, 0, sizeof(qcamera_callback_argm_t));
 
 				cbArg.cb_type 	= QCAMERA_NOTIFY_CALLBACK;
-			    cbArg.msg_type 	= CAMERA_MSG_SCENE_DETECTION;
+			    cbArg.msg_type 	= GN_CAMERA_MSG_TYPE_SCENE_DETECTION;
 			    cbArg.ext1 		= ext1;
 				cbArg.ext2 		= 0;
 			    
@@ -6899,7 +6899,7 @@ void QCamera2HardwareInterface::GNListener::notify(GNCameraMsgType_t msgType, in
 					pCBData[5] = (int)ext4;								//gesture z
 
 					cbArg.cb_type 	= QCAMERA_DATA_CALLBACK;
-				    cbArg.msg_type 	= CAMERA_MSG_GESTURE_DETECTION;
+				    cbArg.msg_type 	= GN_CAMERA_MSG_TYPE_GESTURE_DETECTION;
 				    cbArg.data 		= pmem;
 
 					mpCbNotifier->notifyCallback(cbArg);
@@ -6947,7 +6947,7 @@ void QCamera2HardwareInterface::GNListener::notify(GNCameraMsgType_t msgType, in
 					}
 					
 					cbArg.cb_type	= QCAMERA_DATA_CALLBACK;
-					cbArg.msg_type	= CAMERA_MSG_AGEGENDER_DETECTION;
+					cbArg.msg_type	= GN_CAMERA_MSG_TYPE_AGEGENDER_DETECTION;
 					cbArg.data 		= pmem;
 					cbArg.metadata = roiData;
 					cbArg.user_data = pmem;
