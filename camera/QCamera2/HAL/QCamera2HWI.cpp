@@ -6942,8 +6942,6 @@ void QCamera2HardwareInterface::GNListener::notify(GNCameraMsgType_t msgType, in
 						faces[i].rect[1] = MAP_TO_DRIVER_COORDINATE(res->faceRect[i].top, mDisplayDim.height, 2000, -1000);;//res[i].faceRect[i].top;
 						faces[i].rect[2] = faces[i].rect[0] + MAP_TO_DRIVER_COORDINATE(res->faceRect[i].right, mDisplayDim.width, 2000, 0);//res[i].faceRect[i].right;
 						faces[i].rect[3] = faces[i].rect[1] + MAP_TO_DRIVER_COORDINATE(res->faceRect[i].bottom, mDisplayDim.height, 2000, 0);//res[i].faceRect[i].bottom;
-						faces[i].age = res->ageResult[i];
-						faces[i].gender = res->genderResult[i];
 					}
 					
 					cbArg.cb_type	= QCAMERA_DATA_CALLBACK;
