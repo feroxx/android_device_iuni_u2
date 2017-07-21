@@ -182,7 +182,7 @@ private:
 	int32_t setPicZoomMode(const GNCameraParameters&);
 
     int 	lookupAttr(const QCameraMap arr[], int len, const char *name);
-	String8 getStr(const QCameraMap *map);
+	String8 getStr(const char *value);
 	String8 createValuesStringFromMap(const QCameraMap *map, int map_len);
 
     // Map from strings to values
