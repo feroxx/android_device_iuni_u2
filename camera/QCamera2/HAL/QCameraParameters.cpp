@@ -1956,11 +1956,11 @@ int32_t QCameraParameters::setSceneFocusMode(const QCameraParameters& params)
     if(sceneModeSet && m_pCapability->supported_focus_modes_cnt > 0){
         bool isAutoFocusModeSupported = FALSE;
         for(int i=0;i < m_pCapability->supported_focus_modes_cnt; i++){
-             if(CAM_FOCUS_MODE_AUTO == m_pCapability->supported_focus_modes[i])
+             if(CAM_FOCUS_MODE_CONTINOUS_PICTURE == m_pCapability->supported_focus_modes[i])
                 isAutoFocusModeSupported = TRUE;
         }
         if (isAutoFocusModeSupported) {
-            rc = setFocusMode(FOCUS_MODE_AUTO);
+            rc = setFocusMode(FOCUS_MODE_CONTINUOUS_PICTURE);
         } else {
             rc = setFocusMode(FOCUS_MODE_FIXED);
         }
@@ -4458,9 +4458,7 @@ int32_t QCameraParameters::init(cam_capability_t *capabilities,
     m_pCamOpsTbl = mmOps;
     m_AdjustFPS = adjustFPS;
     m_pTorch = torch;
-
-    capabilities->supported_focus_modes_cnt = 1;
-    capabilities->supported_focus_modes[1].* = FOCUS_MODE_AUTO;
+	
     // For CTS
     capabilities->fps_ranges_tbl_cnt = 2;
     capabilities->fps_ranges_tbl[1].min_fps = 30.0f;
