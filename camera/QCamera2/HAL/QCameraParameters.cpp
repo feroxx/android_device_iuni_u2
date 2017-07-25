@@ -4458,6 +4458,8 @@ int32_t QCameraParameters::init(cam_capability_t *capabilities,
     m_pCamOpsTbl = mmOps;
     m_AdjustFPS = adjustFPS;
     m_pTorch = torch;
+
+    capabilities->supported_focus_modes_cnt = 8;
 	
     // For CTS
     capabilities->fps_ranges_tbl_cnt = 2;
