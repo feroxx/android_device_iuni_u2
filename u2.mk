@@ -126,17 +126,7 @@ PRODUCT_PACKAGES += \
 # Camera
 PRODUCT_PACKAGES += \
     camera.msm8974 \
-    libqomx_core \
-    libmmcamera_interface \
-    libmmjpeg_interface \
-    libmm-qcamera \
-    mm-jpeg-interface-test \
-    mm-qcamera-app \
     Snap
-
-#GNCamera
-PRODUCT_PACKAGES += \
-    libgn_camera_feature
     
 # Display
 PRODUCT_PACKAGES += \

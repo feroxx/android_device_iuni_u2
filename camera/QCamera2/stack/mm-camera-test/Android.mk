@@ -89,7 +89,7 @@ LOCAL_MODULE_TAGS := optional
 
 LOCAL_MODULE:= mm-qcamera-app
 LOCAL_CLANG := false
-include $(BUILD_EXECUTABLE)
+#include $(BUILD_EXECUTABLE)
 endif
 
 ifeq ($(call is-vendor-board-platform,QCOM),true)
@@ -180,5 +180,5 @@ LOCAL_MODULE_TAGS := optional
 
 LOCAL_MODULE:= libmm-qcamera
 LOCAL_CLANG := false
-include $(BUILD_SHARED_LIBRARY)
+#include $(BUILD_SHARED_LIBRARY)
 endif
