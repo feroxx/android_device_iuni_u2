@@ -34,7 +34,6 @@ BOARD_DTBTOOL_ARGS := -2
 TARGET_KERNEL_ARCH := arm
 TARGET_KERNEL_CONFIG := e7_defconfig
 TARGET_KERNEL_SOURCE := kernel/gm/e7
-TARGET_KERNEL_CROSS_COMPILE_PREFIX := arm-linux-androideabi-
 
 # global
 TARGET_SPECIFIC_HEADER_PATH := device/iuni/u2/include
@@ -68,11 +67,10 @@ BOARD_USES_ALSA_AUDIO                      := true
 AUDIO_FEATURE_ENABLED_MULTI_VOICE_SESSIONS := true
 
 # Camera
-USE_CAMERA_STUB := false
 USE_DEVICE_SPECIFIC_CAMERA := true
 TARGET_NEEDS_PLATFORM_TEXT_RELOCATIONS := true
 TARGET_HAS_LEGACY_CAMERA_HAL1 := true
-TARGET_NEEDS_GCC_LIBC := true
+TARGET_SPECIFIC_CAMERA_PARAMETER_LIBRARY := libcamera_parameters_ext
 
 # RIL
 BOARD_GLOBAL_CFLAGS += -DUSE_RIL_VERSION_10
@@ -123,8 +121,8 @@ TARGET_RELEASETOOLS_EXTENSIONS := device/iuni/u2
 -include vendor/qcom/binaries/msm8974/graphics/BoardConfigVendor.mk
 
 # Charger
-BOARD_CHARGER_ENABLE_SUSPEND := true
 BOARD_CHARGER_DISABLE_INIT_BLANK := true
+BACKLIGHT_PATH := /sys/class/leds/lcd-backlight/brightness
 
 # CM Hardware
 BOARD_USES_CYANOGEN_HARDWARE := true
