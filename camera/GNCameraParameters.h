@@ -38,14 +38,14 @@ public:
 	static const char GESTURE_MODE_OFF[];
 
 	//Face beauty mode
-    static const char KEY_FACE_BEAUTY_MODE[];
-    static const char KEY_SUPPOTED_FACE_BEAUTY_MODE[];
+        static const char KEY_FACE_BEAUTY_MODE[];
+        static const char KEY_SUPPOTED_FACE_BEAUTY_MODE[];
 	static const char KEY_FACE_BEAUTY_LEVEL[];
 	static const char KEY_SLENDER_FACE_LEVEL[];
 	static const char KEY_SKIN_SOFTEN_LEVEL[];
 	static const char KEY_EYE_ENLARGMENT_LEVEL[];
-    static const char FACE_BEAUTY_ON[];
-    static const char FACE_BEAUTY_OFF[];    
+        static const char FACE_BEAUTY_ON[];
+        static const char FACE_BEAUTY_OFF[];    
 
 	static const char KEY_FACE_BEAUTY_SUB_MODE[];
 	static const char FACE_BEAUTY_AGEGENDER_MODE[];
@@ -151,7 +151,12 @@ public:
 	static const char LIVE_EFFECT_FINEFOOD[];
 	static const char LIVE_EFFECT_BLACKWHITET[];
 
-    int32_t updateParameters(GNCameraParameters&, bool &needRestart);
+    typedef struct {
+        const char *const desc;
+        int val;
+    } QCameraMap;
+
+        int32_t updateParameters(GNCameraParameters&, bool &needRestart);
 	int32_t setCaptureMode(const char *capMode);
 	bool 	isBurstNumInfinite() {return (m_nBurstNum <= 0);};
 	int32_t getBurstShotNum() {return m_nBurstNum;};
@@ -173,7 +178,21 @@ private:
 	int32_t setPictureFrame(const GNCameraParameters&);
 	int32_t setLiveEffect(const GNCameraParameters&);
 	int32_t setPicZoomMode(const GNCameraParameters&);
-    
+
+        int lookupAttr(const QCameraMap arr[], int len, const char *name);
+	String8 createValuesStringFromMap(const QCameraMap *map, int map_len);
+
+    // Map from strings to values
+	static const QCameraMap CAPTURE_MODES_MAP[];
+	static const QCameraMap GESTURE_MODES_MAP[];
+	static const QCameraMap FACE_BEAUTY_MODES_MAP[];
+	static const QCameraMap AGEGENDER_DETECTION_MODES_MAP[];
+	static const QCameraMap KEY_PICZOOM_MODES_MAP[];
+	static const QCameraMap MIRROR_MODES_MAP[];
+	static const QCameraMap GESTURE_EVENT_TYPES_MAP[];
+	static const QCameraMap SCENE_DETECTION_MODES_MAP[];
+	static const QCameraMap LIVE_EFFECTS_MAP[];
+
 	bool m_bFaceBeautyMode;
 	bool m_bAgeGenderDetectionMode;
 	int32_t m_nBurstNum;
