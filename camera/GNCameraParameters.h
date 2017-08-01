@@ -19,7 +19,7 @@ using namespace android;
 
 namespace qcamera {
 
-class GNCameraParameters: public QCameraParameters
+class GNCameraParameters: public CameraParameters
 {
 public:
 	GNCameraParameters();
