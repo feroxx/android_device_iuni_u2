@@ -18,7 +18,6 @@
 
 #include "GNCameraParameters.h"
 #include <CameraParametersExtra.h>
-#include "QCameraParameters.h"
 
 namespace qcamera {
 
