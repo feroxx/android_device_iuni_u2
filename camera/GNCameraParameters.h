@@ -151,10 +151,8 @@ public:
 	static const char LIVE_EFFECT_FINEFOOD[];
 	static const char LIVE_EFFECT_BLACKWHITET[];
 
-	int32_t init(cam_capability_t *, mm_camera_vtbl_t *, QCameraAdjustFPS *, QCameraTorchInterface *);
     int32_t updateParameters(GNCameraParameters&, bool &needRestart);
 	int32_t setCaptureMode(const char *capMode);
-	bool 	isContinuousShotMode() {return (m_nCaptureMode == CAM_CAPTURE_MODE_BURST);};
 	bool 	isBurstNumInfinite() {return (m_nBurstNum <= 0);};
 	int32_t getBurstShotNum() {return m_nBurstNum;};
 	int32_t getNumOfExtraNightShotInBufsIfNeeded();
