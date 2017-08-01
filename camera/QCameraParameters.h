@@ -59,7 +59,6 @@ public:
     virtual ~QCameraReprocScaleParam();
 
     virtual void setScaleEnable(bool enabled);
-    virtual int32_t setScaleSizeTbl(uint8_t scale_cnt, cam_dimension_t *scale_tbl, uint8_t org_cnt, cam_dimension_t *org_tbl);
     virtual int32_t setValidatePicSize(int &width, int &height);
 
     virtual bool isScaleEnabled();
@@ -67,9 +66,7 @@ public:
 
 
     virtual uint8_t getScaleSizeTblCnt();
-    virtual cam_dimension_t *getScaledSizeTbl();
     virtual uint8_t getTotalSizeTblCnt();
-    virtual cam_dimension_t *getTotalSizeTbl();
     virtual int32_t getPicSizeFromAPK(int &width, int &height);
     virtual int32_t getPicSizeSetted(int &width, int &height);
 
@@ -77,27 +74,12 @@ private:
     bool isScalePicSize(int width, int height);
     bool isValidatePicSize(int width, int height);
     int32_t setSensorSupportedPicSize();
-    uint8_t checkScaleSizeTable(uint8_t scale_cnt, cam_dimension_t *scale_tbl, uint8_t org_cnt, cam_dimension_t *org_tbl);
 
     QCameraParameters *mParent;
     bool mScaleEnabled;
     bool mIsUnderScaling;   //if in scale status
     bool mScaleDirection;   // 0: Upscaling; 1: Downscaling
 
-    // picture size cnt that need scale operation
-    uint8_t mNeedScaleCnt;
-    cam_dimension_t mNeedScaledSizeTbl[MAX_SCALE_SIZES_CNT];
-
-    // sensor supported size cnt and table
-    uint8_t mSensorSizeTblCnt;
-    cam_dimension_t *mSensorSizeTbl;
-
-    // Total size cnt (sensor supported + need scale cnt)
-    uint8_t mTotalSizeTblCnt;
-    cam_dimension_t mTotalSizeTbl[MAX_SIZES_CNT];
-
-    cam_dimension_t mPicSizeFromAPK;   // dimension that APK is expected
-    cam_dimension_t mPicSizeSetted;    // dimension that config vfe
 };
 
 class QCameraParameters: public CameraParameters
@@ -482,21 +464,12 @@ public:
     void setTouchIndexAf(int x, int y);
     void getTouchIndexAf(int *x, int *y);
 
-    int32_t init(cam_capability_t *,
-                 mm_camera_vtbl_t *,
-                 QCameraAdjustFPS *,
-                 QCameraTorchInterface *);
     void deinit();
     int32_t assign(QCameraParameters& params);
     int32_t initDefaultParameters();
     int32_t updateParameters(QCameraParameters&, bool &needRestart);
     int32_t commitParameters();
     int getPreviewHalPixelFormat() const;
-    int32_t getStreamRotation(cam_stream_type_t streamType,
-                               cam_pp_feature_config_t &featureConfig,
-                               cam_dimension_t &dim);
-    int32_t getStreamFormat(cam_stream_type_t streamType,
-                             cam_format_t &format);
     int32_t getStreamDimension(cam_stream_type_t streamType,
                                 cam_dimension_t &dim);
     void getThumbnailSize(int *width, int *height) const;
