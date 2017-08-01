@@ -13,6 +13,7 @@
 
 #ifndef ORIGINAL_VERSION
 
+#include <QCameraParameters.h>
 #include <camera/CameraParameters.h>
 
 using namespace android;
