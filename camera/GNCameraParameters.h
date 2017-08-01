@@ -13,7 +13,6 @@
 
 #ifndef ORIGINAL_VERSION
 
-#include <QCameraParameters.h>
 #include <camera/CameraParameters.h>
 
 using namespace android;
@@ -176,20 +175,6 @@ private:
 	int32_t setPictureFrame(const GNCameraParameters&);
 	int32_t setLiveEffect(const GNCameraParameters&);
 	int32_t setPicZoomMode(const GNCameraParameters&);
-
-    int 	lookupAttr(const QCameraMap arr[], int len, const char *name);
-	String8 createValuesStringFromMap(const QCameraMap *map, int map_len);
-
-    // Map from strings to values
-	static const QCameraMap CAPTURE_MODES_MAP[];
-	static const QCameraMap GESTURE_MODES_MAP[];
-	static const QCameraMap FACE_BEAUTY_MODES_MAP[];
-	static const QCameraMap AGEGENDER_DETECTION_MODES_MAP[];
-	static const QCameraMap KEY_PICZOOM_MODES_MAP[];
-	static const QCameraMap MIRROR_MODES_MAP[];
-	static const QCameraMap GESTURE_EVENT_TYPES_MAP[];
-	static const QCameraMap SCENE_DETECTION_MODES_MAP[];
-	static const QCameraMap LIVE_EFFECTS_MAP[];
     
 	bool m_bFaceBeautyMode;
 	bool m_bAgeGenderDetectionMode;
