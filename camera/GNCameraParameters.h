@@ -14,6 +14,7 @@
 #ifndef ORIGINAL_VERSION
 
 #include <camera/CameraParameters.h>
+#include <camera/CameraParametersExtra.h>
 
 using namespace android;
 
