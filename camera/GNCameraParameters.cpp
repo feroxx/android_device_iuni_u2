@@ -146,69 +146,6 @@ const char GNCameraParameters::LIVE_EFFECT_COSMETOLOGY_BACKLIGHT[] 	= "cosmetolo
 const char GNCameraParameters::LIVE_EFFECT_FINEFOOD[]				= "finefood";
 const char GNCameraParameters::LIVE_EFFECT_BLACKWHITET[]			= "blackwhite";
 
-GNCameraParameters::GNCameraParameters()
-	: QCameraParameters()
-	, m_bFaceBeautyMode(false)
-	, m_nBurstNum(0)
-	, m_nCaptureMode(CAM_CAPTURE_MODE_NORMAL)
-	, m_nLiveEffect(CAM_LIVE_EFFECT_NONE)
-{
-
-}
-
-GNCameraParameters::GNCameraParameters(const String8 &params)
-	: QCameraParameters(params)
-	, m_bFaceBeautyMode(false)
-	, m_nBurstNum(0)
-	, m_nCaptureMode(CAM_CAPTURE_MODE_NORMAL)
-	, m_nLiveEffect(CAM_LIVE_EFFECT_NONE)
-{
-
-}
-
-GNCameraParameters::~GNCameraParameters()
-{
-	
-}
-
-int32_t 
-GNCameraParameters::updateParameters(GNCameraParameters& params, bool &needRestart)
-{
-	int32_t rc = NO_ERROR;
-	int32_t final_rc = NO_ERROR;
-
-	if ((rc = setCaptureMode(params)))					final_rc = rc; 
-	if ((rc = setFaceBeautyMode(params)))				final_rc = rc; 
-	if ((rc = setMirrorMode(params)))					final_rc = rc; 
-	if ((rc = setGestureShotMode(params)))				final_rc = rc; 
-	if ((rc = setGestureDetectionType(params)))		final_rc = rc; 
-	if ((rc = setSceneDetection(params)))				final_rc = rc; 
-	if ((rc = setPictureFrame(params)))				final_rc = rc; 
-	if ((rc = setLiveEffect(params)))					final_rc = rc; 
-	if ((rc = setAgeGenderDetectionMode(params)))		final_rc = rc;
-	if ((rc = setPicZoomMode(params)))					final_rc = rc;
-	if ((rc = QCameraParameters::updateParameters(params, needRestart)))		final_rc = rc; 
-
-	return final_rc;
-}
-
-int32_t 
-GNCameraParameters::setPictureFrame(const GNCameraParameters& params)
-{
-	int32_t rc = NO_ERROR;
-
-	const char *str = params.get(KEY_PICTURE_FRAME);
-	const char *prev_str = get(KEY_PICTURE_FRAME);
-	
-    if (str != NULL) {
-		if (prev_str == NULL || strcmp(str, prev_str) != 0) {
-	    	set(KEY_PICTURE_FRAME, str);
-		}
-    }
-
-	return rc;
-}
-
 }; //namespace qcamera
 
 #endif //ORIGINAL_VERSION
