@@ -19,8 +19,7 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_C_INCLUDES := \
-    frameworks/av/include \
-    system/media/camera/include
+    frameworks/av/include
 
 LOCAL_SRC_FILES := \
     GNCameraParameters.cpp
