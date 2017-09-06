@@ -119,6 +119,8 @@ PRODUCT_PACKAGES += \
     libshim_wvm
 
 PRODUCT_PACKAGES += \
+    android.hardware.wifi@1.0-service \
+	wificond \
     hostapd \
     wcnss_service \
     wpa_supplicant
@@ -135,6 +137,9 @@ PRODUCT_PACKAGES += \
     
 # Graphics
 PRODUCT_PACKAGES += \
+    android.hardware.graphics.allocator@2.0-impl \
+    android.hardware.graphics.mapper@2.0-impl \
+    android.hardware.graphics.composer@2.1-impl \
     copybit.msm8974 \
     gralloc.msm8974 \
     hwcomposer.msm8974 \
@@ -142,14 +147,29 @@ PRODUCT_PACKAGES += \
     liboverlay \
     keystore.msm8974
 
+# Keymaster
+PRODUCT_PACKAGES += \
+    android.hardware.keymaster@3.0-impl
+
 PRODUCT_PACKAGES += \
     libstlport
 
 # Lights
 PRODUCT_PACKAGES += \
+    android.hardware.light@2.0-impl \
     lights.u2
 
+# Sensors
 PRODUCT_PACKAGES += \
+    android.hardware.sensors@1.0-impl
+
+# Vibrator
+PRODUCT_PACKAGES += \
+    android.hardware.vibrator@1.0-impl
+
+PRODUCT_PACKAGES += \
+    android.hardware.audio@2.0-impl \
+    android.hardware.audio.effect@2.0-impl \
     audiod \
     audio.a2dp.default \
     audio_policy.msm8974 \
@@ -161,6 +181,10 @@ PRODUCT_PACKAGES += \
     libqcomvisualizer \
     libqcomvoiceprocessing \
     tinymix
+
+# Bluetooth
+PRODUCT_PACKAGES += \
+    android.hardware.bluetooth@1.0-impl
 
 # for audio.primary.msm8974
 PRODUCT_PACKAGES += \
@@ -185,6 +209,10 @@ PRODUCT_PACKAGES += \
     libOmxVdec \
     libOmxVenc \
     libstagefrighthw 
+
+# HIDL
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/manifest.xml:system/vendor/manifest.xml
 
 # sensors
 PRODUCT_COPY_FILES += \
@@ -224,7 +252,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Graphics
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=196608 \
-    persist.hwc.mdpcomp.enable=true
+    persist.hwc.mdpcomp.enable=true \
+	debug.hwui.use_buffer_age=false
 
 # QMI
 PRODUCT_PROPERTY_OVERRIDES += \
