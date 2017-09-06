@@ -23,10 +23,10 @@ PRODUCT_COPY_FILES += \
     device/iuni/u2/rootdir/twrp.fstab:recovery/root/etc/twrp.fstab 
 
 # call dalvik heap config
-$(call inherit-product, frameworks/native/build/phone-xxhdpi-3072-dalvik-heap.mk)
+#$(call inherit-product, frameworks/native/build/phone-xxhdpi-3072-dalvik-heap.mk)
 
 # call hwui memory config
-$(call inherit-product, frameworks/native/build/phone-xxhdpi-3072-hwui-memory.mk)
+#$(call inherit-product, frameworks/native/build/phone-xxhdpi-3072-hwui-memory.mk)
 
 # Screen density
 PRODUCT_AAPT_CONFIG := normal hdpi xhdpi xxhdpi
@@ -115,8 +115,8 @@ PRODUCT_PACKAGES += \
     p2p_supplicant_overlay.conf
 
 # Widevine
-PRODUCT_PACKAGES += \
-    libshim_wvm
+#PRODUCT_PACKAGES += \
+#    libshim_wvm
 
 PRODUCT_PACKAGES += \
     android.hardware.wifi@1.0-service \
