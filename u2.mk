@@ -120,9 +120,8 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += \
     android.hardware.wifi@1.0-service \
-	wificond \
+    wificond \
     hostapd \
-    wcnss_service \
     wpa_supplicant
     
 # IPv6
