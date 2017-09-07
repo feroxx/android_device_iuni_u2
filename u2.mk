@@ -133,7 +133,12 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += \
     Snap
-    
+
+# Power
+PRODUCT_PACKAGES += \
+    android.hardware.power@1.0-impl \
+    power.msm8974
+
 # Graphics
 PRODUCT_PACKAGES += \
     android.hardware.graphics.allocator@2.0-impl \
