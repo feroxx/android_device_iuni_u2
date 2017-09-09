@@ -141,8 +141,6 @@ TARGET_KEYMASTER_WAIT_FOR_QSEE := true
 #BOARD_SEPOLICY_DIRS += \
 #    device/iuni/u2/sepolicy
 
-BOARD_VNDK_VERSION:=current
-
 #TWRP
 TW_THEME := portrait_hdpi
 TW_NO_SCREEN_TIMEOUT := true 
