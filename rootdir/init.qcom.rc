@@ -37,9 +37,6 @@ on early-boot
 on fs
     mount_all ./fstab.qcom
 
-    wait /dev/block/bootdevice/by-name/persist
-    mount ext4 /dev/block/bootdevice/by-name/persist /persist nosuid nodev barrier=1
-
     restorecon_recursive /persist
 
     mkdir /dev/usb-ffs 0770 shell shell
@@ -53,9 +50,6 @@ on fs
     mkdir /persist/data 0700 system system
     mkdir /persist/data/sfs 0700 system system
     mkdir /persist/data/tz 0700 system system
-
-    wait /dev/block/bootdevice/by-name/modem
-    mount vfat /dev/block/bootdevice/by-name/modem /firmware ro shortname=lower,uid=1000,gid=1000,dmask=227,fmask=337
 
 on boot
     # Necessary for netmgrd to function properly, otherwise no data
