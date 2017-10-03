@@ -34,7 +34,6 @@ LZMA_RAMDISK_TARGETS := boot,recovery
 BOARD_KERNEL_LZ4C_DT := true
 TARGET_KERNEL_CONFIG := e7_defconfig
 TARGET_KERNEL_SOURCE := kernel/kang/msm8974
-TARGET_KERNEL_CROSS_COMPILE_PREFIX := arm-linux-androideabi-
 
 # global
 TARGET_SPECIFIC_HEADER_PATH := device/iuni/u2/include
