@@ -30,8 +30,8 @@ BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.selinux=permissive
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_KERNEL_SEPARATED_DT := true
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x02000000 --kernel_offset 0x00008000
-BOARD_DTBTOOL_ARGS := -2
-TARGET_KERNEL_ARCH := arm
+LZMA_RAMDISK_TARGETS := boot,recovery
+BOARD_KERNEL_LZ4C_DT := true
 TARGET_KERNEL_CONFIG := e7_defconfig
 TARGET_KERNEL_SOURCE := kernel/kang/msm8974
 
