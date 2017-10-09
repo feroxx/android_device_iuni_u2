@@ -1,3 +1,0 @@
-# Read mac address from persist partition
-allow bluetooth_loader persist_file:dir search;
-r_dir_file(bluetooth_loader, persist_bluetooth_file)

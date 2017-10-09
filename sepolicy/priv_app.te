@@ -1,3 +1,0 @@
-userdebug_or_eng(`
-  allow priv_app sysfs_smdpkt:dir r_dir_perms;
-')

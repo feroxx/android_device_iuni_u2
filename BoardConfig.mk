@@ -138,9 +138,6 @@ TARGET_KEYMASTER_WAIT_FOR_QSEE := true
 # selinux
 #include device/qcom/sepolicy/sepolicy.mk
 
-#BOARD_SEPOLICY_DIRS += \
-#    device/iuni/u2/sepolicy
-
 #TWRP
 TW_THEME := portrait_hdpi
 TW_NO_SCREEN_TIMEOUT := true 
