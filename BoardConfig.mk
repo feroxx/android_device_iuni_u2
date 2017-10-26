@@ -34,7 +34,7 @@ BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x02000000 --kernel_offset 0x00008000
 BOARD_DTBTOOL_ARGS := -2
 TARGET_KERNEL_ARCH := arm
 TARGET_KERNEL_CONFIG := e7_defconfig
-TARGET_KERNEL_SOURCE := kernel/kang/e7
+TARGET_KERNEL_SOURCE := kernel/gm/e7
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := arm-linux-androideabi-
 
 # global
