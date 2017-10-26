@@ -257,7 +257,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=196608 \
     persist.hwc.mdpcomp.enable=true \
-	debug.hwui.use_buffer_age=false
+    debug.hwui.use_buffer_age=false \
+    persist.media.treble_omx=false
 
 # QMI
 PRODUCT_PROPERTY_OVERRIDES += \
