@@ -89,7 +89,7 @@ PRODUCT_COPY_FILES += \
 # WiFi
 PRODUCT_COPY_FILES += \
     device/iuni/u2/wifi/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
-    device/iuni/u2/wifi/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
+    device/iuni/u2/wifi/WCNSS_qcom_cfg.ini:system/vendor/etc/wifi/WCNSS_qcom_cfg.ini \
     device/iuni/u2/wifi/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
 
 PRODUCT_COPY_FILES += \
@@ -107,7 +107,6 @@ PRODUCT_PACKAGES += \
     libcnefeatureconfig
 
 PRODUCT_PACKAGES += \
-    hostapd_default.conf \
     hostapd.accept \
     hostapd.deny \
     wpa_supplicant.conf \
@@ -121,7 +120,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.wifi@1.0-service \
     wificond \
-    hostapd \
     wpa_supplicant
     
 # IPv6
@@ -134,6 +132,14 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     Snap
 
+# DRM
+PRODUCT_PACKAGES += \
+    android.hardware.drm@1.0-impl
+
+# RenderScript HAL
+PRODUCT_PACKAGES += \
+    android.hardware.renderscript@1.0-impl
+
 # Power
 PRODUCT_PACKAGES += \
     android.hardware.power@1.0-impl \
@@ -142,8 +148,10 @@ PRODUCT_PACKAGES += \
 # Graphics
 PRODUCT_PACKAGES += \
     android.hardware.graphics.allocator@2.0-impl \
-    android.hardware.graphics.mapper@2.0-impl \
+    android.hardware.graphics.allocator@2.0-service \
     android.hardware.graphics.composer@2.1-impl \
+    android.hardware.graphics.mapper@2.0-impl \
+    android.hardware.memtrack@1.0-impl \
     copybit.msm8974 \
     gralloc.msm8974 \
     hwcomposer.msm8974 \
@@ -188,6 +196,7 @@ PRODUCT_PACKAGES += \
 
 # Bluetooth
 PRODUCT_PACKAGES += \
+    libbt-vendor \
     android.hardware.bluetooth@1.0-impl
 
 # for audio.primary.msm8974
@@ -204,7 +213,6 @@ PRODUCT_PACKAGES += \
 # Media & Audio
 PRODUCT_PACKAGES += \
     libc2dcolorconvert \
-    libdivxdrmdecrypt \
     libOmxAacEnc \
     libOmxAmrEnc \
     libOmxCore \
