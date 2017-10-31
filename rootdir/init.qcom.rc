@@ -531,9 +531,6 @@ service location_mq /system/bin/location-mq
     group gps
     disabled
 
-on property:vold.decrypt=trigger_restart_framework
-    start wcnss-service
-
 service xtwifi_inet /system/bin/xtwifi-inet-agent
     class late_start
     user gps
