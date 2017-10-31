@@ -419,7 +419,7 @@ service qmuxd /system/bin/qmuxd
 service netmgrd /system/bin/netmgrd
     class main
     user root
-    group radio
+    group radio system
 
 # QCOM sensor
 service sensors /system/bin/sensors.qcom
@@ -596,7 +596,7 @@ service hcidump /system/bin/sh /system/etc/hcidump.sh
     disabled
     oneshot
 
-service charger /sbin/healthd -c
+service charger /charger
     class charger
     critical
     seclabel u:r:charger:s0
