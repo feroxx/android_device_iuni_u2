@@ -190,9 +190,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.keymaster@3.0-impl
 
-PRODUCT_PACKAGES += \
-    libstlport
-
 # Lights
 PRODUCT_PACKAGES += \
     android.hardware.light@2.0-impl \
