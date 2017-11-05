@@ -50,12 +50,6 @@ on fs
     mkdir /persist/data/sfs 0700 system system
     mkdir /persist/data/tz 0700 system system
 
-# DNM
-service logcat_debug /system/bin/logcat -b all -f /data/logcat.txt -v threadtime
-    class main
-    user root
-    group system
-
 on boot
     # Necessary for netmgrd to function properly, otherwise no data
     mkdir /dev/socket/netmgr 0750 radio radio
