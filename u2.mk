@@ -133,6 +133,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     Snap
 
+# USB HAL
+PRODUCT_PACKAGES += \
+    android.hardware.usb@1.0-service
+
 # DRM
 PRODUCT_PACKAGES += \
     android.hardware.drm@1.0-impl
@@ -172,9 +176,13 @@ PRODUCT_PACKAGES += \
     android.hardware.light@2.0-impl \
     lights.u2
 
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/sensor/_hals.conf:system/vendor/etc/sensors/_hals.conf
+
 # Sensors
-#PRODUCT_PACKAGES += \
-#    android.hardware.sensors@1.0-impl
+PRODUCT_PACKAGES += \
+    android.hardware.sensors@1.0-impl \
+	sensors.msm8974
 
 # Vibrator
 PRODUCT_PACKAGES += \
