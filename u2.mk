@@ -286,6 +286,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.radio.apm_sim_not_pwdn=1 \
     persist.radio.add_power_save=1 \
     ro.telephony.call_ring.multiple=0 \
+    persist.data.qmi.adb_logmask=0 \
     ro.qualcomm.cabl=1 \
     hw.cabl.level=Auto
 
