@@ -232,7 +232,7 @@
          Zone N + 1     array[N] <= LUX < infinity
          Must be overridden in platform specific overlays -->
     <integer-array name="config_autoBrightnessLevels">
-        <item>10</item>
+        <item>20</item>
         <item>64</item>
         <item>140</item>
         <item>350</item>
@@ -248,7 +248,7 @@
          than the size of the config_autoBrightnessLevels array.
          This must be overridden in platform specific overlays -->
     <integer-array name="config_autoBrightnessLcdBacklightValues">
-        <item>13</item>   <!-- 0-1 -->
+        <item>23</item>   <!-- 0-1 -->
         <item>26</item>   <!-- 1-4 -->
         <item>73</item>   <!-- 4-40 -->
         <item>88</item>   <!-- 40-350 -->
@@ -262,7 +262,7 @@
 
     <!-- Minimum screen brightness setting allowed by the power manager.
          The user is forbidden from setting the brightness below this level. -->
-    <integer name="config_screenBrightnessSettingMinimum">2</integer>
+    <integer name="config_screenBrightnessSettingMinimum">20</integer>
 
     <!-- Maximum screen brightness allowed by the power manager.
          The user is forbidden from setting the brightness above this level. -->
