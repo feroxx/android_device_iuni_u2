@@ -190,6 +190,12 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.keymaster@3.0-impl
 
+# Camera
+PRODUCT_PACKAGES += \
+    android.hardware.camera.provider@2.4-impl-legacy \
+    camera.device@3.2-impl \
+	libu2_cam
+
 # Lights
 PRODUCT_PACKAGES += \
     android.hardware.light@2.0-impl \
@@ -294,7 +300,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=196608 \
     persist.hwc.mdpcomp.enable=true \
     debug.hwui.use_buffer_age=false \
-    persist.media.treble_omx=false
+    persist.media.treble_omx=false \
+	camera.disable_treble=true
 
 # QMI
 PRODUCT_PROPERTY_OVERRIDES += \
