@@ -15,6 +15,6 @@
  */
  
 #define CAMERA_PARAMETERS_EXTRA_C \
-const char _ZN7android16CameraParameters18SCENE_MODE_GESTUREE; \
-const char _ZN7android16CameraParameters15SCENE_MODE_FOODE; \
-const char _ZNK7android16CameraParameters6getStrEPKc;
+const char _ZN7android16CameraParameters18SCENE_MODE_GESTUREE[] = "gesture"; \
+const char _ZN7android16CameraParameters15SCENE_MODE_FOODE[] = "food"; \
+const char _ZNK7android16CameraParameters6getStrEPKc[] = "getStr";
