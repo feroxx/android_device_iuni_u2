@@ -21,7 +21,7 @@ on early-init
     chown system system /sys/kernel/debug/kgsl/proc
 
 on init
-    export LD_SHIM_LIBS "/system/lib/libcamera_client.so|libu2_cam.so"
+    export LD_SHIM_LIBS "/system/lib/libcamera_client.so|libu2_cam.so:/system/lib/hw/camera.msm8974.so|libgn_cam.so"
 
     # Set permissions for persist partition
     mkdir /persist 0771 system system

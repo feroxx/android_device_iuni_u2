@@ -136,8 +136,8 @@ PRODUCT_PACKAGES += \
     p2p_supplicant_overlay.conf
 
 # Widevine
-#PRODUCT_PACKAGES += \
-#    libshim_wvm
+PRODUCT_PACKAGES += \
+    libgn_cam
 
 PRODUCT_PACKAGES += \
     android.hardware.wifi@1.0-service \
