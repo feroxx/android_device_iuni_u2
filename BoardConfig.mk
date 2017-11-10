@@ -41,6 +41,9 @@ TARGET_KERNEL_CROSS_COMPILE_PREFIX := arm-linux-androideabi-
 TARGET_SPECIFIC_HEADER_PATH := device/iuni/u2/include
 BOARD_USES_QCOM_HARDWARE := true
 
+# Binder API version
+TARGET_USES_64_BIT_BINDER := true
+
 # Graphics
 USE_OPENGL_RENDERER               := true
 TARGET_CONTINUOUS_SPLASH_ENABLED  := true
@@ -133,9 +136,6 @@ BOARD_HARDWARE_CLASS += \
 
 # Lights
 TARGET_PROVIDES_LIBLIGHT := true
-
-# USB
-TARGET_USES_LEGACY_ADB_INTERFACE := true
 
 # keymaster
 TARGET_KEYMASTER_WAIT_FOR_QSEE := true
