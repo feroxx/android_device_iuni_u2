@@ -14,5 +14,4 @@
  * limitations under the License.
  */
 
-const char _ZNK7android16CameraParameters6getStrEPKc[] = "getStr"; \
-const char _ZN7qcamera17QCameraParameters21setBurstLEDFlashLevelE25cam_led_flash_burst_level[] = "cam_led_flash_burst_level";
+const char _ZNK7android16CameraParameters6getStrEPKc[] = "getStr";
