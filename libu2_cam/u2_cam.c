@@ -17,4 +17,5 @@
 const char _ZN7android16CameraParameters18SCENE_MODE_GESTUREE[] = "gesture"; \
 const char _ZN7android16CameraParameters15SCENE_MODE_FOODE[] = "food"; \
 const char _ZNK7android16CameraParameters6getStrEPKc[] = "getStr"; \
-const char _ZN7qcamera18GNCameraParameters17KEY_PICTURE_FRAMEE[] = "picture-frame";
+const char _ZN7qcamera18GNCameraParameters17KEY_PICTURE_FRAMEE[] = "picture-frame"; \
+const char _ZN7qcamera18GNCameraParameters20PICTURE_FRAME_NORMALE[] = "normal";
