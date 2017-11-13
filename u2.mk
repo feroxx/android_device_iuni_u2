@@ -135,10 +135,6 @@ PRODUCT_PACKAGES += \
     wpa_supplicant_overlay.conf \
     p2p_supplicant_overlay.conf
 
-# Widevine
-PRODUCT_PACKAGES += \
-    libgn_cam
-
 PRODUCT_PACKAGES += \
     android.hardware.wifi@1.0-service \
     wificond \
@@ -151,9 +147,6 @@ PRODUCT_PACKAGES += \
     libbson \
     libnl_2 \
     ethertypes
-
-PRODUCT_PACKAGES += \
-    Snap
 
 # USB HAL
 PRODUCT_PACKAGES += \
@@ -194,7 +187,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.camera.provider@2.4-impl-legacy \
     camera.device@3.2-impl \
-	libu2_cam
+    libu2_cam
 
 # Lights
 PRODUCT_PACKAGES += \
@@ -207,7 +200,7 @@ PRODUCT_COPY_FILES += \
 # Sensors
 PRODUCT_PACKAGES += \
     android.hardware.sensors@1.0-impl \
-	sensors.msm8974
+    sensors.msm8974
 
 # Vibrator
 PRODUCT_PACKAGES += \
@@ -301,7 +294,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.hwc.mdpcomp.enable=true \
     debug.hwui.use_buffer_age=false \
     persist.media.treble_omx=false \
-	camera.disable_treble=true
+    camera.disable_treble=true
 
 # QMI
 PRODUCT_PROPERTY_OVERRIDES += \
