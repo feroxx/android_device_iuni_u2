@@ -15,6 +15,8 @@
  */
 #include "u2_cam.h"
 #include <utils/String8.h>
+#include <string.h>
+#include <stdlib.h>
 
 namespace android {
 
