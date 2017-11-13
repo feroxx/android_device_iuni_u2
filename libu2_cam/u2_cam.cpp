@@ -17,7 +17,6 @@
 #include <utils/String8.h>
 #include <string.h>
 #include <stdlib.h>
-#include <camera/CameraParameters.h>
 
 namespace android {
 
