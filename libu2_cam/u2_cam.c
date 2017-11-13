@@ -17,8 +17,5 @@
 const char _ZN7android16CameraParameters18SCENE_MODE_GESTUREE[] = "gesture"; \
 const char _ZN7android16CameraParameters15SCENE_MODE_FOODE[] = "food"; \
 const char _ZNK7android16CameraParameters6getStrEPKc[] = "getStr"; \
-const char _ZN7qcamera18GNCameraParameters17KEY_PICTURE_FRAMEE[] = "picture-frame"; \
-const char _ZN7qcamera18GNCameraParameters20PICTURE_FRAME_NORMALE[] = "normal"; \
-const char _ZN7qcamera17QCameraParameters13getFlashValueEv[] = "getFlashValue"; \
-const char _ZN7qcamera17QCameraParameters21setBurstLEDFlashLevelE25cam_led_flash_burst_level[] = "setBurstLEDFlashLevel"; \
-const char _ZN7qcamera17QCameraParameters4initEP16cam_capability_tP16mm_camera_vtbl_tPNS_16QCameraAdjustFPSEPNS_21QCameraTorchInterfaceE[] = "init";
+const char _ZN7qcamera18GNCameraParameters15setPictureFrameERKS0_[] = "picture-frame"; \
+const char _ZN7qcamera17QCameraParameters21setBurstLEDFlashLevelE25cam_led_flash_burst_level[] = "setBurstLEDFlashLevel";
