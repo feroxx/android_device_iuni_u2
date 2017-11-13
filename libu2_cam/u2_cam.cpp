@@ -18,6 +18,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <sys/mman.h>
+#include <camera/CameraParameters.h>
 
 namespace android {
 
