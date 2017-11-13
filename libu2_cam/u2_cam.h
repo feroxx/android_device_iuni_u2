@@ -23,6 +23,7 @@ class CameraParameters
 public:
     static const char SCENE_MODE_GESTURE[];
     static const char SCENE_MODE_FOOD[];
+	const char *get(const char *key) const;
     String8 getStr(char const* key) const;
 };
 
