@@ -17,6 +17,7 @@
 #include <utils/String8.h>
 #include <string.h>
 #include <stdlib.h>
+#include <sys/mman.h>
 
 namespace android {
 
