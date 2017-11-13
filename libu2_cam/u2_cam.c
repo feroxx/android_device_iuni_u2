@@ -14,8 +14,8 @@
  * limitations under the License.
  */
  
-const char _ZN7android16CameraParameters18SCENE_MODE_GESTUREE[] = "gesture"; \
-const char _ZN7android16CameraParameters15SCENE_MODE_FOODE[] = "food"; \
+const char _ZN7android16CameraParameters18SCENE_MODE_GESTUREE[] = "SCENE_MODE_GESTURE"; \
+const char _ZN7android16CameraParameters15SCENE_MODE_FOODE[] = "SCENE_MODE_FOOD"; \
 const char _ZNK7android16CameraParameters6getStrEPKc[] = "getStr"; \
 const char _ZN7qcamera18GNCameraParameters15setPictureFrameERKS0_[] = "picture-frame"; \
-const char _ZN7qcamera17QCameraParameters21setBurstLEDFlashLevelE25cam_led_flash_burst_level[] = "setBurstLEDFlashLevel";
+const char _ZN7qcamera17QCameraParameters21setBurstLEDFlashLevelE25cam_led_flash_burst_level[] = "setBurstLEDFlashLevel(cam_led_flash_burst_level)";
