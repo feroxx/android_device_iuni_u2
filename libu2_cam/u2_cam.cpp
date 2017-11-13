@@ -13,9 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
-const char _ZN7android16CameraParameters18SCENE_MODE_GESTUREE[] = "SCENE_MODE_GESTURE"; \
-const char _ZN7android16CameraParameters15SCENE_MODE_FOODE[] = "SCENE_MODE_FOOD"; \
-const char _ZNK7android16CameraParameters6getStrEPKc[] = "getStr"; \
-const char _ZN7qcamera18GNCameraParameters15setPictureFrameERKS0_[] = "picture-frame"; \
-const char _ZN7qcamera17QCameraParameters21setBurstLEDFlashLevelE25cam_led_flash_burst_level[] = "setBurstLEDFlashLevel(cam_led_flash_burst_level)";
+#include "u2_cam.h"
+#include <utils/String8.h>
+
+namespace android {
+
+const char CameraParameters::SCENE_MODE_GESTURE[] = "gesture";
+const char CameraParameters::SCENE_MODE_FOOD[] = "food";
+String8 CameraParameters::getStr(char const *key) const
+{
+    char const* p = get(key);
+    return  (0 != p) ? String8(p) : String8::empty();
+}
+
+}; // namespace android
