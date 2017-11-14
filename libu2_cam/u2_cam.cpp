@@ -19,6 +19,6 @@ namespace android {
 
 const char CameraParameters::SCENE_MODE_GESTURE[] = "gesture";
 const char CameraParameters::SCENE_MODE_FOOD[] = "food";
-const char *CameraParameters::getStr(const char *key) const;
+int CameraParameters::getStr(const char *key) const { return -1; };
 
 }; // namespace android

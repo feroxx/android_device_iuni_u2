@@ -21,7 +21,7 @@ class CameraParameters
 public:
     static const char SCENE_MODE_GESTURE[];
     static const char SCENE_MODE_FOOD[];
-    const char *getStr(const char *key) const;
+    int getStr(const char *key) const;
 };
 
 }; // namespace android
