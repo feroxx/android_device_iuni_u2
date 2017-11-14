@@ -13,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <utils/KeyedVector.h>
-#include <utils/String8.h>
 
 namespace android {
 
@@ -23,7 +21,6 @@ class CameraParameters
 public:
     static const char SCENE_MODE_GESTURE[];
     static const char SCENE_MODE_FOOD[];
-	const char *get(const char *key) const;
     String8 getStr(char const* key) const;
 };
 

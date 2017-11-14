@@ -14,28 +14,11 @@
  * limitations under the License.
  */
 #include "u2_cam.h"
-#include <utils/String8.h>
-#include <string.h>
-#include <stdlib.h>
-#include <sys/mman.h>
-#include <camera/CameraParameters.h>
 
 namespace android {
 
 const char CameraParameters::SCENE_MODE_GESTURE[] = "gesture";
 const char CameraParameters::SCENE_MODE_FOOD[] = "food";
-const char *CameraParameters::get(const char *key) const
-{
-    String8 v = mMap.valueFor(String8(key));
-    if (v.length() == 0)
-        return 0;
-    return v.string();
-}
-
-String8 CameraParameters::getStr(char const *key) const
-{
-    char const* p = get(key);
-    return  (0 != p) ? String8(p) : String8::empty();
-}
+String8 CameraParameters::getStr(char const *key) const;
 
 }; // namespace android
