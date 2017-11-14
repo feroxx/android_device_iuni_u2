@@ -517,6 +517,11 @@ service set_baseband /system/bin/sh /system/etc/set_baseband.sh
     user root
     oneshot
 
+service qcamerasvr /system/bin/mm-qcamera-daemon
+    class late_start
+    user camera
+    group camera system inet input
+
 service gpsone_daemon /system/bin/gpsone_daemon
     class late_start
     user gps
