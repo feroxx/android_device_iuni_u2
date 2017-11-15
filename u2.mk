@@ -186,8 +186,7 @@ PRODUCT_PACKAGES += \
 # Camera
 PRODUCT_PACKAGES += \
     android.hardware.camera.provider@2.4-impl-legacy \
-    camera.device@3.2-impl \
-    libu2_cam
+    camera.device@3.2-impl
 
 # Lights
 PRODUCT_PACKAGES += \
