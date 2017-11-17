@@ -402,14 +402,14 @@ service bt-sap /system/bin/sapd 15
 service ftmd /system/bin/logwrapper /system/bin/ftmdaemon
     class late_start
     user root
-    group bluetooth net_bt_admin misc net_bt_stack qcom_diag
+    group bluetooth net_bt_admin misc net_bt_stack diag
     disabled
     oneshot
 
 service bridgemgrd /system/bin/bridgemgrd
     class late_start
     user radio
-    group radio qcom_diag
+    group radio diag
     disabled
 
 service port-bridge /system/bin/port-bridge /dev/smd0 /dev/ttyGS0
@@ -421,7 +421,7 @@ service port-bridge /system/bin/port-bridge /dev/smd0 /dev/ttyGS0
 service qmiproxy /system/bin/qmiproxy
     class main
     user radio
-    group radio qcom_diag
+    group radio diag
     disabled
 
 # QMUX must be in multiple groups to support external process connections
@@ -620,7 +620,7 @@ service ssr_diag /system/bin/ssr_diag
 service wcnss-service /system/bin/wcnss_service
     class main
     user system
-    group system wifi qcom_diag diag radio
+    group system wifi diag radio
     oneshot
 
 # Define fastmmi

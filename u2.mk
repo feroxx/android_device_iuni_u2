@@ -263,9 +263,9 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_COPY_FILES += \
     device/iuni/u2/audio/audio_effects.conf:system/vendor/etc/audio_effects.conf \
-    device/iuni/u2/audio/audio_policy.conf:system/etc/audio_policy.conf \
-    device/iuni/u2/audio/mixer_paths.xml:system/etc/mixer_paths.xml \
-    device/iuni/u2/audio/mixer_paths_auxpcm.xml:system/etc/mixer_paths_auxpcm.xml
+    device/iuni/u2/audio/audio_policy.conf:system/vendor/etc/audio_policy.conf \
+    device/iuni/u2/audio/mixer_paths.xml:system/vendor/etc/mixer_paths.xml \
+    device/iuni/u2/audio/mixer_paths_auxpcm.xml:system/vendor/etc/mixer_paths_auxpcm.xml
     
 # GPS configuration
 PRODUCT_COPY_FILES += \
