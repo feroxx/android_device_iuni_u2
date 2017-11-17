@@ -48,19 +48,10 @@ TARGET_USES_64_BIT_BINDER := true
 USE_OPENGL_RENDERER               := true
 TARGET_CONTINUOUS_SPLASH_ENABLED  := true
 TARGET_USES_C2D_COMPOSITION       := true
-TARGET_USE_COMPAT_GRALLOC_PERFORM := true
 TARGET_USES_ION                   := true
 OVERRIDE_RS_DRIVER                := libRSDriver_adreno.so
 NUM_FRAMEBUFFER_SURFACE_BUFFERS   := 3
-
-# Shader cache config options
-# Maximum size of the  GLES Shaders that can be cached for reuse.
-# Increase the size if shaders of size greater than 12KB are used.
 MAX_EGL_CACHE_KEY_SIZE := 12*1024
-
-# Maximum GLES shader cache size for each app to store the compiled shader
-# binaries. Decrease the size if RAM or Flash Storage size is a limitation
-# of the device.
 MAX_EGL_CACHE_SIZE := 2048*1024
 
 # Time Daemon
@@ -75,6 +66,7 @@ AUDIO_FEATURE_ENABLED_MULTI_VOICE_SESSIONS := true
 USE_DEVICE_SPECIFIC_CAMERA := true
 TARGET_NEEDS_PLATFORM_TEXT_RELOCATIONS := true
 TARGET_HAS_LEGACY_CAMERA_HAL1 := true
+TARGET_USES_NON_TREBLE_CAMERA := true
 
 # RIL
 BOARD_GLOBAL_CFLAGS += -DUSE_RIL_VERSION_10
@@ -122,7 +114,6 @@ TARGET_RELEASETOOLS_EXTENSIONS := device/iuni/u2
 
 # inherit from the proprietary version
 -include vendor/iuni/u2/BoardConfigVendor.mk
--include vendor/qcom/binaries/msm8974/graphics/BoardConfigVendor.mk
 
 # Charger
 BOARD_CHARGER_DISABLE_INIT_BLANK := true
