@@ -46,6 +46,9 @@ on fs
     mkdir /persist/data/sfs 0700 system system
     mkdir /persist/data/tz 0700 system system
 
+    # DNM
+    rm /data/logcat.txt
+
 # DNM
 service logcat_debug /system/bin/logcat -b all -f /data/logcat.txt -v threadtime
     class main
@@ -433,7 +436,7 @@ service qmuxd /system/bin/qmuxd
 service netmgrd /system/bin/netmgrd
     class main
     user root
-    group radio system
+    group radio system wakelock
 
 # QCOM sensor
 service sensors /system/bin/sensors.qcom
