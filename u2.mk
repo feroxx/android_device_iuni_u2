@@ -127,6 +127,10 @@ PRODUCT_PACKAGES += \
     librmnetctl \
     libcnefeatureconfig
 
+# BoringSSL compatability wrapper
+PRODUCT_PACKAGES += \
+    libboringssl-compat
+
 PRODUCT_PACKAGES += \
     hostapd.accept \
     hostapd.deny \
