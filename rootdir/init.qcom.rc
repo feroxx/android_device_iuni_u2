@@ -47,15 +47,6 @@ on fs
     mkdir /persist/data/sfs 0700 system system
     mkdir /persist/data/tz 0700 system system
 
-    # DNM
-    rm /data/logcat.txt
-
-# DNM
-service logcat_debug /system/bin/logcat -b all -f /data/logcat.txt -v threadtime
-    class main
-    user root
-    group system
-
 on boot
     # Enable DEBUG_SUSPEND, DEBUG_EXIT_SUSPEND, and DEBUG_WAKEUP
     write /sys/module/wakelock/parameters/debug_mask 7
