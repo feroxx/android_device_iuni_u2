@@ -295,7 +295,7 @@ on post-fs-data
     chown system system /data/shared
 
     # save rtc time offsets
-    mkdir /data/system/time 0700 system system
+    mkdir /data/time 0700 system system
 
     mkdir /data/audio/ 0770 media audio
 
