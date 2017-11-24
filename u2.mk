@@ -231,10 +231,6 @@ PRODUCT_PACKAGES += \
     libOmxVenc \
     libstagefrighthw 
 
-# HIDL
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/manifest.xml:system/vendor/manifest.xml
-
 # sensors
 PRODUCT_COPY_FILES += \
     device/iuni/u2/sensor/sap.conf:system/etc/sap.conf \
