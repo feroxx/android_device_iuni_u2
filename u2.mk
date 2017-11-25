@@ -167,7 +167,8 @@ PRODUCT_PACKAGES += \
 
 # Camera
 PRODUCT_PACKAGES += \
-    android.hardware.camera.provider@2.4-impl-legacy
+    android.hardware.camera.provider@2.4-impl \
+    camera.device@3.2-impl
 
 # Lights
 PRODUCT_PACKAGES += \
@@ -189,8 +190,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.audio@2.0-impl \
     android.hardware.audio.effect@2.0-impl \
-    android.hardware.broadcastradio@1.0-impl \
-    android.hardware.soundtrigger@2.0-impl \
     audiod \
     audio.a2dp.default \
     audio_policy.msm8974 \
