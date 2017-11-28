@@ -24,6 +24,8 @@ on early-init
 on init
     export LD_SHIM_LIBS /system/vendor/lib/libqomx_jpegenc.so|libboringssl-compat.so
 
+    write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
+
     # Set permissions for persist partition
     mkdir /persist 0771 system system
     mkdir /firmware 0771 system system
