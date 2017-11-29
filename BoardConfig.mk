@@ -68,9 +68,6 @@ TARGET_NEEDS_PLATFORM_TEXT_RELOCATIONS := true
 TARGET_HAS_LEGACY_CAMERA_HAL1 := true
 TARGET_USES_NON_TREBLE_CAMERA := true
 
-# RIL
-TARGET_RIL_VARIANT := caf
-
 # HIDL
 DEVICE_MANIFEST_FILE := device/iuni/u2/manifest.xml
 
@@ -121,10 +118,7 @@ BOARD_CHARGER_DISABLE_INIT_BLANK := true
 BACKLIGHT_PATH := /sys/class/leds/lcd-backlight/brightness
 
 # CM Hardware
-BOARD_USES_CYANOGEN_HARDWARE := true
 TARGET_TAP_TO_WAKE_NODE := "/sys/devices/platform/tp_wake_switch/double_wake"
-BOARD_HARDWARE_CLASS += \
-    hardware/cyanogen/cmhw
 
 # Lights
 TARGET_PROVIDES_LIBLIGHT := true
