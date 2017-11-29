@@ -31,15 +31,6 @@ on init
     mkdir /firmware 0771 system system
     symlink /sdcard /storage/sdcard0
 
-    # DNM
-    rm /data/logcat.txt
-
-# DNM
-service logcat_debug /system/bin/logcat -b all -f /data/logcat.txt -v threadtime
-    class main
-    user root
-    group system
-
 on early-boot
     # set RLIMIT_MEMLOCK to 64MB
     setrlimit 8 67108864 67108864
