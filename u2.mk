@@ -88,9 +88,9 @@ PRODUCT_COPY_FILES += \
 
 # WiFi
 PRODUCT_COPY_FILES += \
-    device/iuni/u2/wifi/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
+    device/iuni/u2/wifi/WCNSS_cfg.dat:system/vendor/etc/firmware/wlan/prima/WCNSS_cfg.dat \
     device/iuni/u2/wifi/WCNSS_qcom_cfg.ini:system/vendor/etc/wifi/WCNSS_qcom_cfg.ini \
-    device/iuni/u2/wifi/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
+    device/iuni/u2/wifi/WCNSS_qcom_wlan_nv.bin:system/vendor/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
 
 PRODUCT_COPY_FILES += \
     device/iuni/u2/thermal-engine-8974.conf:system/etc/thermal-engine-8974.conf
