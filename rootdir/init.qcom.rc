@@ -356,13 +356,13 @@ service bluetoothd /system/bin/logwrapper /system/bin/bluetoothd -n
     socket dbus_bluetooth stream 660 bluetooth bluetooth
     # init.rc does not yet support applying capabilities, so run as root and
     # let bluetoothd drop uid to bluetooth with the right linux capabilities
-    group bluetooth net_bt_admin misc net_bt_stack
+    group bluetooth net_bt_admin misc
     disabled
 
 service hciattach /system/bin/sh /system/etc/init.qcom.bt.sh
     class late_start
     user bluetooth
-    group qcom_oncrpc bluetooth net_bt_admin system
+    group bluetooth net_bt_admin system
     disabled
     oneshot
 
@@ -396,7 +396,7 @@ service bt-sap /system/bin/sapd 15
 service ftmd /system/bin/logwrapper /system/bin/ftmdaemon
     class late_start
     user root
-    group bluetooth net_bt_admin misc net_bt_stack diag
+    group bluetooth net_bt_admin misc diag
     disabled
     oneshot
 
@@ -518,7 +518,7 @@ service qcamerasvr /system/bin/mm-qcamera-daemon
 service gpsone_daemon /system/bin/gpsone_daemon
     class late_start
     user gps
-    group gps qcom_oncrpc inet net_raw
+    group gps inet net_raw
     disabled
 
 service quipc_igsn /system/bin/quipc_igsn
