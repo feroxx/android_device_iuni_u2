@@ -98,7 +98,8 @@ PRODUCT_COPY_FILES += \
 PRODUCT_TAGS += dalvik.gc.type-precise
 
 DEVICE_PACKAGE_OVERLAYS := \
-    device/iuni/u2/overlay
+    device/iuni/u2/overlay \
+	device/iuni/u2/overlay-lineage
 
 # Data
 PRODUCT_PACKAGES += \
