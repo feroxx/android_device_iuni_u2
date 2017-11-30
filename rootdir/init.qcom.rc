@@ -216,8 +216,6 @@ on boot
     write /sys/module/msm_thermal/freq_control/freq_step 1
     write /sys/module/msm_thermal/parameters/enabled 1
 
-    start config_bluetooth
-
     # Wifi firmware reload path
     chown wifi wifi /sys/module/wlan/parameters/fwpath
 
