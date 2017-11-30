@@ -423,7 +423,7 @@ service p2p_supplicant /system/vendor/bin/hw/wpa_supplicant \
     disabled
     oneshot
 
-service set_baseband /system/bin/sh /system/etc/set_baseband.sh
+service set_baseband /system/bin/set_baseband.sh
     class late_start
     user system
     group shell
