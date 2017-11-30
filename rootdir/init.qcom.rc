@@ -425,7 +425,8 @@ service p2p_supplicant /system/vendor/bin/hw/wpa_supplicant \
 
 service set_baseband /system/bin/sh /system/etc/set_baseband.sh
     class late_start
-    user root
+    user system
+    group shell
     oneshot
 
 service qcamerasvr /system/bin/mm-qcamera-daemon
