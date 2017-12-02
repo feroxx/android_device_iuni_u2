@@ -18,6 +18,5 @@
 /recovery	   emmc		/dev/block/platform/msm_sdcc.1/by-name/recovery
 /persist      ext4     /dev/block/platform/msm_sdcc.1/by-name/persist
 /sdcard		   vfat		/dev/block/mmcblk1p1	/dev/block/mmcblk0p20 flags=storage
-/sdcard-ext		   vfat		/dev/block/mmcblk0p20	 /dev/block/mmcblk1p1 flags=storage
 /usb-otg      vfat          /dev/block/sda1     /dev/block/sda  flags=removable;storage;display=USB-OTG
 
