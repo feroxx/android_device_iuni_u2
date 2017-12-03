@@ -21,7 +21,7 @@
      for different hardware and product builds. -->
 <resources>
 
-    <!-- Whether to enable data switch or not -->
-    <bool name="config_enableDataSwitch">true</bool>
+    <!-- Whether to show activity indicators in the status bar -->
+    <bool name="config_showActivity">true</bool>
 
 </resources>
