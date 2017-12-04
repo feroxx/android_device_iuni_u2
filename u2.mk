@@ -105,7 +105,8 @@ DEVICE_PACKAGE_OVERLAYS := \
 # Data
 PRODUCT_PACKAGES += \
     libxml2 \
-    librmnetctl
+    librmnetctl \
+    libcnefeatureconfig
 
 # BoringSSL compatability wrapper
 PRODUCT_PACKAGES += \
