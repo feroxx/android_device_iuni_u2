@@ -105,8 +105,7 @@ DEVICE_PACKAGE_OVERLAYS := \
 # Data
 PRODUCT_PACKAGES += \
     libxml2 \
-    librmnetctl \
-    libcnefeatureconfig
+    librmnetctl
 
 # BoringSSL compatability wrapper
 PRODUCT_PACKAGES += \
@@ -123,7 +122,9 @@ PRODUCT_PACKAGES += \
     android.hardware.wifi@1.0-service \
     wificond \
     wcnss_service \
-    wpa_supplicant
+    wpa_supplicant \
+    libwpa_client \
+    hostapd
     
 # IPv6
 PRODUCT_PACKAGES += \
