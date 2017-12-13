@@ -27,48 +27,17 @@
 #
 #
 
-on init
-    # Set the property to indicate type of virtual display to 0
-    # 0 indicates that virtual display is not a Wifi display and that the
-    # session is not exercised through RemoteDisplay in the android framework
-    setprop persist.sys.wfd.virtual 0
-
-
 # import cne init file
 on post-fs
     export LD_PRELOAD /vendor/lib/libNimsWrap.so
 
 on boot
-    start imsqmidaemon
-    insmod /system/lib/modules/adsprpc.ko
-
-# Allow usb charging to be disabled persistently
-on property:persist.usb.chgdisabled=1
-    write /sys/class/power_supply/battery/charging_enabled 0
-
-on property:persist.usb.chgdisabled=0
-    write /sys/class/power_supply/battery/charging_enabled 1
 
 #start GNSS/Sensor interface daemon
 service gsiff_daemon /system/bin/gsiff_daemon
     class late_start
     user gps
     group gps net_raw misc
-
-service qrngd /system/bin/qrngd -f
-    class main
-    user root
-    group root
-
-service qrngp /system/bin/qrngp
-    class main
-    user root
-    group root
-    oneshot
-    disabled
-
-on property:sys.boot_completed=1
-    start qrngp
 
 service time_daemon /system/bin/time_daemon
    class late_start
