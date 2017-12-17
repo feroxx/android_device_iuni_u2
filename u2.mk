@@ -337,7 +337,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 #system prop for switching gps driver to qmi
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.gps.qmienabled=true \
-    persist.timed.enable=true
+    persist.timed.enable=true \
+    persist.cne.feature=1
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.build.selinux=1 \
