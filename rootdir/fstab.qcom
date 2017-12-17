@@ -14,5 +14,5 @@
 /dev/block/platform/msm_sdcc.1/by-name/misc        /misc        emmc    defaults                                                                                                           defaults
 /dev/block/platform/msm_sdcc.1/by-name/persist     /persist     ext4    nosuid,nodev,barrier=1,data=ordered,nodelalloc,nomblk_io_submit,errors=panic                                       wait,notrim
 /dev/block/platform/msm_sdcc.1/by-name/modem       /firmware    vfat    ro,shortname=lower,uid=1000,gid=1000,dmask=227,fmask=337                                                           wait
-/devices/msm_sdcc.1/mmc_host/*/mmcblk0             auto         auto    noatime,nosuid,nodev,barrier=1,data=ordered,noauto_da_alloc,uid=1023,gid=1023,dmask=0007,fmask=0007,ignore_case=1 voldmanaged=sdcard0:20,nonremovable,noemulatedsd
+
 /devices/platform/xhci-hcd*                        auto         auto    defaults                                                                                                           voldmanaged=usb:auto
