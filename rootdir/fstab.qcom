@@ -6,14 +6,14 @@
 # Currently we dont have e2fsck compiled. So fs check would failed.
 
 #<src>                                             <mnt_point>  <type>  <mnt_flags and options>                                          <fs_mgr_flags>
-/dev/block/bootdevice/by-name/system      /system      ext4    ro                                                    wait
-/dev/block/bootdevice/by-name/userdata    /data        ext4    nosuid,nodev,noatime,noauto_da_alloc                           wait,check,formattable,encryptable=footer,resize
-/dev/block/bootdevice/by-name/cache       /cache       ext4    nosuid,nodev,noatime,noauto_da_alloc                                           wait,check,formattable
-/dev/block/bootdevice/by-name/boot        /boot        emmc    defaults                                                         defaults
-/dev/block/bootdevice/by-name/recovery    /recovery    emmc    defaults                                                         defaults
-/dev/block/bootdevice/by-name/misc        /misc        emmc    defaults                                                         defaults
-/dev/block/bootdevice/by-name/persist     /persist     ext4    nosuid,nodev,barrier=1                                           wait
-/dev/block/bootdevice/by-name/modem       /firmware    vfat    ro,shortname=lower,uid=1000,gid=1000,dmask=227,fmask=337         wait
+/dev/block/platform/msm_sdcc.1/by-name/system      /system      ext4    ro                                                    wait
+/dev/block/platform/msm_sdcc.1/by-name/userdata    /data        ext4    nosuid,nodev,noatime,noauto_da_alloc                           wait,check,formattable,encryptable=footer,resize
+/dev/block/platform/msm_sdcc.1/by-name/cache       /cache       ext4    nosuid,nodev,noatime,noauto_da_alloc                                           wait,check,formattable
+/dev/block/platform/msm_sdcc.1/by-name/boot        /boot        emmc    defaults                                                         defaults
+/dev/block/platform/msm_sdcc.1/by-name/recovery    /recovery    emmc    defaults                                                         defaults
+/dev/block/platform/msm_sdcc.1/by-name/misc        /misc        emmc    defaults                                                         defaults
+/dev/block/platform/msm_sdcc.1/by-name/persist     /persist     ext4    nosuid,nodev,barrier=1                                           wait
+/dev/block/platform/msm_sdcc.1/by-name/modem       /firmware    vfat    ro,shortname=lower,uid=1000,gid=1000,dmask=227,fmask=337         wait
 
 /devices/msm_sdcc.1/mmc_host/*/mmcblk0             auto         auto    noatime,nosuid,nodev,barrier=1,data=ordered,noauto_da_alloc,uid=1023,gid=1023,dmask=0007,fmask=0007,ignore_case=1 voldmanaged=sdcard0:20,nonremovable,noemulatedsd
 /devices/platform/xhci-hcd*                        auto         auto    defaults                                                         voldmanaged=usb:auto
