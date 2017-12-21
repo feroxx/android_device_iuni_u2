@@ -1,0 +1,4 @@
+allow fsck random_device:file getattr;
+allow fsck misc_block_device:blk_file { getattr read write };
+allow fsck cache_block_device:blk_file { getattr read write };
+allow fsck userdata_block_device:blk_file { getattr read write };
