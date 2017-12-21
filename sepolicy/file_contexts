@@ -46,6 +46,7 @@
 
 # CPU governor controls
 /dev/socket/mpdecision(/.*)?           u:object_r:mpdecision_socket:s0
+/sys/devices/system/cpu/online         u:object_r:sysfs_devices_system_cpu:s0
 
 ## Radio related
 # modem driver
