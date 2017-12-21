@@ -1,0 +1,1 @@
+allow { domain } sysfs_devices_system_cpu:file { read open getattr };
