@@ -1,1 +1,2 @@
 ctl.mpdecision         u:object_r:ctl_mpdecision:s0
+net.r_rmnet            u:object_r:qcom_netmgrd_prop:s0
