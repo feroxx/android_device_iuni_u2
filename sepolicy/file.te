@@ -28,3 +28,6 @@ type sysfs_surfaceflinger, fs_type, sysfs_type;
 type sysfs_smdcntl_open_timeout, fs_type, sysfs_type;
 type sysfs_subsys, sysfs_type, fs_type;
 allow sysfs_type sysfs:filesystem associate;
+
+#type for devstart
+type sysfs_audio, sysfs_type, fs_type;
