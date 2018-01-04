@@ -1,3 +1,6 @@
+# Baseband
+/system/bin/set_baseband.sh                         u:object_r:set_baseband_exec:s0
+
 # GPU device
 /dev/kgsl-3d0       u:object_r:gpu_device:s0
 /dev/kgsl           u:object_r:gpu_device:s0

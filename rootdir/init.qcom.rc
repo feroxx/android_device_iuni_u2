@@ -388,14 +388,15 @@ service set_baseband /system/bin/set_baseband.sh
     user system
     group shell
     oneshot
+	disabled
+  
+ on property:gsm.version.baseband=""
+    start set_baseband
 
 service qcamerasvr /system/bin/mm-qcamera-daemon
     class late_start
     user camera
     group camera system inet input
-
-on property:sys.boot_completed=1
-    write /dev/kmsg "Boot completed"
 
 service charger /charger
     class charger
