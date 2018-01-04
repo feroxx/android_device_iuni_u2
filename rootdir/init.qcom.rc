@@ -47,14 +47,7 @@ on fs
     mkdir /dev/bus 0755 root root
     mkdir /dev/bus/usb 0755 root root
 
-    mkdir /persist/data 0700 system system
-    mkdir /persist/data/sfs 0700 system system
-    mkdir /persist/data/tz 0700 system system
-
 on boot
-    # Enable DEBUG_SUSPEND, DEBUG_EXIT_SUSPEND, and DEBUG_WAKEUP
-    write /sys/module/wakelock/parameters/debug_mask 7
-
     # Necessary for netmgrd to function properly, otherwise no data
     mkdir /dev/socket/netmgr 0750 radio radio
     
@@ -187,15 +180,7 @@ on post-fs
     start devstart_sh
 
 on post-fs-data
-    # Subsytem Ramdump collection
-    mkdir /data/tombstones/ramdump 0777 system system
-    write /sys/module/subsystem_restart/parameters/enable_ramdumps 1
-
     mkdir /data/media 0770 media_rw media_rw
-
-    # NFC: create data/nfc for nv storage
-    mkdir /data/nfc 0770 nfc nfc
-    mkdir /data/nfc/param 0770 nfc nfc
 
     # Create directory for TZ Apps
     mkdir /data/misc/qsee 0770 system system
@@ -226,19 +211,6 @@ on post-fs-data
 
     # To prevent permission denied error for telephony
     chmod 0644 /proc/cmdline
-
-    # Create the directories used by DPM subsystem
-    mkdir /data/dpm 0771 system system
-    chown system system /data/dpm
-
-    mkdir /data/dpm/nsrm 0771 system system
-    chown system system /data/dpm/nsrm
-
-    # Create directory used by the DASH client
-    mkdir /data/misc/dash 0770 media audio
-
-    # Create directory used by display clients
-    mkdir /data/misc/display 0770 root system
 
     # We chown/chmod /persist again so because mount is run as root + defaults
     chown system system /persist
@@ -407,6 +379,9 @@ service ssr_diag /system/bin/ssr_diag
     class late_start
     user system
     group system
+
+on property:vold.decrypt=trigger_restart_framework
+    start wcnss-service
 
 service wcnss-service /vendor/bin/wcnss_service
     class main
