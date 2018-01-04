@@ -27,13 +27,7 @@
 #
 #
 
-# import cne init file
-on post-fs
-    export LD_PRELOAD /vendor/lib/libNimsWrap.so
-
 on boot
-
-#start GNSS/Sensor interface daemon
 service gsiff_daemon /system/bin/gsiff_daemon
     class late_start
     user gps
