@@ -27,7 +27,7 @@
 #
 #
 
-on boot
+on post-fs-data
 service gsiff_daemon /system/bin/gsiff_daemon
     class late_start
     user gps
