@@ -38,7 +38,6 @@ PRODUCT_COPY_FILES += \
     device/iuni/u2/rootdir/init.qcom.rc:root/init.qcom.rc \
 	device/iuni/u2/rootdir/init.qcom.power.rc:root/init.qcom.power.rc \
     device/iuni/u2/rootdir/init.target.rc:root/init.target.rc \
-    device/iuni/u2/rootdir/init.qcom.syspart_fixup.sh:root/init.qcom.syspart_fixup.sh \
     device/iuni/u2/rootdir/init.qcom.usb.rc:root/init.qcom.usb.rc \
     device/iuni/u2/rootdir/fstab.qcom:root/fstab.qcom \
     device/iuni/u2/rootdir/ueventd.qcom.rc:root/ueventd.qcom.rc
@@ -46,8 +45,7 @@ PRODUCT_COPY_FILES += \
 # system/etc files
 PRODUCT_COPY_FILES += \
     device/iuni/u2/rootdir/etc/init.qcom.bt.sh:system/etc/init.qcom.bt.sh \
-    device/iuni/u2/rootdir/bin/set_baseband.sh:system/bin/set_baseband.sh \
-    device/iuni/u2/rootdir/etc/init.qcom.modem_links.sh:system/etc/init.qcom.modem_links.sh
+    device/iuni/u2/rootdir/bin/set_baseband.sh:system/bin/set_baseband.sh
 
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
