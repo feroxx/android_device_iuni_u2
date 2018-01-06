@@ -25,8 +25,6 @@ on early-init
 on init
     export LD_SHIM_LIBS /system/vendor/lib/libqomx_jpegenc.so|libboringssl-compat.so:/system/vendor/lib/libmmcamera_hdr_gb_lib.so|/system/vendor/lib/libmmqjpeg_codec.so
 
-    write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
-
     # Set permissions for persist partition
     mkdir /persist 0771 system system
     mkdir /firmware 0771 system system
@@ -376,6 +374,11 @@ service charger /charger
     class charger
     critical
     seclabel u:r:charger:s0
+
+service time_daemon /system/bin/time_daemon
+   class late_start
+   user root
+   group root
 
 service ssr_diag /system/bin/ssr_diag
     class late_start
