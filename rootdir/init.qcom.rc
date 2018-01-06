@@ -30,20 +30,16 @@ on init
     mkdir /firmware 0771 system system
     symlink /sdcard /storage/sdcard0
 
+on fs
+    mount_all ./fstab.qcom
+    restorecon_recursive /persist
+
 on early-boot
     # set RLIMIT_MEMLOCK to 64MB
     setrlimit 8 67108864 67108864
 	
-	# Busy loop to wait for devices booted by devstart_sh just in case device not ready
+    # Busy loop to wait for devices booted by devstart_sh just in case device not ready
     exec - root root system -- /vendor/bin/init.qcom.devwait.sh
-    
-on fs
-    mount_all ./fstab.qcom
-
-    restorecon_recursive /persist
-
-    mkdir /dev/bus 0755 root root
-    mkdir /dev/bus/usb 0755 root root
 
 on boot
     # Necessary for netmgrd to function properly, otherwise no data
@@ -106,8 +102,8 @@ on boot
     # Allow QMUX daemon to assign port open wait time
     chown radio radio /sys/devices/virtual/hsicctl/hsicctl0/modem_wait
 
-#   Assign TCP buffer thresholds to be ceiling value of technology maximums
-#   Increased technology maximums should be reflected here.
+    # Assign TCP buffer thresholds to be ceiling value of technology maximums
+    # Increased technology maximums should be reflected here.
     write /proc/sys/net/core/rmem_max  2097152
     write /proc/sys/net/core/wmem_max  2097152
 
