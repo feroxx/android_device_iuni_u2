@@ -18,6 +18,7 @@ import init.target.rc
 import init.qcom.usb.rc
 
 on early-init
+    mkdir /firmware 0771 system system
     mount debugfs debugfs /sys/kernel/debug
     chown system system /sys/kernel/debug/kgsl/proc
 
@@ -26,7 +27,6 @@ on init
 
     # Set permissions for persist partition
     mkdir /persist 0771 system system
-    mkdir /firmware 0771 system system
     symlink /sdcard /storage/sdcard0
 
 on fs
@@ -298,7 +298,7 @@ service charger /charger
     critical
     seclabel u:r:charger:s0
 
-service hciattach /system/bin/sh /system/etc/init.qcom.bt.sh
+service hciattach /system/bin/hci_qcomm_init -e
     class late_start
     user bluetooth
     group bluetooth net_bt_admin system
@@ -307,6 +307,7 @@ service hciattach /system/bin/sh /system/etc/init.qcom.bt.sh
 
 on property:bluetooth.hciattach=true
     start hciattach
+    setprop bluetooth.status on
 
 on property:bluetooth.hciattach=false
     setprop bluetooth.status off
