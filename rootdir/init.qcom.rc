@@ -49,7 +49,6 @@ on fs
 on early-boot
     # set RLIMIT_MEMLOCK to 64MB
     setrlimit 8 67108864 67108864
-    write /sys/kernel/boot_adsp/boot 1
 
 on boot
     # Necessary for netmgrd to function properly, otherwise no data
@@ -167,6 +166,8 @@ on boot
     chown wifi wifi /sys/module/wlan/parameters/fwpath
 
 on post-fs-data
+    write /sys/kernel/boot_adsp/boot 1
+
     #  bluetooth
     mkdir /data/misc/bluetooth 0770 bluetooth bluetooth
 
