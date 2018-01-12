@@ -300,11 +300,6 @@ service qseecomd /system/bin/qseecomd
     user root
     group root
 
-service charger /charger
-    class charger
-    critical
-    seclabel u:r:charger:s0
-
 service hciattach /system/bin/hci_qcomm_init -e
     class late_start
     user bluetooth
