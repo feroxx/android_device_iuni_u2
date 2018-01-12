@@ -233,12 +233,12 @@ service rfs_access /system/bin/rfs_access
 
 # QMUX must be in multiple groups to support external process connections
 service qmuxd /system/bin/qmuxd
-    class main
+    class core
     user radio
     group radio audio bluetooth wakelock gps
 
 service netmgrd /system/bin/netmgrd
-    class main
+    class core
     user root
     group radio system wakelock
 
@@ -289,7 +289,7 @@ service p2p_supplicant /system/vendor/bin/hw/wpa_supplicant \
     oneshot
 
 service qseecomd /system/bin/qseecomd
-    class core
+    class main
     user root
     group root
 
@@ -376,7 +376,7 @@ service ssr_diag /system/bin/ssr_diag
     group system
 
 service wcnss-service /vendor/bin/wcnss_service
-    class main
+    class late_start
     user system
     group system wifi diag radio
     oneshot
