@@ -43,7 +43,6 @@ PRODUCT_COPY_FILES += \
 
 # system/etc files
 PRODUCT_COPY_FILES += \
-    device/iuni/u2/rootdir/etc/init.qcom.bt.sh:system/etc/init.qcom.bt.sh \
     device/iuni/u2/rootdir/bin/set_baseband.sh:system/bin/set_baseband.sh
 
 PRODUCT_COPY_FILES += \
@@ -258,19 +257,11 @@ PRODUCT_COPY_FILES += \
 
 # bluetooth
 PRODUCT_PROPERTY_OVERRIDES += \
-     bluetooth.hfp.client=1 \
      qcom.bluetooth.soc=smd \
      ro.bluetooth.hfp.ver=1.7 \
      ro.qualcomm.bt.hci_transport=smd \
      ro.bluetooth.dun=false \
-     ro.bluetooth.sap=false \
-     ro.qualcomm.bluetooth.ftp=true \
-     ro.qualcomm.bluetooth.hfp=true \
-     ro.qualcomm.bluetooth.hsp=true \
-     ro.qualcomm.bluetooth.map=true \
-     ro.qualcomm.bluetooth.nap=true \
-     ro.qualcomm.bluetooth.opp=true \
-     ro.qualcomm.bluetooth.pbap=true
+     ro.bluetooth.sap=false
 
 # Graphics
 PRODUCT_PROPERTY_OVERRIDES += \
