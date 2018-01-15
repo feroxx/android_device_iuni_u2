@@ -263,7 +263,7 @@ service p2p_supplicant /system/vendor/bin/hw/wpa_supplicant \
     oneshot
 
 service qseecomd /system/bin/qseecomd
-    class main
+    class core
     user root
     group root
 
