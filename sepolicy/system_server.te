@@ -1,21 +1,28 @@
-# for CMHardwareService access to TapToWake
-allow system_server proc_touchpanel:file rw_file_perms;
-allow system_server proc_touchpanel:dir { search };
-allow system_server touchscreen_file:file rw_file_perms;
+# Grant access to Qualcomm MSM Interface (QMI) radio sockets to system services
+# (e.g., LocationManager)
+qmux_socket(system_server)
 
-# examine battery state
-r_dir_file(system_server, sysfs_usb_supply);
+# PowerManagerService access to sensors socket
+unix_socket_connect(system_server, sensors, sensors)
+unix_socket_send(system_server, sensors, sensors)
+allow system_server sensors:unix_stream_socket sendto;
+allow system_server sensors_socket:sock_file r_file_perms;
 
-allow system_server sensors_persist_file:dir search;
-allow system_server sensors_persist_file:file read;
-allow system_server sensors_persist_file:file open;
-allow system_server sensors_persist_file:file getattr;
+# mpdecision socket access
+unix_socket_connect(system_server, mpdecision, mpdecision)
+unix_socket_send(system_server, mpdecision, mpdecision)
+allow system_server mpdecision:unix_stream_socket sendto;
+allow system_server mpdecision_socket:dir search;
 
-allow system_server qmuxd_socket:dir { search write add_name };
-allow system_server qmuxd_socket:sock_file { create write };
-allow system_server sensors_device:chr_file { getattr };
-allow system_server sensors:unix_stream_socket { connectto };
-allow system_server sensors_socket:sock_file rw_file_perms;
-allow system_server qmuxd:unix_stream_socket { connectto };
+# Read /data/tombstones/ramdump files.
+allow system_server ramdump_data_file:dir r_dir_perms;
+allow system_server ramdump_data_file:file r_file_perms;
 
-allow system_server frp_block_device:blk_file rw_file_perms;
+allow system_server self:netlink_socket create_socket_perms_no_ioctl;
+
+# Reading from /persist/wifi/.macaddr
+allow system_server persist_file:dir r_dir_perms;
+r_dir_file(system_server, persist_wifi_file)
+
+allow system_server sysfs_thermal:file r_file_perms;
+allow system_server baseband_prop:file r_file_perms;

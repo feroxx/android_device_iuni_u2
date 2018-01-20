@@ -1,16 +1,13 @@
-allow rild nv_data_file:dir { getattr search write create add_name };
-allow rild nv_data_file:file { create open write };
-allow rild radio_data_file:file rw_file_perms;
-allow rild radio_data_file:file { create unlink };
-allow rild radio_data_file:dir { open read write search add_name remove_name };
-allow rild tee_device:chr_file r_file_perms;
+# Grant access to Qualcomm MSM Interface (QMI) radio sockets to RILD
+qmux_socket(rild)
 
-binder_call(rild, servicemanager)
-binder_call(rild, mediaserver)
-binder_call(rild, audioserver)
-binder_call(audioserver, rild)
+# rild needs 'lock' for /vendor/qcril.db
+allow rild vendor_file:file { lock };
+allow rild time:unix_stream_socket connectto;
 
-allow rild { mediaserver_service audioserver_service }:service_manager find;
+# whitelist qualcomm specific ioctls
+allow rild self:socket ioctl;
+allowxperm rild self:socket ioctl msm_sock_ipc_ioctls;
 
-allow rild ssr_device:chr_file r_file_perms;
-r_dir_file(rild, sysfs_ssr)
+# rild needs to parse through /proc to obtain pid of netmgrd
+r_dir_file(rild, netmgrd)

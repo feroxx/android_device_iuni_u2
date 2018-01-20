@@ -1,3 +1,4 @@
-allow fsck persist_block_device:blk_file rw_file_perms;
-allow fsck cache_block_device:blk_file rw_file_perms;
-allow fsck tee_device:chr_file r_file_perms;
+allow fsck random_device:file getattr;
+allow fsck misc_block_device:blk_file { getattr read write };
+allow fsck cache_block_device:blk_file { getattr read write };
+allow fsck userdata_block_device:blk_file { getattr read write };

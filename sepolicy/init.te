@@ -1,7 +1,2 @@
-allow init socket_device:sock_file create;
-allow init socket_device:sock_file setattr;
-allow init proc_touchpanel:file write;
-
-allow init { domain -lmkd -crash_dump }:process noatsecure;
-
-set_prop(init, wcnss_prop)
+allow init diag_device:chr_file unlink;
+allow init tmpfs:lnk_file create_file_perms;
