@@ -127,11 +127,15 @@ on boot
     write /proc/sys/net/core/rmem_max  2097152
     write /proc/sys/net/core/wmem_max  2097152
  
-     # Subsytem Restart
+    # Subsytem Restart
+    # adsp
     write /sys/bus/msm_subsys/devices/subsys0/restart_level "related"
+    # modem
     write /sys/bus/msm_subsys/devices/subsys1/restart_level "related"
+    # wcnss
     write /sys/bus/msm_subsys/devices/subsys2/restart_level "related"
-	write /sys/bus/msm_subsys/devices/subsys2/restart_level "related"
+    # venus
+    write /sys/bus/msm_subsys/devices/subsys3/restart_level "related"
 
     # cpuquiet
     chown system system /sys/devices/system/cpu/cpuquiet/cpuquiet_driver/max_cpus
