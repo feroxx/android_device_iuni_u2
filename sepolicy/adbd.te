@@ -1,0 +1,2 @@
+allow adbd sysfs:file { open read getattr };
+allow adbd adb_device:chr_file rw_file_perms;
