@@ -14,7 +14,6 @@
 # limitations under the License.
 #
 
-import init.target.rc
 import init.qcom.usb.rc
 
 on early-init
@@ -271,6 +270,12 @@ service qseecomd /system/bin/qseecomd
     user root
     group root
 
+service config_bt_addr /system/bin/btnvtool -O
+    class core
+    user bluetooth
+    group bluetooth radio
+    oneshot
+
 service hciattach /system/bin/hci_qcomm_init -e
     class late_start
     user bluetooth
@@ -310,6 +315,24 @@ service audiod /system/bin/audiod
     user system
     group system
 
+service gsiff_daemon /system/bin/gsiff_daemon
+    class late_start
+    user gps
+    group gps net_raw misc
+
+service thermal-engine /system/bin/thermal-engine
+   class main
+   user root
+   group root
+   socket thermal-send-client stream 0666 system system
+   socket thermal-recv-client stream 0660 system system
+   socket thermal-recv-passive-client stream 0666 system system
+
+service adsprpcd /system/bin/adsprpcd
+   class main
+   user media
+   group media
+
 service set_baseband /system/bin/set_baseband.sh
     class late_start
     user system
@@ -323,7 +346,7 @@ service set_baseband /system/bin/set_baseband.sh
 service qcamerasvr /system/bin/mm-qcamera-daemon
     class late_start
     user camera
-    group camera system inet input
+    group camera system inet input graphics
 
 service charger /charger
     class charger
@@ -335,19 +358,13 @@ service time_daemon /system/bin/time_daemon
    user root
    group root
 
-service ssr_diag /system/bin/ssr_diag
-    class late_start
-    disabled
-    user system
-    group system
-
 service wcnss-service /vendor/bin/wcnss_service
-    class late_start
+    class main
     user system
     group system wifi diag radio
     oneshot
 
 service charger_monitor /system/bin/charger_monitor
-    user system
-    group system
-    disabled
+    class late_start
+    user root
+    group root

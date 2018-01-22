@@ -32,7 +32,6 @@ PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 # u2 Init files
 PRODUCT_COPY_FILES += \
     device/iuni/u2/rootdir/init.qcom.rc:root/init.qcom.rc \
-    device/iuni/u2/rootdir/init.target.rc:root/init.target.rc \
     device/iuni/u2/rootdir/init.qcom.usb.rc:root/init.qcom.usb.rc \
     device/iuni/u2/rootdir/fstab.qcom:root/fstab.qcom \
     device/iuni/u2/rootdir/ueventd.qcom.rc:root/ueventd.qcom.rc
@@ -134,7 +133,8 @@ PRODUCT_PACKAGES += \
 
 # DRM
 PRODUCT_PACKAGES += \
-    android.hardware.drm@1.0-impl
+    android.hardware.drm@1.0-impl \
+	android.hardware.drm@1.0-service
 
 # RenderScript HAL
 PRODUCT_PACKAGES += \
@@ -142,8 +142,7 @@ PRODUCT_PACKAGES += \
 
 # Power
 PRODUCT_PACKAGES += \
-    android.hardware.power@1.0-impl \
-    power.msm8974
+    android.hardware.power@1.0-service-qti
 
 # Graphics
 PRODUCT_PACKAGES += \
@@ -172,6 +171,14 @@ PRODUCT_PACKAGES += \
     android.hardware.light@2.0-impl \
     lights.u2
 
+# RIL
+PRODUCT_PACKAGES += \
+    android.hardware.radio@1.0-impl
+
+# Configstore
+PRODUCT_PACKAGES += \
+    android.hardware.configstore@1.0-service
+
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/sensor/_hals.conf:system/vendor/etc/sensors/_hals.conf
 
@@ -182,7 +189,8 @@ PRODUCT_PACKAGES += \
 
 # Vibrator
 PRODUCT_PACKAGES += \
-    android.hardware.vibrator@1.0-impl
+    android.hardware.vibrator@1.0-impl \
+	android.hardware.thermal@1.0-impl
 
 PRODUCT_PACKAGES += \
     android.hardware.audio@2.0-impl \
@@ -264,7 +272,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=196608 \
     persist.hwc.mdpcomp.enable=true \
     debug.hwui.use_buffer_age=false \
-    persist.media.treble_omx=false \
+	persist.media.treble_omx=false \
     camera.disable_treble=true
 
 # QMI
