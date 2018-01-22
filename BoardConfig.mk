@@ -56,11 +56,11 @@ MAX_EGL_CACHE_SIZE := 2048*1024
 
 # Time Daemon
 BOARD_USES_QC_TIME_SERVICES := true
-TARGET_POWERHAL_VARIANT             := qcom
 
 # Audio
 BOARD_USES_ALSA_AUDIO                      := true
 AUDIO_FEATURE_ENABLED_MULTI_VOICE_SESSIONS := true
+TARGET_USE_DEVICE_AUDIO_EFFECTS_CONF := true
 
 # Camera
 USE_DEVICE_SPECIFIC_CAMERA := true
@@ -70,6 +70,7 @@ TARGET_USES_NON_TREBLE_CAMERA := true
 
 # HIDL
 DEVICE_MANIFEST_FILE := device/iuni/u2/manifest.xml
+DEVICE_MATRIX_FILE := device/iuni/u2/compatibility_matrix.xml
 
 # Bluetooth
 BOARD_HAVE_BLUETOOTH := true
@@ -120,6 +121,9 @@ BACKLIGHT_PATH := /sys/class/leds/lcd-backlight/brightness
 
 # CM Hardware
 TARGET_TAP_TO_WAKE_NODE := "/sys/devices/platform/tp_wake_switch/double_wake"
+TARGET_HAS_LEGACY_POWER_STATS := true
+TARGET_HAS_NO_WIFI_STATS := true
+TARGET_USES_INTERACTION_BOOST := true
 
 # Lights
 TARGET_PROVIDES_LIBLIGHT := true
