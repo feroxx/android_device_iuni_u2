@@ -93,7 +93,7 @@ PRODUCT_TAGS += dalvik.gc.type-precise
 
 DEVICE_PACKAGE_OVERLAYS := \
     device/iuni/u2/overlay \
-	device/iuni/u2/overlay-lineage
+    device/iuni/u2/overlay-lineage
 
 # Data
 PRODUCT_PACKAGES += \
@@ -134,7 +134,7 @@ PRODUCT_PACKAGES += \
 # DRM
 PRODUCT_PACKAGES += \
     android.hardware.drm@1.0-impl \
-	android.hardware.drm@1.0-service
+    android.hardware.drm@1.0-service
 
 # RenderScript HAL
 PRODUCT_PACKAGES += \
@@ -190,7 +190,7 @@ PRODUCT_PACKAGES += \
 # Vibrator
 PRODUCT_PACKAGES += \
     android.hardware.vibrator@1.0-impl \
-	android.hardware.thermal@1.0-impl
+    android.hardware.thermal@1.0-impl
 
 PRODUCT_PACKAGES += \
     android.hardware.audio@2.0-impl \
@@ -272,7 +272,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=196608 \
     persist.hwc.mdpcomp.enable=true \
     debug.hwui.use_buffer_age=false \
-	persist.media.treble_omx=false \
+    persist.media.treble_omx=false \
     camera.disable_treble=true
 
 # QMI
@@ -285,8 +285,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.radio.add_power_save=1 \
     ro.telephony.call_ring.multiple=0 \
     persist.data.qmi.adb_logmask=0 \
-    ro.qualcomm.cabl=1 \
-    hw.cabl.level=Auto
+    ro.qualcomm.cabl=0
 
 #For internal sdcard
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
