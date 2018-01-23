@@ -42,8 +42,6 @@ on early-boot
 on boot
     # Necessary for netmgrd to function properly, otherwise no data
     mkdir /dev/socket/netmgr 0750 radio radio
-    
-    setprop wifi.interface wlan0
 
     # bluetooth
     chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
