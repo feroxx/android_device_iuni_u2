@@ -268,12 +268,6 @@ service qseecomd /system/bin/qseecomd
     user root
     group root
 
-service config_bt_addr /system/bin/btnvtool -O
-    class core
-    user bluetooth
-    group bluetooth radio
-    oneshot
-
 service hciattach /system/bin/hci_qcomm_init -e
     class late_start
     user bluetooth
@@ -307,11 +301,6 @@ service port-bridge /system/bin/port-bridge /dev/smd0 /dev/ttyGS0
     user system
     group system inet
     disabled
-
-service audiod /system/bin/audiod
-    class late_start
-    user system
-    group system
 
 service gsiff_daemon /system/bin/gsiff_daemon
     class late_start
