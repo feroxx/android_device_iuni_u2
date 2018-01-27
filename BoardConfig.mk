@@ -69,6 +69,9 @@ TARGET_NEEDS_PLATFORM_TEXT_RELOCATIONS := true
 TARGET_HAS_LEGACY_CAMERA_HAL1 := true
 TARGET_USES_NON_TREBLE_CAMERA := true
 
+# RIL
+TARGET_RIL_VARIANT := caf
+
 # HIDL
 DEVICE_MANIFEST_FILE := device/iuni/u2/manifest.xml
 DEVICE_MATRIX_FILE := device/iuni/u2/compatibility_matrix.xml
@@ -118,6 +121,7 @@ TARGET_RELEASETOOLS_EXTENSIONS := device/iuni/u2
 
 # Charger
 BOARD_CHARGER_DISABLE_INIT_BLANK := true
+BOARD_CHARGER_ENABLE_SUSPEND := true
 BACKLIGHT_PATH := /sys/class/leds/lcd-backlight/brightness
 
 # Dexpreopt
