@@ -320,7 +320,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # QC Perf
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.vendor.extension_library=libqti-perfd-client.so
+    ro.vendor.extension_library=/vendor/lib/libqti-perfd-client.so
 
 # gps
 #system prop for switching gps driver to qmi
