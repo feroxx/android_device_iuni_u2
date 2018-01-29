@@ -339,6 +339,7 @@ service qcamerasvr /system/bin/mm-qcamera-daemon
 service charger /charger
     class charger
     critical
+    group system graphics
     seclabel u:r:charger:s0
 
 service time_daemon /system/bin/time_daemon
