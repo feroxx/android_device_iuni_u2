@@ -33,6 +33,7 @@ PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 PRODUCT_COPY_FILES += \
     device/iuni/u2/rootdir/init.qcom.rc:root/init.qcom.rc \
     device/iuni/u2/rootdir/init.qcom.usb.rc:root/init.qcom.usb.rc \
+	device/iuni/u2/rootdir/init.qcom.power.rc:root/init.qcom.power.rc \
     device/iuni/u2/rootdir/fstab.qcom:root/fstab.qcom \
     device/iuni/u2/rootdir/ueventd.qcom.rc:root/ueventd.qcom.rc
 
