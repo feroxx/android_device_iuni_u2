@@ -1,2 +1,0 @@
-type drm_block_device, dev_type;
-type adb_device, dev_type;
