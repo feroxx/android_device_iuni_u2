@@ -1,3 +1,1 @@
-ctl.mpdecision         u:object_r:ctl_mpdecision:s0
-net.r_rmnet            u:object_r:qcom_netmgrd_prop:s0
-gsm.version.baseband        u:object_r:baseband_prop:s0
+ro.wcnss.serialno                  u:object_r:wcnss_prop:s0

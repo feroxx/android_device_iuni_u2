@@ -1,13 +1,17 @@
-# Bluetooth executables and scripts
-type bluetooth_loader, domain, device_domain_deprecated;
-type bluetooth_loader_exec, exec_type, file_type;
+# Run init.qcom.bt.sh
+allow bluetooth_loader shell_exec:file { entrypoint getattr read };
+allow bluetooth_loader bluetooth_loader_exec:file { getattr open execute_no_trans };
 
-# Start bdAddrLoader from init
-init_daemon_domain(bluetooth_loader)
+# init.qcom.bt.sh needs /system/bin/log access
+allow bluetooth_loader devpts:chr_file rw_file_perms;
 
-# Read mac address from persist partition
-allow bluetooth_loader persist_file:dir search;
-r_dir_file(bluetooth_loader, persist_bluetooth_file)
+# Run hci_qcomm_init from init.qcom.bt.sh
+allow bluetooth_loader vendor_file:file { execute_no_trans };
 
-# Set persist.service.bdroid.* and bluetooth.* property values
-set_prop(bluetooth_loader, bluetooth_prop)
+# Allow getprop/setprop for init.qcom.bt.sh
+allow bluetooth_loader system_file:file execute_no_trans;
+allow bluetooth_loader toolbox_exec:file rx_file_perms;
+
+# Allow hci_qcomm_init /persist/.bt_nv.bin access
+r_dir_file(bluetooth_loader, persist_file);
+allow bluetooth_loader bluetooth_data_file:file r_file_perms;
