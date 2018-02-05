@@ -126,16 +126,6 @@ on boot
     # Increased technology maximums should be reflected here.
     write /proc/sys/net/core/rmem_max  2097152
     write /proc/sys/net/core/wmem_max  2097152
- 
-    # Subsytem Restart
-    # adsp
-    write /sys/bus/msm_subsys/devices/subsys0/restart_level "related"
-    # modem
-    write /sys/bus/msm_subsys/devices/subsys1/restart_level "related"
-    # wcnss
-    write /sys/bus/msm_subsys/devices/subsys2/restart_level "related"
-    # venus
-    write /sys/bus/msm_subsys/devices/subsys3/restart_level "related"
 
     # cpuquiet
     chown system system /sys/devices/system/cpu/cpuquiet/cpuquiet_driver/max_cpus
@@ -215,12 +205,12 @@ service rfs_access /system/bin/rfs_access
 
 # QMUX must be in multiple groups to support external process connections
 service qmuxd /system/bin/qmuxd
-    class main
+    class core
     user radio
     group radio audio bluetooth wakelock gps
 
 service netmgrd /system/bin/netmgrd
-    class main
+    class core
     user root
     group radio system wakelock
 
@@ -271,7 +261,7 @@ service p2p_supplicant /system/vendor/bin/hw/wpa_supplicant \
     oneshot
 
 service qseecomd /system/bin/qseecomd
-    class core
+    class main
     user root
     group root
 
@@ -354,7 +344,7 @@ service time_daemon /system/bin/time_daemon
    group root
 
 service wcnss-service /vendor/bin/wcnss_service
-    class main
+    class late_start
     user system
     group system wifi diag radio
     oneshot
