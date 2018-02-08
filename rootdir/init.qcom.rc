@@ -17,10 +17,7 @@
 import init.qcom.usb.rc
 import init.qcom.power.rc
 
-on early-init
-    mount debugfs debugfs /sys/kernel/debug
-    chmod 0755 /sys/kernel/debug
-	
+on early-init	
     chown system system /sys/kernel/debug/kgsl/proc
 
 on init
