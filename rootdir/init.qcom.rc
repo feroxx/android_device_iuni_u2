@@ -19,7 +19,7 @@ import init.qcom.power.rc
 
 on early-init
     mount debugfs debugfs /sys/kernel/debug
-	chmod 0755 /sys/kernel/debug
+    chmod 0755 /sys/kernel/debug
 	
     chown system system /sys/kernel/debug/kgsl/proc
 
@@ -28,7 +28,7 @@ on init
 
     # Set permissions for persist partition
     mkdir /persist 0771 system system
-	mkdir /firmware 0771 system system
+    mkdir /firmware 0771 system system
     symlink /sdcard /storage/sdcard0
 
 on fs
@@ -38,15 +38,9 @@ on fs
 on early-boot
     # set RLIMIT_MEMLOCK to 64MB
     setrlimit 8 67108864 67108864
-	
-    # Busy loop to wait for devices booted by devstart_sh just in case device not ready
-    exec - root root system -- /vendor/bin/init.qcom.devwait.sh
+    write /sys/kernel/boot_adsp/boot 1
 
 on boot
-    # Necessary for netmgrd to function properly, otherwise no data
-    mkdir /dev/socket/netmgr 0750 radio radio
-
-    # bluetooth
     chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/type
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
@@ -72,14 +66,19 @@ on boot
     #Create QMUX deamon socket area
     mkdir /dev/socket/qmux_radio 0770 radio radio
     chmod 2770 /dev/socket/qmux_radio
+    mkdir /dev/socket/netmgr 0770 radio radio
+    chmod 2770 /dev/socket/netmgr
     mkdir /dev/socket/qmux_audio 0770 media audio
     chmod 2770 /dev/socket/qmux_audio
     mkdir /dev/socket/qmux_bluetooth 0770 bluetooth bluetooth
     chmod 2770 /dev/socket/qmux_bluetooth
     mkdir /dev/socket/qmux_gps 0770 gps gps
     chmod 2770 /dev/socket/qmux_gps
+    chmod 0644 /proc/cmdline
 
-    #charger
+    mkdir /persist/bluetooth 0770 bluetooth bluetooth
+
+    # Charger
     chown root system /sys/module/qpnp_charger/parameters/charger_monitor
     chown root system /sys/class/power_supply/battery/input_current_max
     chown root system /sys/class/power_supply/battery/input_current_trim
@@ -136,9 +135,6 @@ on boot
     # Wifi firmware reload path
     chown wifi wifi /sys/module/wlan/parameters/fwpath
 
-on post-fs
-    # Start devices by sysfs trigger
-    start devstart_sh
 
 on post-fs-data
     #  bluetooth
@@ -148,20 +144,17 @@ on post-fs-data
     mkdir /data/misc/audio 0770 audio audio
 
     # Create directory used by sensor subsystem
-    mkdir /persist/sensors
-    chmod 775 /persist/sensors
+    mkdir /persist/sensors 0775 system root
     write /persist/sensors/sensors_settings 1
-    chmod 0664 /persist/sensors/sensors_settings
-    mkdir /data/misc/sensors
-    chmod 775 /data/misc/sensors
+    chmod 0644 /persist/sensors/sensors_settings
+    chown system root /persist/sensors/sensors_settings
+    mkdir /data/misc/sensors 0775 system system
+    restorecon_recursive /data/misc/sensors
 
     # Create the directories used by the Wireless subsystem
     mkdir /data/misc/wifi 0770 wifi wifi
     mkdir /data/misc/wifi/sockets 0770 wifi wifi
     mkdir /data/misc/wifi/wpa_supplicant 0770 wifi wifi
-    
-    # To prevent permission denied error for telephony
-    chmod 0644 /proc/cmdline
 
     # We chown/chmod /persist again so because mount is run as root + defaults
     chown system system /persist
@@ -182,15 +175,15 @@ on post-fs-data
     mkdir /data/misc/location/mq 0770 gps gps
     mkdir /data/misc/location/xtwifi 0770 gps gps
 
-    #Create directory from IMS services
+    # Create directory from IMS services
     mkdir /data/shared 0755
     chown system system /data/shared
 
-    # save rtc time offsets
+    # Create /data/time folder for time-services
     mkdir /data/time/ 0700 system system
 
     mkdir /data/audio/ 0770 media audio
-    
+
     setprop vold.post_fs_data_done 1
 
 service rmt_storage /system/bin/rmt_storage
@@ -205,7 +198,7 @@ service rfs_access /system/bin/rfs_access
 
 # QMUX must be in multiple groups to support external process connections
 service qmuxd /system/bin/qmuxd
-    class core
+    class main
     user radio
     group radio audio bluetooth wakelock gps
 
@@ -261,7 +254,7 @@ service p2p_supplicant /system/vendor/bin/hw/wpa_supplicant \
     oneshot
 
 service qseecomd /system/bin/qseecomd
-    class main
+    class core
     user root
     group root
 
@@ -344,14 +337,8 @@ service time_daemon /system/bin/time_daemon
    group root
 
 service wcnss-service /vendor/bin/wcnss_service
-    class late_start
+    class main
     user system
     group system wifi diag radio
     oneshot
 
-service devstart_sh /vendor/bin/init.qcom.devstart.sh
-    class main
-    user root
-    group root system
-    disabled
-    oneshot
