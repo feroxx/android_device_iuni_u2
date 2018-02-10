@@ -190,10 +190,6 @@ on post-fs-data
 
     setprop vold.post_fs_data_done 1
 
-on charger
-    wait /dev/block/platform/msm_sdcc.1/by-name/system
-    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/system /system ro barrier=1
-
 service rmt_storage /system/bin/rmt_storage
     class core
     user root
