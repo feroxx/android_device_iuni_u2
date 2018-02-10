@@ -119,8 +119,8 @@ TARGET_RELEASETOOLS_EXTENSIONS := device/iuni/u2
 # inherit from the proprietary version
 -include vendor/iuni/u2/BoardConfigVendor.mk
 
-# Charger
-BOARD_CHARGER_DISABLE_INIT_BLANK := true
+# Offmode Charging
+BOARD_HEALTHD_CUSTOM_CHARGER_RES := device/iuni/u2/charger/images
 
 # Dexpreopt
 ifeq ($(HOST_OS),linux)

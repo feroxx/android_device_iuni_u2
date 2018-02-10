@@ -100,6 +100,10 @@ DEVICE_PACKAGE_OVERLAYS := \
     device/iuni/u2/overlay \
     device/iuni/u2/overlay-lineage
 
+# Offmode Charging
+PRODUCT_PACKAGES += \
+    charger_res_images
+
 # Data
 PRODUCT_PACKAGES += \
     libxml2 \
