@@ -29,8 +29,20 @@ on init
     symlink /sdcard /storage/sdcard0
 
 on fs
-    mount_all ./fstab.qcom
+    mount_all ./fstab.qcom --early
     restorecon_recursive /persist
+
+    # Start HW service manager early
+    start hwservicemanager
+
+on late-fs
+    # Start services for bootanim
+    start surfaceflinger
+    start bootanim
+    start configstore-hal-1-0
+    start gralloc-2-0
+
+    mount_all ./fstab.flo --late
 
 on early-boot
     # set RLIMIT_MEMLOCK to 64MB
