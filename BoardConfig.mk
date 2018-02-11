@@ -35,7 +35,7 @@ BOARD_DTBTOOL_ARGS := -2
 TARGET_KERNEL_ARCH := arm
 TARGET_KERNEL_CONFIG := e7_defconfig
 TARGET_KERNEL_SOURCE := kernel/gm/e7
-TARGET_KERNEL_CROSS_COMPILE_PREFIX := arm-linux-androideabi-
+LZMA_RAMDISK_TARGETS := [boot,recovery]
 
 # global
 TARGET_SPECIFIC_HEADER_PATH := device/iuni/u2/include
