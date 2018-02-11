@@ -1,7 +1,14 @@
 allow init socket_device:sock_file create;
 allow init socket_device:sock_file setattr;
 allow init proc_touchpanel:file write;
-
+allow init init:udp_socket { ioctl };
+allow init smd_device:chr_file { write ioctl };
+allow init init:socket { create ioctl bind read write create };
+allow init tee_device:chr_file { write ioctl };
+allow init ion_device:chr_file { write ioctl };
+allow init sensors_device:chr_file { ioctl getattr };
+allow init rtc_device:chr_file { ioctl };
+allow init video_device:chr_file { write ioctl };
 allow init { domain -lmkd -crash_dump }:process noatsecure;
 
 set_prop(init, wcnss_prop)
