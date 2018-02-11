@@ -13,6 +13,7 @@ allow system_server sensors_persist_file:file getattr;
 
 allow system_server qmuxd_socket:dir { search write add_name };
 allow system_server qmuxd_socket:sock_file { create write };
+allow system_server socket_device:sock_file { write };
 allow system_server sensors_device:chr_file { getattr };
 allow system_server sensors:unix_stream_socket { connectto };
 allow system_server sensors_socket:sock_file rw_file_perms;
