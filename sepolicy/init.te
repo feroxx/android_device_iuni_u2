@@ -2,6 +2,9 @@ allow init proc_touchpanel:file write;
 
 allow init smd_device:chr_file { write };
 allow init init:socket { bind read write create };
+allow init init:netlink_socket { bind create write };
+allow init init:netlink_xfrm_socket { bind create };
+allow init init:rawip_socket { create getopt setopt };
 allow init init:netlink_route_socket { bind read write create getattr setopt nlmsg_read nlmsg_write};
 allow init tee_device:chr_file { write };
 allow init ion_device:chr_file { write };
