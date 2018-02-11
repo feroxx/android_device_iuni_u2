@@ -112,7 +112,8 @@ PRODUCT_PACKAGES += \
 
 # BoringSSL compatability wrapper
 PRODUCT_PACKAGES += \
-    libboringssl-compat
+    libboringssl-compat \
+	libshims_atomic
 
 # TextClassifier smart selection model files
 PRODUCT_PACKAGES += \
