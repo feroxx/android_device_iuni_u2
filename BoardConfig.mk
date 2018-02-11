@@ -146,6 +146,8 @@ TARGET_PROVIDES_LIBLIGHT := true
 TARGET_KEYMASTER_WAIT_FOR_QSEE := true
 
 # selinux
+include device/qcom/sepolicy/sepolicy.mk
+include device/qcom/sepolicy/legacy-sepolicy.mk
 BOARD_SEPOLICY_DIRS += device/iuni/u2/sepolicy
 
 #TWRP
