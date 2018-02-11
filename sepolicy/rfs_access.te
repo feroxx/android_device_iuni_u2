@@ -1,2 +1,8 @@
+# Started by init
+init_daemon_domain(rfs_access)
+
 allow rfs_access sysfs:file { read open getattr };
 allow rfs_access tee_device:chr_file { read open getattr };
+
+allow rfs_access self:socket create_socket_perms;
+allowxperm rfs_access self:socket ioctl msm_sock_ipc_ioctls;
