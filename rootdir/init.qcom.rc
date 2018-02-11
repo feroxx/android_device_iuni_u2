@@ -28,6 +28,10 @@ on init
     mkdir /firmware 0771 system system
     symlink /sdcard /storage/sdcard0
 
+    # start qseecomd early as we mount system/ early
+    # vold needs keymaster that needs qseecomd
+    start qseecomd
+
 on fs
     mount_all ./fstab.qcom --early
     restorecon_recursive /persist
