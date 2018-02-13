@@ -18,6 +18,8 @@ import init.qcom.usb.rc
 import init.qcom.power.rc
 
 on early-init
+    mount debugfs debugfs /sys/kernel/debug
+    chmod 0775 /sys/kernel/debug
     setprop ro.wcnss.serialno ${ro.boot.serialno}
 
 on init
