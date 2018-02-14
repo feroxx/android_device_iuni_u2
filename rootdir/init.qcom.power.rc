@@ -91,3 +91,4 @@ on boot
 
 on property:sys.boot_completed=1
     trigger enable-low-power
+	start mpdecision
