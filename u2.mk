@@ -39,7 +39,7 @@ PRODUCT_COPY_FILES += \
 
 # system/etc files
 PRODUCT_COPY_FILES += \
-    device/iuni/u2/rootdir/bin/set_baseband.sh:system/bin/set_baseband.sh
+    device/iuni/u2/rootdir/bin/set_baseband.sh:$(TARGET_COPY_OUT_VENDOR)/bin/set_baseband.sh
 
 PRODUCT_COPY_FILES += \
     device/iuni/u2/rootdir/bin/init.qcom.devwait.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.qcom.devwait.sh \
