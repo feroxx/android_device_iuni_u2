@@ -108,8 +108,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     libxml2 \
     librmnetctl \
-    libcnefeatureconfig \
-	libshim_cutils_atomic
+    libcnefeatureconfig
 
 # BoringSSL compatability wrapper
 PRODUCT_PACKAGES += \
