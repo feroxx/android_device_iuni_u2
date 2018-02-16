@@ -3,5 +3,6 @@ allow rmt_storage modem_block_device:blk_file { read write open };
 allow rmt_storage ssd_device:blk_file rw_file_perms;
 allow rmt_storage self:capability { sys_admin };
 allow rmt_storage system_file:file { execute_no_trans };
+allow rmt_storage vendor_file:file { execute_no_trans };
 allow rmt_storage self:socket create_socket_perms;
 allowxperm rmt_storage self:socket ioctl msm_sock_ipc_ioctls;
