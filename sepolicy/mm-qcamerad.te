@@ -7,3 +7,5 @@ allow mm-qcamerad camera_data_file:sock_file { create unlink };
 allow mm-qcamerad camera_socket:sock_file { create unlink };
 allow mm-qcamerad camera_prop:file r_file_perms;
 allow mm-qcamerad untrusted_app_25:fd { use };
+
+allow mm-qcamerad vendor_file:file execmod;
