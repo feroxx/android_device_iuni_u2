@@ -91,9 +91,6 @@ PRODUCT_COPY_FILES += \
     device/iuni/u2/wifi/WCNSS_qcom_cfg.ini:system/vendor/etc/wifi/WCNSS_qcom_cfg.ini \
     device/iuni/u2/wifi/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
 
-PRODUCT_COPY_FILES += \
-    device/iuni/u2/thermal-engine-8974.conf:system/etc/thermal-engine-8974.conf
-
 PRODUCT_TAGS += dalvik.gc.type-precise
 
 DEVICE_PACKAGE_OVERLAYS := \
