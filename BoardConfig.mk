@@ -164,5 +164,4 @@ TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 TW_BRIGHTNESS_PATH := "/sys/devices/mdp.0/qcom\x2cmdss_fb_primary.148/leds/lcd-backlight/brightness"
 TW_MAX_BRIGHTNESS := 255
 TW_EXTRA_LANGUAGES := true
-#RECOVERY_VARIANT := twrp
-BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_23x41.h\"
+RECOVERY_VARIANT := twrp
