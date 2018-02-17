@@ -31,9 +31,7 @@ PRODUCT_PACKAGES += \
     init.qcom.rc \
     init.qcom.usb.rc \
     ueventd.qcom.rc \
-	set_baseband.sh \
-	init.qcom.devwait.sh \
-	init.qcom.devstart.sh
+	set_baseband.sh
 
 PRODUCT_COPY_FILES += \
     device/iuni/u2/rootdir/etc/bin/init.qcom.devwait.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.qcom.devwait.sh \
