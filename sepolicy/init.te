@@ -29,6 +29,4 @@ allow init vfat:file { read open getattr };
 allow init self:socket ioctl;
 allowxperm init self:socket ioctl msm_sock_ipc_ioctls;
 
-allow init { domain -lmkd -crash_dump }:process noatsecure;
-
 set_prop(init, wcnss_prop)
