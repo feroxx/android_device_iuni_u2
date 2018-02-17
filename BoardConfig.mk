@@ -113,7 +113,7 @@ BOARD_FLASH_BLOCK_SIZE := 131072
 # Use mke2fs to create ext4 images
 TARGET_USES_MKE2FS := true
 
-TARGET_RECOVERY_FSTAB := device/iuni/u2/rootdir/fstab.recovery
+TARGET_RECOVERY_FSTAB := device/iuni/u2/rootdir/etc/fstab.recovery
 
 TARGET_RELEASETOOLS_EXTENSIONS := device/iuni/u2
 
