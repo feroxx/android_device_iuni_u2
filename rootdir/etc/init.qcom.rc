@@ -47,9 +47,7 @@ on late-fs
 on early-boot
     # set RLIMIT_MEMLOCK to 64MB
     setrlimit 8 67108864 67108864
-
-    # Busy loop to wait for devices booted by devstart_sh just in case device not ready
-    exec - root root system -- /vendor/bin/init.qcom.devwait.sh
+    write /sys/kernel/boot_adsp/boot 1
 
 on boot
     chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
@@ -139,6 +137,16 @@ on boot
     write /proc/sys/net/core/rmem_max  2097152
     write /proc/sys/net/core/wmem_max  2097152
 
+    # Subsytem Restart
+    # adsp
+    write /sys/bus/msm_subsys/devices/subsys0/restart_level "related"
+    # modem
+    write /sys/bus/msm_subsys/devices/subsys1/restart_level "related"
+    # wcnss
+    write /sys/bus/msm_subsys/devices/subsys2/restart_level "related"
+    # venus
+    write /sys/bus/msm_subsys/devices/subsys3/restart_level "related"
+
     # cpuquiet
     chown system system /sys/devices/system/cpu/cpuquiet/cpuquiet_driver/max_cpus
 
@@ -147,10 +155,6 @@ on boot
 
     # Wifi firmware reload path
     chown wifi wifi /sys/module/wlan/parameters/fwpath
-
-on post-fs
-    # Start devices by sysfs trigger
-    start devstart_sh
 
 on post-fs-data
     # Bluetooth
@@ -310,11 +314,4 @@ service wcnss-service /vendor/bin/wcnss_service
     class main
     user system
     group system wifi diag radio
-    oneshot
-
-service devstart_sh /vendor/bin/init.qcom.devstart.sh
-    class main
-    user root
-    group root system
-    disabled
     oneshot
