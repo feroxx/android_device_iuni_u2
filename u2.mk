@@ -1,4 +1,4 @@
-#
+﻿#
 # Copyright (C) 2013 The Android Open-Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,11 +16,6 @@
 # Common QCOM configuration tools
 $(call inherit-product, device/qcom/common/Android.mk)
 
-# TWRP
-PRODUCT_COPY_FILES += \
-    device/iuni/u2/rootdir/init.qcom.usb.rc:recovery/root/init.usb.rc \
-    device/iuni/u2/rootdir/twrp.fstab:recovery/root/etc/twrp.fstab 
-
 # Dalvik/HWUI
 $(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-3072-dalvik-heap.mk)
 $(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-3072-hwui-memory.mk)
@@ -29,21 +24,16 @@ $(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-3072-hwui
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
-# u2 Init files
-PRODUCT_COPY_FILES += \
-    device/iuni/u2/rootdir/init.qcom.rc:root/init.qcom.rc \
-    device/iuni/u2/rootdir/init.qcom.usb.rc:root/init.qcom.usb.rc \
-	device/iuni/u2/rootdir/init.qcom.power.rc:root/init.qcom.power.rc \
-    device/iuni/u2/rootdir/fstab.qcom:root/fstab.qcom \
-    device/iuni/u2/rootdir/ueventd.qcom.rc:root/ueventd.qcom.rc
-
-# system/etc files
-PRODUCT_COPY_FILES += \
-    device/iuni/u2/rootdir/bin/set_baseband.sh:$(TARGET_COPY_OUT_VENDOR)/bin/set_baseband.sh
-
-PRODUCT_COPY_FILES += \
-    device/iuni/u2/rootdir/bin/init.qcom.devwait.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.qcom.devwait.sh \
-    device/iuni/u2/rootdir/bin/init.qcom.devstart.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.qcom.devstart.sh
+# Ramdisk
+PRODUCT_PACKAGES += \
+    fstab.qcom \
+    init.qcom.power.rc \
+    init.qcom.rc \
+    init.qcom.usb.rc \
+    ueventd.qcom.rc \
+	set_baseband.sh \
+	init.qcom.devwait.sh \
+	init.qcom.devstart.sh
 
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
