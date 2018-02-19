@@ -111,7 +111,6 @@ PRODUCT_PACKAGES += \
     p2p_supplicant_overlay.conf
 
 PRODUCT_PACKAGES += \
-    android.hardware.wifi@1.0-service \
     wificond \
     wcnss_service \
     wpa_supplicant \
@@ -125,30 +124,8 @@ PRODUCT_PACKAGES += \
     libnl_2 \
     ethertypes
 
-# USB HAL
-PRODUCT_PACKAGES += \
-    android.hardware.usb@1.0-service
-
-# DRM
-PRODUCT_PACKAGES += \
-    android.hardware.drm@1.0-impl \
-    android.hardware.drm@1.0-service
-
-# RenderScript HAL
-PRODUCT_PACKAGES += \
-    android.hardware.renderscript@1.0-impl
-
-# Power
-PRODUCT_PACKAGES += \
-    android.hardware.power@1.0-service-qti
-
 # Graphics
 PRODUCT_PACKAGES += \
-    android.hardware.graphics.allocator@2.0-impl \
-    android.hardware.graphics.allocator@2.0-service \
-    android.hardware.graphics.composer@2.1-impl \
-    android.hardware.graphics.mapper@2.0-impl \
-    android.hardware.memtrack@1.0-impl \
     copybit.msm8974 \
     gralloc.msm8974 \
     hwcomposer.msm8974 \
@@ -156,33 +133,15 @@ PRODUCT_PACKAGES += \
     liboverlay \
     keystore.msm8974
 
-# Keymaster
-PRODUCT_PACKAGES += \
-    android.hardware.keymaster@3.0-impl
-
-# Camera
-PRODUCT_PACKAGES += \
-    android.hardware.camera.provider@2.4-impl-legacy
-
 # Lights
 PRODUCT_PACKAGES += \
-    android.hardware.light@2.0-impl \
     lights.u2
-
-# RIL
-PRODUCT_PACKAGES += \
-    android.hardware.radio@1.0-impl
-
-# Configstore
-PRODUCT_PACKAGES += \
-    android.hardware.configstore@1.0-service
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/sensor/_hals.conf:system/vendor/etc/sensors/_hals.conf
 
 # Sensors
 PRODUCT_PACKAGES += \
-    android.hardware.sensors@1.0-impl \
     sensors.msm8974
 
 # Vibrator
@@ -191,8 +150,6 @@ PRODUCT_PACKAGES += \
     android.hardware.thermal@1.0-impl
 
 PRODUCT_PACKAGES += \
-    android.hardware.audio@2.0-impl \
-    android.hardware.audio.effect@2.0-impl \
     audio.a2dp.default \
     audio_policy.msm8974 \
     audio.primary.msm8974 \
@@ -206,8 +163,7 @@ PRODUCT_PACKAGES += \
 
 # Bluetooth
 PRODUCT_PACKAGES += \
-    libbt-vendor \
-    android.hardware.bluetooth@1.0-impl
+    libbt-vendor
 
 # for audio.primary.msm8974
 PRODUCT_PACKAGES += \
@@ -330,3 +286,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.build.selinux=1 \
     ro.sf.lcd_density=480
+
+# HIDL packages
+$(call inherit-product, $(LOCAL_PATH)/hidl.mk)
