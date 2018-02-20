@@ -1,0 +1,5 @@
+allow mediaprovider cache_file:dir create_dir_perms;
+allow mediaprovider cache_file:file create_file_perms;
+
+dontaudit mediaprovider cache_private_backup_file:dir getattr;
+dontaudit mediaprovider cache_recovery_file:dir getattr;

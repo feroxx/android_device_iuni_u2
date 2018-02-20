@@ -13,3 +13,4 @@ allow mediaserver system_server:unix_stream_socket { read write };
 
 allow mediaserver system_file:file execmod;
 allow mediaserver vendor_file:file execmod;
+allow mediaserver power_wakelock_file:file rw_file_perms;

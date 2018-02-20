@@ -1,3 +1,4 @@
 allow sensors persist_file:dir { search write create add_name };
 allow sensors persist_file:file { create rw_file_perms setattr };
 allow sensors sysfs:file { open read getattr };
+allow sensors power_wakelock_file:file rw_file_perms;

@@ -1,2 +1,4 @@
 allow webview_zygote sysfs:file { open read getattr };
 allow webview_zygote mnt_expand_file:dir { getattr };
+allow webview_zygote cgroup:file create_file_perms;
+allow webview_zygote cgroup:dir rw_dir_perms;

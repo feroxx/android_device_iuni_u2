@@ -15,11 +15,13 @@
 /persist/.genmac                                        u:object_r:wifi_data_file:s0
 /persist/.bt_nv.bin                                     u:object_r:bluetooth_data_file:s0
 
+# CPU & Mem
+/sys/power/wake_lock                                    u:object_r:power_wakelock_file:s0
+/sys/power/wake_unlock                                  u:object_r:power_wakelock_file:s0
+/sys/module/lowmemorykiller(/.*)?                       u:object_r:sysfs_lowmemorykiller:s0
+
 # Vibrator
 /sys/devices/virtual/timed_output/vibrator(/.*)?        u:object_r:sysfs_vibrator:s0
-
-# Backlight
-/sys/class/leds/lcd-backlight/brightness                u:object_r:touchscreen_file:s0
 
 # Modem
 /dev/block/platform/msm_sdcc\.1/by-name/modem           u:object_r:modem_block_device:s0

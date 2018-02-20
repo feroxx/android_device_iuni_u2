@@ -4,3 +4,5 @@ allow rmt_storage ssd_device:blk_file rw_file_perms;
 allow rmt_storage vendor_file:file { execute_no_trans };
 allow rmt_storage self:socket create_socket_perms;
 allowxperm rmt_storage self:socket ioctl msm_sock_ipc_ioctls;
+allow rmt_storage sysfs:file { open read getattr };
+allow rmt_storage power_wakelock_file:file rw_file_perms;

@@ -14,3 +14,5 @@ allow rild { mediaserver_service audioserver_service }:service_manager find;
 
 allow rild ssr_device:chr_file r_file_perms;
 r_dir_file(rild, sysfs_ssr)
+
+allow rild power_wakelock_file:file rw_file_perms;

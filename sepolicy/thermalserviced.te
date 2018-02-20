@@ -1,0 +1,1 @@
+allow thermalserviced sysfs:file { open read getattr };

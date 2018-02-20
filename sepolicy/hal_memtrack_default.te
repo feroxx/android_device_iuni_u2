@@ -1,0 +1,44 @@
+allow hal_memtrack_default hal_configstore_default:dir search;
+allow hal_memtrack_default hal_configstore_default:file r_file_perms;
+allow hal_memtrack_default hal_dumpstate_default:dir search;
+allow hal_memtrack_default hal_dumpstate_default:file r_file_perms;
+allow hal_memtrack_default hal_health_default:dir search;
+allow hal_memtrack_default hal_health_default:file r_file_perms;
+allow hal_memtrack_default hal_keymaster_default:dir search;
+allow hal_memtrack_default hal_keymaster_default:file r_file_perms;
+allow hal_memtrack_default hal_light_default:dir search;
+allow hal_memtrack_default hal_light_default:file r_file_perms;
+allow hal_memtrack_default hal_power_default:dir search;
+allow hal_memtrack_default hal_power_default:file r_file_perms;
+allow hal_memtrack_default hal_sensors_default:dir search;
+allow hal_memtrack_default hal_sensors_default:file r_file_perms;
+allow hal_memtrack_default hal_thermal_default:dir search;
+allow hal_memtrack_default hal_thermal_default:file r_file_perms;
+allow hal_memtrack_default hal_usb_default:dir search;
+allow hal_memtrack_default hal_usb_default:file r_file_perms;
+allow hal_memtrack_default hal_vibrator_default:dir search;
+allow hal_memtrack_default hal_vibrator_default:file r_file_perms;
+# allow hal_memtrack_default hal_allocator_default:dir search;
+# allow hal_memtrack_default hal_allocator_default:file r_file_perms;
+allow hal_memtrack_default hwservicemanager:dir search;
+allow hal_memtrack_default hwservicemanager:file r_file_perms;
+allow hal_memtrack_default servicemanager:dir search;
+allow hal_memtrack_default servicemanager:file r_file_perms;
+allow hal_memtrack_default vndservicemanager:dir search;
+allow hal_memtrack_default vndservicemanager:file r_file_perms;
+allow hal_memtrack_default wcnss_service:dir search;
+allow hal_memtrack_default wcnss_service:file r_file_perms;
+allow hal_memtrack_default rfs_access:dir search;
+allow hal_memtrack_default rfs_access:file r_file_perms;
+
+allow hal_memtrack_default sysfs:file { open read getattr };
+
+allow hal_memtrack_default init:dir search;
+allow hal_memtrack_default init:file r_file_perms;
+allow hal_memtrack_default system_app:dir search;
+allow hal_memtrack_default system_app:file r_file_perms;
+
+allow hal_memtrack_default surfaceflinger:file read;
+dontaudit hal_memtrack_default { domain -surfaceflinger}:file read;
+
+allow hal_memtrack_default rfs_system_file:file r_file_perms;
