@@ -1,2 +1,4 @@
 allow ueventd vfat:dir search;
 allow ueventd vfat:file { read open getattr };
+
+dontaudit ueventd self:capability2 mac_admin;

@@ -1,17 +1,5 @@
-# Run init.qcom.bt.sh
-allow bluetooth_loader shell_exec:file { entrypoint getattr read };
-allow bluetooth_loader bluetooth_loader_exec:file { getattr open execute_no_trans };
-
-# init.qcom.bt.sh needs /system/bin/log access
-allow bluetooth_loader devpts:chr_file rw_file_perms;
-
-# Run hci_qcomm_init from init.qcom.bt.sh
-allow bluetooth_loader vendor_file:file { execute_no_trans };
-
-# Allow getprop/setprop for init.qcom.bt.sh
-allow bluetooth_loader system_file:file execute_no_trans;
-allow bluetooth_loader toolbox_exec:file rx_file_perms;
-
-# Allow hci_qcomm_init /persist/.bt_nv.bin access
-r_dir_file(bluetooth_loader, persist_file);
+allow bluetooth_loader power_wakelock_file:file rw_file_perms;
+allow bluetooth_loader persist_file:dir search;
+allow bluetooth_loader sysfs:file { open read getattr };
 allow bluetooth_loader bluetooth_data_file:file r_file_perms;
+get_prop(bluetooth_loader, wcnss_prop)

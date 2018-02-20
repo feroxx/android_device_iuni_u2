@@ -8,3 +8,9 @@ allow untrusted_app_25 sysfs_usb_supply:file r_file_perms;
 
 get_prop(untrusted_app_25, qemu_hw_mainkeys_prop)
 get_prop(untrusted_app_25, camera_prop)
+
+allow untrusted_app_25 lineage_weather_service:service_manager find;
+allow untrusted_app_25 sysfs:file { open read getattr };
+
+dontaudit untrusted_app_25 anr_data_file:dir read;
+dontaudit untrusted_app_25 hal_memtrack_hwservice:hwservice_manager find;
