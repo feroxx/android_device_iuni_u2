@@ -27,7 +27,7 @@ PRODUCT_BRAND := IUNI
 PRODUCT_MODEL := U810
 PRODUCT_MANUFACTURER := IUNI
 
+$(call inherit-product-if-exists, vendor/iuni/u2/u2-vendor.mk)
+
 # Unofficial build ID
 TARGET_UNOFFICIAL_BUILD_ID := feroxx
-
-$(call inherit-product-if-exists, vendor/iuni/u2/u2-vendor.mk)
