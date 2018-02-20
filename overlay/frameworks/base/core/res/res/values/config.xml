@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /*
-** Copyright 2013, The Android Open Source Project
+** Copyright 2016, The CyanogenMod Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -18,30 +18,6 @@
 -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-
-   <!-- Control the behavior when the user long presses the home button.
-            0 - Nothing
-            1 - Launch all apps intent
-            2 - Launch assist intent
-         This needs to match the constants in
-         policy/src/com/android/internal/policy/impl/PhoneWindowManager.java
-    -->
-    <integer name="config_longPressOnHomeBehavior">0</integer>
-
-    <!-- Control the behavior when the user double-taps the home button.
-            0 - Nothing
-            1 - Recent apps view in SystemUI
-         This needs to match the constants in
-         policy/src/com/android/internal/policy/impl/PhoneWindowManager.java
-    -->
-    <integer name="config_doubleTapOnHomeBehavior">0</integer>
-
-    <!-- The duration (in milliseconds) that the radio will scan for a signal
-         when there's no network connection. If the scan doesn't timeout, use zero -->
-    <integer name="config_radioScanningTimeout">0</integer>
-
-    <!-- Boolean indicating whether the wifi chipset has dual frequency band support -->
-    <bool translatable="false" name="config_wifi_dual_band_support">true</bool>
 
     <!-- Boolean indicating whether the wifi chipset has background scan support -->
     <bool translatable="false" name="config_wifi_background_scan_support">true</bool>
@@ -61,7 +37,7 @@
     <string-array translatable="false" name="networkAttributes">
         <item>"wifi,1,1,1,-1,true"</item>
         <item>"mobile,0,0,0,-1,true"</item>
-        <item>"mobile_mms,2,0,4,60000,true"</item>
+        <item>"mobile_mms,2,0,2,60000,true"</item>
         <item>"mobile_supl,3,0,2,60000,true"</item>
         <item>"mobile_dun,4,0,2,60000,true"</item>
         <item>"mobile_hipri,5,0,3,60000,true"</item>
@@ -118,23 +94,17 @@
         <item>7</item>
     </integer-array>
 
-    <!-- Boolean indicddating if restoring network selection should be skipped -->
+    <!-- Boolean indicating if restoring network selection should be skipped -->
     <!-- The restoring is handled by modem if it is true -->
     <bool translatable="false" name="skip_restoring_network_selection">true</bool>
 
     <!-- If this is true, the screen will come on when you unplug usb/power/whatever. -->
     <bool name="config_unplugTurnsOnScreen">true</bool>
 
-    <!-- reference volume index for music stream to limit headphone volume and display warning -->
-    <integer name="config_safe_media_volume_index">9</integer>
-
     <bool name="config_enableWifiDisplay">true</bool>
 
     <!-- Set to true to add links to Cell Broadcast app from Settings and MMS app. -->
     <bool name="config_cellBroadcastAppLinks">true</bool>
-
-    <!-- Make things go fast -->
-    <bool name="config_ui_enableFadingMarquee">false</bool>
 
     <!-- Set to true if the wifi display supports compositing content stored
          in gralloc protected buffers.  For this to be true, there must exist
@@ -150,54 +120,60 @@
     -->
     <bool name="config_wifiDisplaySupportsProtectedBuffers">true</bool>
 
-    <!-- bool value to for enabling motion accelerometer
-    <bool name="use_motion_accel">false</bool>
-    -->
+    <!-- Device specific options -->
+
+    <!-- Default LED on time for notification LED in milliseconds. -->
+    <integer name="config_defaultNotificationLedOn">500</integer>
+
+    <!-- Default LED off time for notification LED in milliseconds. -->
+    <integer name="config_defaultNotificationLedOff">1000</integer>
+
+    <!-- Is the notification LED intrusive? Used to decide if there should be a disable option -->
+    <bool name="config_intrusiveNotificationLed">true</bool>
 
     <!-- Flag indicating whether the we should enable the automatic brightness in Settings.
          Software implementation will be used if config_hardware_auto_brightness_available is not set -->
     <bool name="config_automatic_brightness_available">true</bool>
+
+    <!-- Setting this true forces the headset jack switches to use the/dev/input/event subsystem
+         rather than the uevent framework. -->
+    <bool name="config_useDevInputEventForAudioJack">true</bool>
 
     <!-- Indicate whether closing the lid causes the device to go to sleep and opening
          it causes the device to wake up.
          The default is false. -->
     <bool name="config_lidControlsSleep">true</bool>
 
-    <!-- Enable doze mode
-         ComponentName of a dream to show whenever the system would otherwise have gone to sleep. -->
-    <string name="config_dozeComponent">com.android.systemui/com.android.systemui.doze.DozeService</string>
-
-    <!-- If true, the doze component is not started until after the screen has been turned off
-         and the screen off animation has been performed. -->
-    <bool name="config_dozeAfterScreenOff">true</bool>
-
     <!-- Is the device capable of hot swapping an ICC Card -->
     <bool name="config_hotswapCapable">true</bool>
 
-    <!-- When true use the linux /dev/input/event subsystem to detect the switch changes
-        on the headphone/microphone jack. When false use the older uevent framework. -->
-    <bool name="config_useDevInputEventForAudioJack">true</bool>
-
-    <!-- Flag specifying whether VoLTE & VT is availasble on device -->
-    <bool name="config_device_volte_available">false</bool>
+    <!--  Maximum number of supported users -->
+    <integer name="config_multiuserMaximumUsers">4</integer>
+    <!--  Whether Multiuser UI should be shown -->
+    <bool name="config_enableMultiUserUI">true</bool>
 
     <!-- Array of light sensor LUX values to define our levels for auto backlight brightness support.
          The N entries of this array define N  1 zones as follows:
+
          Zone 0:        0 <= LUX < array[0]
          Zone 1:        array[0] <= LUX < array[1]
          ...
          Zone N:        array[N - 1] <= LUX < array[N]
          Zone N + 1     array[N] <= LUX < infinity
+
          Must be overridden in platform specific overlays -->
     <integer-array name="config_autoBrightnessLevels">
-        <item>10</item>
-        <item>64</item>
-        <item>140</item>
-        <item>350</item>
-        <item>600</item>
+        <item>2</item>
+        <item>7</item>
+        <item>15</item>
+        <item>50</item>
+        <item>100</item>
+        <item>200</item>
+        <item>400</item>
         <item>1000</item>
-        <item>1600</item>
+        <item>2000</item>
         <item>3000</item>
+        <item>5000</item>
         <item>10000</item>
     </integer-array>
 
@@ -206,15 +182,18 @@
          than the size of the config_autoBrightnessLevels array.
          This must be overridden in platform specific overlays -->
     <integer-array name="config_autoBrightnessLcdBacklightValues">
-        <item>13</item>   <!-- 0-1 -->
-        <item>26</item>   <!-- 1-4 -->
-        <item>73</item>   <!-- 4-40 -->
-        <item>88</item>   <!-- 40-350 -->
-        <item>130</item>  <!-- 350-600 -->
-        <item>167</item>  <!-- 600-1000 -->
-        <item>204</item>  <!-- 1000-1600 -->
-        <item>240</item>  <!-- 1600-3000 -->
-        <item>254</item>  <!-- 3000-10000 -->
+        <item>13</item>   <!-- 0-2 -->
+        <item>25</item>   <!-- 3-7 -->
+        <item>32</item>   <!-- 5-15 -->
+        <item>41</item>   <!-- 15-50 -->
+        <item>52</item>   <!-- 50-100 -->
+        <item>62</item>   <!-- 100-200 -->
+        <item>69</item>   <!-- 200-400 -->
+        <item>78</item>   <!-- 400-1000 -->
+        <item>88</item>   <!-- 1000-2000 -->
+        <item>134</item>  <!-- 2000-3000 -->
+        <item>178</item>  <!-- 3000-5000 -->
+        <item>225</item>  <!-- 5000-10000 -->
         <item>255</item>  <!-- 10000+ -->
     </integer-array>
 
@@ -222,35 +201,14 @@
          The user is forbidden from setting the brightness below this level. -->
     <integer name="config_screenBrightnessSettingMinimum">2</integer>
 
-    <!-- Maximum screen brightness allowed by the power manager.
-         The user is forbidden from setting the brightness above this level. -->
-    <integer name="config_screenBrightnessSettingMaximum">255</integer>
-
     <!-- Default screen brightness setting.
          Must be in the range specified by minimum and maximum. -->
-    <integer name="config_screenBrightnessSettingDefault">102</integer>
+    <integer name="config_screenBrightnessSettingDefault">79</integer>
 
     <!-- Screen brightness used to dim the screen when the user activity
          timeout expires.  May be less than the minimum allowed brightness setting
          that can be set by the user. -->
-    <integer name="config_screenBrightnessDim">10</integer>
-
-    <!-- Indicate the device's Smart Cover coordinates.
-         If none are provided, then the feature will be disabled.
-         The array should contain 4 values, in pixels, (sample values provided):
-         Top      0
-         Left     100
-         Bottom   Top + 400
-         Right    Display Width - 100
-    -->
-    <!-- disabled until smart cover can be tested
-    <integer-array name="config_smartCoverWindowCoords">
-        <item>0</item>
-        <item>44</item>
-        <item>774</item>
-        <item>1036</item>
-    </integer-array>
-    -->
+    <integer name="config_screenBrightnessDim">2</integer>
 
     <!-- Base "touch slop" value used by ViewConfiguration as a
          movement threshold where scrolling should begin. -->
@@ -259,21 +217,28 @@
     <!-- Vibrator pattern for feedback about a long screen/key press -->
     <integer-array name="config_longPressVibePattern">
         <item>0</item>
-        <item>25</item>
-        <item>10</item>
+        <item>47</item>
+        <item>7</item>
     </integer-array>
 
     <!-- Vibrator pattern for feedback about touching a virtual key -->
     <integer-array name="config_virtualKeyVibePattern">
         <item>0</item>
-        <item>25</item>
-        <item>8</item>
+        <item>45</item>
+        <item>7</item>
     </integer-array>
 
     <!-- Vibrator pattern for a very short but reliable vibration for soft keyboard tap -->
     <integer-array name="config_keyboardTapVibePattern">
-        <item>25</item>
+        <item>0</item>
+        <item>41</item>
+        <item>7</item>
     </integer-array>
+
+    <!-- Doze mode -->
+    <string name="config_dozeComponent">com.android.systemui/com.android.systemui.doze.DozeService</string>
+    <bool name="config_dozeAfterScreenOff">true</bool>
+    <bool name="config_powerDecoupleInteractiveModeFromDisplay">true</bool>
 
     <!-- Whether device supports double tap to wake -->
     <bool name="config_supportDoubleTapWake">true</bool>
@@ -291,11 +256,20 @@
         <item>"evdo:4094,87380,1048576,4096,16384,262144"</item>
         <item>"ehrpd:4094,87380,1048576,4096,16384,262144"</item>
     </string-array>
-  
+
     <!-- Configure wifi tcp buffersizes in the form:
          rmem_min,rmem_def,rmem_max,wmem_min,wmem_def,wmem_max -->
     <string name="config_wifi_tcp_buffers" translatable="false">524288,2097152,4194304,262144,524288,1048576</string>
 
+    <!-- Disable wakeup during Network Sampling -->
+    <bool name="config_networkSamplingWakesDevice">false</bool>
+
     <!-- Our modem doesn't support this query yet -->
     <string name="config_radio_access_family">GPRS|EDGE|UMTS|HSDPA|HSUPA|HSPA|LTE|HSPAP|GSM|TD_SCDMA|WCDMA|LTE_CA</string>
+
+    <!-- Control the behavior when the user panic presses the back button.
+            0 - Nothing
+            1 - Go to home
+    -->
+    <integer name="config_backPanicBehavior">0</integer>
 </resources>
