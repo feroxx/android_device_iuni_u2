@@ -192,7 +192,7 @@ PRODUCT_COPY_FILES += \
 
 # MSM IPC Router security configuration
 PRODUCT_COPY_FILES += \
-    device/iuni/u2/sec_config:system/vendor/etc/sec_config
+    device/iuni/u2/configs/sec_config:system/vendor/etc/sec_config
 
 PRODUCT_COPY_FILES += \
     device/iuni/u2/audio/audio_effects.conf:system/vendor/etc/audio_effects.conf \
