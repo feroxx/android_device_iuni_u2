@@ -72,6 +72,9 @@ TARGET_LD_SHIM_LIBS := \
 # RIL
 TARGET_RIL_VARIANT := caf
 
+# Filesystem
+TARGET_FS_CONFIG_GEN := $(PLATFORM_PATH)/config.fs
+
 # HIDL
 DEVICE_MANIFEST_FILE := device/iuni/u2/manifest.xml
 DEVICE_MATRIX_FILE := device/iuni/u2/compatibility_matrix.xml

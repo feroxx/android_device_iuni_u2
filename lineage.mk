@@ -1,5 +1,4 @@
-#
-# Copyright 2012 The Android Open Source Project
+# Copyright (C) 2016 The CyanogenMod Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,21 +11,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
-
-# Sample: This is where we'd set a backup provider if we had one
-# $(call inherit-product, device/sample/products/backup_overlay.mk)
-
-# Boot animation
-TARGET_SCREEN_HEIGHT := 1920
-TARGET_SCREEN_WIDTH := 1080
-TARGET_CONTINUOUS_SPLASH_ENABLED := true
-TARGET_BOOTANIMATION_HALF_RES := true
 
 # Inherit from those products. Most specific first.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
-# Inherit some common lineage stuff.
+# Inherit some common LineageOS stuff.
 $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 
 # Inherit from hardware-specific part of the product configuration
@@ -37,5 +26,8 @@ PRODUCT_DEVICE := u2
 PRODUCT_BRAND := IUNI
 PRODUCT_MODEL := U810
 PRODUCT_MANUFACTURER := IUNI
+
+# Unofficial build ID
+TARGET_UNOFFICIAL_BUILD_ID := feroxx
 
 $(call inherit-product-if-exists, vendor/iuni/u2/u2-vendor.mk)
