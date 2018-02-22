@@ -68,7 +68,7 @@ TARGET_USES_NON_TREBLE_CAMERA := true
 TARGET_LD_SHIM_LIBS := \
     /system/vendor/lib/libqomx_jpegenc.so|libboringssl-compat.so \
     /system/vendor/lib/libmmcamera_hdr_gb_lib.so|/system/vendor/lib/libmmqjpeg_codec.so \
-	/system/lib/hw/camera.msm8974.so|/system/lib/libshim_camera.so
+    /system/lib/hw/camera.msm8974.so|/system/lib/libshim_camera.so
 
 # RIL
 TARGET_RIL_VARIANT := caf
