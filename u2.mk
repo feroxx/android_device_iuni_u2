@@ -95,7 +95,8 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     libxml2 \
     librmnetctl \
-    libcnefeatureconfig
+    libcnefeatureconfig \
+	libshim_camera
 
 # BoringSSL compatability wrapper
 PRODUCT_PACKAGES += \
