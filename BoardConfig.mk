@@ -74,6 +74,7 @@ TARGET_RIL_VARIANT := caf
 
 # Filesystem
 TARGET_FS_CONFIG_GEN := device/iuni/u2/config.fs
+TARGET_EXFAT_DRIVER := exfat
 
 # HIDL
 DEVICE_MANIFEST_FILE := device/iuni/u2/manifest.xml
