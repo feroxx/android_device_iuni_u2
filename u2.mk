@@ -236,10 +236,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.telephony.call_ring.multiple=0 \
     persist.data.qmi.adb_logmask=0 \
     ro.qualcomm.cabl=0
-
-#For internal sdcard
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    ro.vold.primary_physical=1
     
 PRODUCT_PROPERTY_OVERRIDES += \
     drm.service.enabled=true
