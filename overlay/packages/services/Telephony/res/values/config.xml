@@ -21,9 +21,6 @@
          the com.android.internal.telephony.Phone interface (false). -->
     <bool name="send_mic_mute_to_AudioManager">true</bool>
 
-    <!-- Show enabled lte option for lte device -->
-    <bool name="config_enabled_lte" translatable="false">true</bool>
-
     <bool name="allow_emergency_numbers_in_call_log">true</bool>
 
 </resources>
