@@ -158,7 +158,6 @@ include device/qcom/sepolicy/legacy-sepolicy.mk
 BOARD_SEPOLICY_DIRS += device/iuni/u2/sepolicy
 
 #TWRP
-TW_USE_TOOLBOX := true
 TW_EXCLUDE_SUPERSU := true
 TW_THEME := portrait_hdpi
 TW_NO_SCREEN_TIMEOUT := true 
