@@ -30,9 +30,6 @@
 # Modem
 /dev/block/platform/msm_sdcc\.1/by-name/modem           u:object_r:modem_block_device:s0
 
-# ADB
-/dev/android_adb                                        u:object_r:adb_device:s0
-
 # USB HAL
 /system/vendor/bin/hw/android\.hardware\.usb@1\.0-service\.onyx         u:object_r:hal_usb_default_exec:s0
 
