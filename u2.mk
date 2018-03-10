@@ -16,6 +16,11 @@
 # Common QCOM configuration tools
 $(call inherit-product, device/qcom/common/Android.mk)
 
+# TWRP
+PRODUCT_COPY_FILES += \
+    device/iuni/u2/rootdir/init.qcom.usb.rc:recovery/root/init.usb.rc \
+    device/iuni/u2/rootdir/twrp.fstab:recovery/root/etc/twrp.fstab 
+
 # Dalvik/HWUI
 $(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-3072-dalvik-heap.mk)
 $(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-3072-hwui-memory.mk)
