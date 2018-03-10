@@ -18,7 +18,7 @@ $(call inherit-product, device/qcom/common/Android.mk)
 
 # TWRP
 PRODUCT_COPY_FILES += \
-    device/iuni/u2/rootdir/init.qcom.usb.rc:recovery/root/init.usb.rc \
+    device/iuni/u2/rootdir/etc/init.qcom.usb.rc:recovery/root/init.usb.rc \
     device/iuni/u2/rootdir/twrp.fstab:recovery/root/etc/twrp.fstab 
 
 # Dalvik/HWUI
