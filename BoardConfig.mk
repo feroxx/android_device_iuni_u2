@@ -171,4 +171,4 @@ TW_BRIGHTNESS_PATH := "/sys/devices/mdp.0/qcom\x2cmdss_fb_primary.148/leds/lcd-b
 TW_MAX_BRIGHTNESS := 255
 TW_EXTRA_LANGUAGES := true
 TW_DEVICE_VERSION := feroxx
-RECOVERY_VARIANT := twrp
+#RECOVERY_VARIANT := twrp
