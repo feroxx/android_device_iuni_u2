@@ -127,8 +127,8 @@ TARGET_RELEASETOOLS_EXTENSIONS := device/iuni/u2
 -include vendor/iuni/u2/BoardConfigVendor.mk
 
 # Offmode Charging
+BOARD_CHARGER_ENABLE_SUSPEND := true
 BOARD_CHARGER_DISABLE_INIT_BLANK := true
-BACKLIGHT_PATH := /sys/class/leds/lcd-backlight/brightness
 BOARD_HEALTHD_CUSTOM_CHARGER_RES := device/iuni/u2/charger/images
 
 # Dexpreopt
