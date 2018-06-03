@@ -86,7 +86,6 @@ BOARD_HAVE_BLUETOOTH_QCOM := true
 BLUETOOTH_HCI_USE_MCT := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/iuni/u2/bluetooth
 
-
 # Wifi
 BOARD_HAS_QCOM_WLAN              := true
 BOARD_HAS_QCOM_WLAN_SDK          := true
@@ -141,7 +140,11 @@ ifeq ($(HOST_OS),linux)
   endif
 endif
 
-# CM Hardware
+# Lineage Hardware
+BOARD_HARDWARE_CLASS += \
+    device/iuni/u2/lineagehw
+
+# Power
 TARGET_TAP_TO_WAKE_NODE := "/sys/devices/platform/tp_wake_switch/double_wake"
 TARGET_HAS_LEGACY_POWER_STATS := true
 TARGET_HAS_NO_WIFI_STATS := true
