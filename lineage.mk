@@ -31,3 +31,8 @@ $(call inherit-product-if-exists, vendor/iuni/u2/u2-vendor.mk)
 
 # Unofficial build ID
 TARGET_UNOFFICIAL_BUILD_ID := feroxx
+
+PRODUCT_BUILD_PROP_OVERRIDES += \
+    PRIVATE_BUILD_DESC="msm8974-user 4.4.2 KVT49L eng.jenkins.20150227.055834 release-keys"
+
+BUILD_FINGERPRINT := IUNI/IUNI/IUNI:4.4.2/KVT49L/:user/release-keys
