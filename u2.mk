@@ -135,10 +135,6 @@ PRODUCT_PACKAGES += \
     liboverlay \
     keystore.msm8974
 
-# Lights
-PRODUCT_PACKAGES += \
-    lights.u2
-
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/sensor/_hals.conf:system/vendor/etc/sensors/_hals.conf
 
