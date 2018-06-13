@@ -66,9 +66,8 @@ USE_DEVICE_SPECIFIC_CAMERA := true
 TARGET_NEEDS_PLATFORM_TEXT_RELOCATIONS := true
 TARGET_HAS_LEGACY_CAMERA_HAL1 := true
 TARGET_USES_NON_TREBLE_CAMERA := true
-#TARGET_LD_SHIM_LIBS := \
-#    /system/vendor/lib/libqomx_jpegenc.so|libboringssl-compat.so \
-#    /system/vendor/lib/libmmcamera_hdr_gb_lib.so|/system/vendor/lib/libmmqjpeg_codec.so
+TARGET_LD_SHIM_LIBS := \
+    /system/vendor/lib/libqomx_jpegenc.so|/system/lib/libboringssl-compat.so
 
 # RIL
 TARGET_RIL_VARIANT := caf
