@@ -368,7 +368,7 @@ static int camera_cancel_picture(struct camera_device *device)
 }
 
 static int camera_set_parameters(struct camera_device *device,
-        const char *params)
+        const char *parameters)
 {
     ALOGV("%s->%08X->%08X", __FUNCTION__, (uintptr_t)device,
             (uintptr_t)(((wrapper_camera_device_t*)device)->vendor));
@@ -376,7 +376,7 @@ static int camera_set_parameters(struct camera_device *device,
     if (!device)
         return -EINVAL;
 
-return VENDOR_CALL(device, set_parameters, params);
+    return VENDOR_CALL(device, set_parameters, strdup(parameters));
 }
 
 static char *camera_get_parameters(struct camera_device *device)
@@ -394,7 +394,6 @@ static char *camera_get_parameters(struct camera_device *device)
         wrapper->initial_get = false;
         CameraParameters2 params;
         params.unflatten(String8(parameters));
-        params.set("cyanogen-camera", "1");
         VENDOR_CALL(device, set_parameters, strdup(params.flatten().string())); 
         parameters = VENDOR_CALL(device, get_parameters);
     }
