@@ -140,7 +140,8 @@ PRODUCT_COPY_FILES += \
 
 # Sensors
 PRODUCT_PACKAGES += \
-    sensors.msm8974
+    sensors.msm8974 \
+	camera.u2
 
 PRODUCT_PACKAGES += \
     audio.a2dp.default \
