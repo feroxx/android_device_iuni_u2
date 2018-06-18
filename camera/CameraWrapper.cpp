@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2016, The CyanogenMod Project
+ *               2017, The LineageOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,6 +38,9 @@
 
 #define BACK_CAMERA_ID 0
 #define FRONT_CAMERA_ID 1
+
+#define OPEN_RETRIES    10
+#define OPEN_RETRY_MSEC 40
 
 using namespace android;
 
@@ -84,7 +88,6 @@ typedef struct wrapper_camera_device {
     camera_device_t base;
     int id;
     camera_device_t *vendor;
-    bool initial_get;
 } wrapper_camera_device_t;
 
 void camera_notify_cb(int32_t msg_type, int32_t ext1, int32_t ext2, void * /*user*/) {
@@ -253,11 +256,11 @@ static int camera_store_meta_data_in_buffers(struct camera_device *device,
     return VENDOR_CALL(device, store_meta_data_in_buffers, enable);
 }
 
-static bool is4k(CameraParameters2 &params) {
+static bool camera_is4k(CameraParameters2 &params) {
     int video_width, video_height;
     params.getVideoSize(&video_width, &video_height);
 
-    return video_width*video_height > 1920*1080;
+    return video_width * video_height == 3840*2160;
 }
 
 static int camera_start_recording(struct camera_device *device)
@@ -268,22 +271,17 @@ static int camera_start_recording(struct camera_device *device)
     if (!device)
         return EINVAL;
 
+    CameraParameters2 params;
+    params.unflatten(String8(camera_get_parameters(device)));
 
-    CameraParameters2 parameters;
-    parameters.unflatten(String8(camera_get_parameters(device)));
-    if (CAMERA_ID(device) == BACK_CAMERA_ID) {
-        if (is4k(parameters)) {
-            parameters.set("preview-format", "nv12-venus");
-        }
-        parameters.set("picture-size", "4160x3120");
+    if (CAMERA_ID(device) == BACK_CAMERA_ID && camera_is4k(params)) {
+        ALOGI("4k video: Forcing nv12-venus preview format");
+
+        params.set("preview-size", "3840x2160");
+        params.set("preview-format", "nv12-venus");
     }
-    camera_set_parameters(device,  strdup(parameters.flatten().string()));
 
-    CameraParameters2 parameters2;
-    parameters2.unflatten(String8(VENDOR_CALL(device, get_parameters)));
-    parameters2.dump();
-
-
+    camera_set_parameters(device, strdup(params.flatten().string()));
 
     return VENDOR_CALL(device, start_recording);
 }
@@ -387,43 +385,15 @@ static char *camera_get_parameters(struct camera_device *device)
     if (!device)
         return NULL;
 
-    char *parameters = VENDOR_CALL(device, get_parameters); 
-    wrapper_camera_device_t *wrapper = (wrapper_camera_device_t *)device;
-
-    if (wrapper->initial_get) {
-        wrapper->initial_get = false;
-        CameraParameters2 params;
-        params.unflatten(String8(parameters));
-        VENDOR_CALL(device, set_parameters, strdup(params.flatten().string())); 
-        parameters = VENDOR_CALL(device, get_parameters);
-    }
+    char *parameters = VENDOR_CALL(device, get_parameters);
 
     CameraParameters2 params;
     params.unflatten(String8(parameters));
-    if (CAMERA_ID(device) == BACK_CAMERA_ID) {
-        /* Disable 352x288 preview sizes, the combination of this preview size and larger resolutions stalls the HAL */
-        params.set(CameraParameters::KEY_SUPPORTED_PREVIEW_SIZES,
-            "1920x1080,1440x1080,1280x720,720x480,640x480,320x240");
-        params.set(CameraParameters::KEY_SUPPORTED_VIDEO_SIZES,
-            "4096x2160,3840x2160,1920x1080,1280x720,864x480,800x480,720x480,640x480,320x240,176x144");
-        params.set(CameraParameters::KEY_SUPPORTED_PICTURE_SIZES,
-            "4160x3120,4160x2340,4000x3000,4096x2160,3200x2400,3200x1800,2592x1944,2048x1536,1920x1080,1600x1200,1280x768,1280x720,1024x768,800x600,800x480,720x480,640x480,320x240");
-        params.set("preview-fps-range-values", "(7500,30000),(8000,30000),(30000,30000)");
-        params.set("supported-live-snapshot-sizes",
-            "3200x2400,2592x1944,2048x1536,1920x1080,1600x1200,1280x768,1280x720,1024x768,800x600,864x480,800x480,720x480,640x480,320x240");
-    } else if (CAMERA_ID(device) == FRONT_CAMERA_ID) { 
-        /* Inject all supported resolutions */
-        params.set(CameraParameters::KEY_SUPPORTED_VIDEO_SIZES,
-            "1280x720,864x480,800x480,720x480,640x480,320x240,176x144");
-        params.set(CameraParameters::KEY_SUPPORTED_PREVIEW_SIZES,
-            "1280x960,1280x720,720x480,640x480,576x432,320x240");
-        params.set("preview-fps-range-values", "(7500,30000),(8000,30000),(30000,30000)");
-    }
 
-    const char *pf = params.get(android::CameraParameters::KEY_PREVIEW_FORMAT);
-    if (pf && strcmp(pf, "nv12-venus") == 0) {
-        params.set(android::CameraParameters::KEY_PREVIEW_FORMAT, "yuv420sp");
-    }
+    /* HSR, DIS & longshot are not supported */
+    params.remove("video-hsr");
+    params.set("dis-values", "disable");
+    params.set("longshot-supported", "false");
 
     return strdup(params.flatten().string());
 }
@@ -548,11 +518,16 @@ static int camera_device_open(const hw_module_t *module, const char *name,
         memset(camera_device, 0, sizeof(*camera_device));
         camera_device->id = cameraid;
 
-        camera_device->initial_get = true;
-
-        rv = gVendorModule->common.methods->open(
-                (const hw_module_t*)gVendorModule, name,
-                (hw_device_t**)&(camera_device->vendor));
+        int retries = OPEN_RETRIES;
+        bool retry;
+        do {
+            rv = gVendorModule->common.methods->open(
+                    (const hw_module_t*)gVendorModule, name,
+                    (hw_device_t**)&(camera_device->vendor));
+            retry = --retries > 0 && rv;
+            if (retry)
+                usleep(OPEN_RETRY_MSEC * 1000);
+        } while (retry);
         if (rv) {
             ALOGE("vendor camera open fail");
             goto fail;
