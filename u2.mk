@@ -279,5 +279,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.build.selinux=1 \
     ro.sf.lcd_density=480
 
+# Vendor security patch level
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.lineage.build.vendor_security_patch=2016-04-01
+
 # HIDL packages
 $(call inherit-product, $(LOCAL_PATH)/hidl.mk)
