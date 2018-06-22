@@ -54,7 +54,6 @@ PRODUCT_COPY_FILES += \
 
 # Permissions
 PRODUCT_COPY_FILES += \
-    external/ant-wireless/antradio-library/com.dsi.ant.antradio_library.xml:system/vendor/etc/permissions/com.dsi.ant.antradio_library.xml \
     frameworks/native/data/etc/handheld_core_hardware.xml:system/vendor/etc/permissions/handheld_core_hardware.xml \
     frameworks/native/data/etc/android.hardware.audio.low_latency.xml:system/vendor/etc/permissions/android.hardware.audio.low_latency.xml \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:system/vendor/etc/permissions/android.hardware.bluetooth_le.xml \
@@ -141,7 +140,7 @@ PRODUCT_COPY_FILES += \
 # Sensors
 PRODUCT_PACKAGES += \
     sensors.msm8974 \
-	camera.u2
+    camera.u2
 
 PRODUCT_PACKAGES += \
     audio.a2dp.default \
@@ -208,29 +207,39 @@ PRODUCT_COPY_FILES += \
 
 # bluetooth
 PRODUCT_PROPERTY_OVERRIDES += \
-     qcom.bluetooth.soc=smd \
-     ro.bluetooth.hfp.ver=1.7 \
-     ro.qualcomm.bt.hci_transport=smd \
-     ro.bluetooth.dun=false \
-     ro.bluetooth.sap=false
+    qcom.bluetooth.soc=smd \
+    ro.bluetooth.hfp.ver=1.7 \
+    ro.qualcomm.bt.hci_transport=smd \
+    ro.bluetooth.dun=false \
+    ro.bluetooth.sap=false
 
 # Graphics
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=196608 \
-    persist.hwc.mdpcomp.enable=true \
     debug.hwui.use_buffer_age=false
 
 # QMI
 PRODUCT_PROPERTY_OVERRIDES += \
-    persist.data.netmgrd.qos.enable=true \
     rild.libpath=/vendor/lib/libril-qc-qmi-1.so \
+    rild.libargs=-d /dev/smd0 \
     ro.use_data_netmgrd=true \
+    persist.data.netmgrd.qos.enable=true \
     ro.telephony.default_network=3 \
     persist.radio.apm_sim_not_pwdn=1 \
     persist.radio.add_power_save=1 \
     ro.telephony.call_ring.multiple=0 \
     persist.data.qmi.adb_logmask=0 \
-    ro.qualcomm.cabl=0
+    persist.radio.aosp_usr_pref_sel=true \
+    persist.radio.rat_on=combine \
+    persist.rild.nitz_plmn= \
+    persist.rild.nitz_long_ons_0= \
+    persist.rild.nitz_long_ons_1= \
+    persist.rild.nitz_long_ons_2= \
+    persist.rild.nitz_long_ons_3= \
+    persist.rild.nitz_short_ons_0= \
+    persist.rild.nitz_short_ons_1= \
+    persist.rild.nitz_short_ons_2= \
+    persist.rild.nitz_short_ons_3=
 
 #For internal sdcard
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
@@ -249,9 +258,17 @@ PRODUCT_PROPERTY_OVERRIDES += \
     media.stagefright.less-secure=true \
     camera.disable_treble=true
 
-# Enable AAC 5.1 output
+# Media
 PRODUCT_PROPERTY_OVERRIDES += \
-    media.aac_51_output_enabled=true
+    media.aac_51_output_enabled=true \
+    media.stagefright.enable-player=true \
+    media.stagefright.enable-http=true \
+    media.stagefright.enable-aac=true \
+    media.stagefright.enable-qcp=true \
+    media.stagefright.enable-fma2dp=true \
+    media.stagefright.enable-scan=true \
+    mm.enable.smoothstreaming=true \
+    mmp.enable.3g2=true
 
 # Audio Configuration
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -263,21 +280,33 @@ PRODUCT_PROPERTY_OVERRIDES += \
     av.offload.enable=false \
     av.streaming.offload.enable=false \
     audio.offload.pcm.16bit.enable=true \
-    audio.offload.multiple.enabled=false
+    audio.offload.multiple.enabled=false \
+    mm.enable.qcom_parser=37491
+
+# Display
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.debug.wfd.enable=1 \
+    debug.sf.hw=1 \
+    debug.egl.hw=1 \
+    debug.composition.type=c2d \
+    debug.mdpcomp.logs=0 \
+    dev.pm.dyn_samplingrate=1 \
+    persist.hwc.mdpcomp.enable=true \
+    persist.demo.hdmirotationlock=false \
+    ro.qualcomm.cabl=0
 
 # QC Perf
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.vendor.extension_library=/vendor/lib/libqti-perfd-client.so
 
-# gps
 #system prop for switching gps driver to qmi
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.gps.qmienabled=true \
     persist.timed.enable=true \
-    persist.cne.feature=1
+    persist.cne.feature=1 \
+    persist.dpm.feature=0
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.build.selinux=1 \
     ro.sf.lcd_density=480
 
 # Vendor security patch level
