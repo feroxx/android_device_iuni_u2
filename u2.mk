@@ -218,9 +218,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=196608 \
     persist.hwc.mdpcomp.enable=true \
-    debug.hwui.use_buffer_age=false \
-    persist.media.treble_omx=false \
-    camera.disable_treble=true
+    debug.hwui.use_buffer_age=false
 
 # QMI
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -246,7 +244,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # qcom
 PRODUCT_PROPERTY_OVERRIDES += \
-    camera2.portability.force_api=1
+    camera2.portability.force_api=1 \
+    media.stagefright.legacyencoder=true \
+    media.stagefright.less-secure=true \
+    camera.disable_treble=true
 
 # Enable AAC 5.1 output
 PRODUCT_PROPERTY_OVERRIDES += \
