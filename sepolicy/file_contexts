@@ -1,15 +1,5 @@
-# NV backup partitions
-/dev/block/platform/msm_sdcc\.1/by-name/oppodycnvbk     u:object_r:nvbackup_block_device:s0
-/dev/block/platform/msm_sdcc\.1/by-name/oppostanvbk     u:object_r:nvbackup_block_device:s0
-
 # Persist filesystem
 /dev/block/platform/msm_sdcc\.1/by-name/persist         u:object_r:persist_block_device:s0
-
-# FRP partition
-/dev/block/platform/msm_sdcc\.1/by-name/config          u:object_r:frp_block_device:s0
-
-# Reserve4 filesystem for encryption
-/dev/block/platform/msm_sdcc\.1/by-name/reserve2        u:object_r:reserve2_block_device:s0
 
 # Old camera socket
 /data/misc/camera/cam_socket1                           u:object_r:camera_socket:s0
@@ -30,17 +20,11 @@
 # Modem
 /dev/block/platform/msm_sdcc\.1/by-name/modem           u:object_r:modem_block_device:s0
 
-# USB HAL
-/system/vendor/bin/hw/android\.hardware\.usb@1\.0-service\.onyx         u:object_r:hal_usb_default_exec:s0
-
 # Light HAL
-/system/vendor/bin/hw/android\.hardware\.light@2\.0-service\.onyx       u:object_r:hal_light_default_exec:s0
+/system/vendor/bin/hw/android\.hardware\.light@2\.0-service\.u2       u:object_r:hal_light_default_exec:s0
 /sys/class/leds/lcd-backlight(/.*)?                                     u:object_r:sysfs_leds:s0
-/sys/devices/mdp\.0/qcom\,mdss_fb_primary\.171/leds/lcd-backlight(/.*)? u:object_r:sysfs_leds:s0
+/sys/devices/mdp\.0/qcom\,mdss_fb_primary\.169/leds/lcd-backlight(/.*)? u:object_r:sysfs_leds:s0
 /sys/devices/leds-qpnp-25/leds(/.*)?                                    u:object_r:sysfs_leds:s0
-
-# Power HAL
-/system/vendor/bin/hw/android\.hardware\.power@1\.0-service\.onyx       u:object_r:hal_power_default_exec:s0
 
 # CPU & Mem
 /sys/power/wake_lock                                    u:object_r:power_wakelock_file:s0
