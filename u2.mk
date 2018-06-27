@@ -18,7 +18,6 @@ $(call inherit-product, device/qcom/common/Android.mk)
 
 # Dalvik/HWUI
 $(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-3072-dalvik-heap.mk)
-$(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-3072-hwui-memory.mk)
 
 # Screen density
 PRODUCT_AAPT_CONFIG := normal
