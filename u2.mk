@@ -17,7 +17,7 @@
 $(call inherit-product, device/qcom/common/Android.mk)
 
 # Dalvik/HWUI
-$(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-3072-dalvik-heap.mk)
+$(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-2048-dalvik-heap.mk)
 
 # Screen density
 PRODUCT_AAPT_CONFIG := normal
@@ -203,114 +203,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/seccomp/mediacodec.policy:system/vendor/etc/seccomp_policy/mediacodec.policy \
     $(LOCAL_PATH)/seccomp/mediaextractor.policy:system/vendor/etc/seccomp_policy/mediaextractor.policy
-
-# bluetooth
-PRODUCT_PROPERTY_OVERRIDES += \
-    qcom.bluetooth.soc=smd \
-    ro.bluetooth.hfp.ver=1.7 \
-    ro.qualcomm.bt.hci_transport=smd \
-    ro.bluetooth.dun=false \
-    ro.bluetooth.sap=false
-
-# Graphics
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.opengles.version=196608 \
-    debug.hwui.use_buffer_age=false
-
-# QMI
-PRODUCT_PROPERTY_OVERRIDES += \
-    rild.libpath=/vendor/lib/libril-qc-qmi-1.so \
-    rild.libargs=-d /dev/smd0 \
-    ro.use_data_netmgrd=true \
-    persist.data.netmgrd.qos.enable=true \
-    ro.telephony.default_network=3 \
-    persist.radio.apm_sim_not_pwdn=1 \
-    persist.radio.add_power_save=1 \
-    ro.telephony.call_ring.multiple=0 \
-    persist.data.qmi.adb_logmask=0 \
-    persist.radio.aosp_usr_pref_sel=true \
-    persist.radio.rat_on=combine \
-    persist.rild.nitz_plmn= \
-    persist.rild.nitz_long_ons_0= \
-    persist.rild.nitz_long_ons_1= \
-    persist.rild.nitz_long_ons_2= \
-    persist.rild.nitz_long_ons_3= \
-    persist.rild.nitz_short_ons_0= \
-    persist.rild.nitz_short_ons_1= \
-    persist.rild.nitz_short_ons_2= \
-    persist.rild.nitz_short_ons_3=
-
-#For internal sdcard
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    ro.vold.primary_physical=1
-    
-PRODUCT_PROPERTY_OVERRIDES += \
-    drm.service.enabled=true
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    wifi.interface=wlan0
-
-# qcom
-PRODUCT_PROPERTY_OVERRIDES += \
-    camera2.portability.force_api=1 \
-    media.stagefright.legacyencoder=true \
-    media.stagefright.less-secure=true \
-    camera.disable_treble=true
-
-# Media
-PRODUCT_PROPERTY_OVERRIDES += \
-    media.aac_51_output_enabled=true \
-    media.stagefright.enable-player=true \
-    media.stagefright.enable-http=true \
-    media.stagefright.enable-aac=true \
-    media.stagefright.enable-qcp=true \
-    media.stagefright.enable-fma2dp=true \
-    media.stagefright.enable-scan=true \
-    mm.enable.smoothstreaming=true \
-    mmp.enable.3g2=true
-
-# Audio Configuration
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.qc.sdk.audio.audience=true \
-    persist.audio.fluence.voicecall=true \
-    audio.offload.buffer.size.kb=32 \
-    audio.offload.gapless.enabled=true \
-    use.voice.path.for.pcm.voip=true \
-    av.offload.enable=false \
-    av.streaming.offload.enable=false \
-    audio.offload.pcm.16bit.enable=true \
-    audio.offload.multiple.enabled=false \
-    mm.enable.qcom_parser=37491
-
-# Display
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.debug.wfd.enable=1 \
-    debug.sf.hw=1 \
-    debug.egl.hw=1 \
-    debug.composition.type=c2d \
-    debug.mdpcomp.logs=0 \
-    dev.pm.dyn_samplingrate=1 \
-    persist.hwc.mdpcomp.enable=true \
-    persist.demo.hdmirotationlock=false \
-    ro.qualcomm.cabl=0
-
-# QC Perf
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.vendor.extension_library=/vendor/lib/libqti-perfd-client.so
-
-#system prop for switching gps driver to qmi
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.gps.qmienabled=true \
-    persist.timed.enable=true \
-    persist.cne.feature=1 \
-    persist.dpm.feature=0
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.sf.lcd_density=480
-
-# Vendor security patch level
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.lineage.build.vendor_security_patch=2016-04-01
 
 # HIDL packages
 $(call inherit-product, $(LOCAL_PATH)/hidl.mk)
