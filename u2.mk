@@ -14,10 +14,7 @@
 # limitations under the License.
 
 # Common QCOM configuration tools
-$(call inherit-product, device/qcom/common/Android.mk)
-
-# Dalvik/HWUI
-$(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-2048-dalvik-heap.mk)
+#$(call inherit-product, device/qcom/common/Android.mk)
 
 # Screen density
 PRODUCT_AAPT_CONFIG := normal
@@ -116,6 +113,15 @@ PRODUCT_PACKAGES += \
     wpa_supplicant \
     libwpa_client \
     hostapd
+
+# Dalvik heap
+PRODUCT_PROPERTY_OVERRIDES += \
+    dalvik.vm.heapstartsize=8m \
+    dalvik.vm.heapgrowthlimit=192m \
+    dalvik.vm.heapsize=512m \
+    dalvik.vm.heaptargetutilization=0.75 \
+    dalvik.vm.heapminfree=2m \
+    dalvik.vm.heapmaxfree=8m
     
 # IPv6
 PRODUCT_PACKAGES += \
