@@ -158,6 +158,7 @@ TARGET_KEYMASTER_WAIT_FOR_QSEE := true
 #include device/qcom/sepolicy/sepolicy.mk
 #include device/qcom/sepolicy/legacy-sepolicy.mk
 #BOARD_SEPOLICY_DIRS += device/iuni/u2/sepolicy
+BOARD_SEPOLICY_M4DEFS += vensys=\(vendor\|system/vendor\)
 
 #TWRP
 TW_EXCLUDE_SUPERSU := true
