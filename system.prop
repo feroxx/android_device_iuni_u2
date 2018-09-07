@@ -1,5 +1,6 @@
 # bluetooth
 qcom.bluetooth.soc=smd
+vendor.qcom.bluetooth.soc=pronto
 ro.bluetooth.hfp.ver=1.7
 ro.qualcomm.bt.hci_transport=smd
 ro.bluetooth.dun=false
@@ -61,6 +62,8 @@ audio.offload.buffer.size.kb=32
 audio.offload.gapless.enabled=true
 use.voice.path.for.pcm.voip=true
 av.offload.enable=false
+ro.config.media_vol_steps=25
+ro.config.vc_call_vol_steps=7
 av.streaming.offload.enable=false
 audio.offload.pcm.16bit.enable=true
 audio.offload.multiple.enabled=false

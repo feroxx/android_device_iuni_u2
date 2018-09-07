@@ -19,7 +19,7 @@
     </hal>
     <hal format="hidl">
         <name>android.hardware.bluetooth</name>
-        <transport>hwbinder</transport>
+        <transport arch="32">passthrough</transport>
         <version>1.0</version>
         <interface>
             <name>IBluetoothHci</name>
@@ -47,7 +47,7 @@
     <hal format="hidl">
         <name>android.hardware.configstore</name>
         <transport>hwbinder</transport>
-        <version>1.0</version>
+        <version>1.1</version>
         <interface>
             <name>ISurfaceFlingerConfigs</name>
             <instance>default</instance>
@@ -87,6 +87,15 @@
         </interface>
     </hal>
     <hal format="hidl">
+        <name>android.hardware.graphics.composer</name>
+        <transport arch="32">passthrough</transport>
+        <version>2.1</version>
+        <interface>
+            <name>IComposer</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
         <name>android.hardware.graphics.mapper</name>
         <transport arch="32">passthrough</transport>
         <version>2.0</version>
@@ -97,7 +106,7 @@
     </hal>
     <hal format="hidl">
         <name>android.hardware.keymaster</name>
-        <transport>hwbinder</transport>
+        <transport arch="32">passthrough</transport>
         <version>3.0</version>
         <interface>
             <name>IKeymasterDevice</name>
@@ -208,6 +217,15 @@
         <version>1.2</version>
         <interface>
             <name>IWifi</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
+        <name>android.hardware.wifi.hostapd</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>IHostapd</name>
             <instance>default</instance>
         </interface>
     </hal>

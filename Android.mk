@@ -69,7 +69,7 @@ $(WCNSS_CONFIG_SYMLINK): $(LOCAL_INSTALLED_MODULE)
 	@echo "WCNSS config link: $@"
 	@mkdir -p $(dir $@)
 	@rm -rf $@
-	$(hide) ln -sf /data/misc/wifi/$(notdir $@) $@
+	$(hide) ln -sf /data/vendor/wifi/$(notdir $@) $@
 
 ALL_DEFAULT_INSTALLED_MODULES += $(WCNSS_CONFIG_SYMLINK)
 
@@ -156,14 +156,5 @@ $(WV_SYMLINKS): $(LOCAL_INSTALLED_MODULE)
 	$(hide) ln -sf /firmware/image/$(notdir $@) $@
 
 ALL_DEFAULT_INSTALLED_MODULES += $(WV_SYMLINKS)
-
-# Create links for audcal data files
-$(shell mkdir -p $(TARGET_OUT)/etc/firmware/wcd9320; \
-	ln -sf /data/misc/audio/wcd9320_anc.bin \
-		$(TARGET_OUT)/etc/firmware/wcd9320/wcd9320_anc.bin;\
-	ln -sf /data/misc/audio/wcd9320_mbhc.bin \
-		$(TARGET_OUT)/etc/firmware/wcd9320/wcd9320_mbhc.bin; \
-	ln -sf /data/misc/audio/wcd9320_mad_audio.bin \
-		$(TARGET_OUT)/etc/firmware/wcd9320/wcd9320_mad_audio.bin)
 
 endif
