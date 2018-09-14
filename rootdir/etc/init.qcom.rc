@@ -260,7 +260,7 @@ service qseecomd /vendor/bin/qseecomd
     user root
     group root
 
-service hciattach /vendor/bin/hci_qcomm_init -e
+service hciattach /vendor/bin/init.qcom.bt.sh
     class late_start
     user bluetooth
     group bluetooth net_bt_admin oem_2950 radio
@@ -269,7 +269,6 @@ service hciattach /vendor/bin/hci_qcomm_init -e
 
 on property:vendor.bluetooth.hciattach=true
     start hciattach
-    setprop bluetooth.status on
 
 on property:vendor.bluetooth.hciattach=false
     setprop bluetooth.status off
