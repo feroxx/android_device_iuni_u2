@@ -83,6 +83,7 @@ DEVICE_MATRIX_FILE := device/iuni/u2/compatibility_matrix.xml
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_QCOM := true
 BLUETOOTH_HCI_USE_MCT := true
+QCOM_BT_USE_BTNV := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/iuni/u2/bluetooth
 
 # Wifi
