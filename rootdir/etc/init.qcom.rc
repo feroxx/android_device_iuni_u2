@@ -212,6 +212,7 @@ on post-fs-data
     mkdir /data/audio/ 0770 media audio
 
     setprop vold.post_fs_data_done 1
+    ro.boot.btmacaddr 00:00:00:00:00:00
 
 service rmt_storage /vendor/bin/rmt_storage
     class core
