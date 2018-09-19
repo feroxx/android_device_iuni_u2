@@ -50,6 +50,7 @@ on late-fs
     start vendor.gralloc-2-0
 
     mount_all /vendor/etc/fstab.qcom --late
+    setprop ro.boot.btmacaddr 00:00:00:00:00:00
 
 on early-boot
     # set RLIMIT_MEMLOCK to 64MB
@@ -212,7 +213,6 @@ on post-fs-data
     mkdir /data/audio/ 0770 media audio
 
     setprop vold.post_fs_data_done 1
-    ro.boot.btmacaddr 00:00:00:00:00:00
 
 service rmt_storage /vendor/bin/rmt_storage
     class core
