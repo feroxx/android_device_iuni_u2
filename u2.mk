@@ -144,6 +144,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/sensor/_hals.conf:system/vendor/etc/sensors/_hals.conf
 
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/external_camera_config.xml:system/vendor/etc/external_camera_config.xml
+
 # Sensors
 PRODUCT_PACKAGES += \
     sensors.msm8974 \
