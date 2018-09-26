@@ -161,6 +161,10 @@ on boot
     # Wifi firmware reload path
     chown wifi wifi /sys/module/wlan/parameters/fwpath
 
+on post-fs
+    # Allow writing to the kernel trace log.
+    chmod 0222 /sys/kernel/debug/tracing/trace_marker
+
 on post-fs-data
     # Bluetooth
     mkdir /data/misc/bluetooth 0770 bluetooth bluetooth
