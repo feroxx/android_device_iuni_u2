@@ -21,6 +21,8 @@ on early-init
     setprop ro.wcnss.serialno ${ro.boot.serialno}
 
 on init
+    export LD_PRELOAD "libboringssl-compat.so"
+
     # Set permissions for persist partition
     mkdir /persist 0771 system system
     mkdir /firmware 0771 system system
