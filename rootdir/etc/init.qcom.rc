@@ -26,7 +26,6 @@ on init
     # Set permissions for persist partition
     mkdir /persist 0771 system system
     mkdir /firmware 0771 system system
-    symlink /sdcard /storage/sdcard0
 
 on fs
     mount_all /vendor/etc/fstab.qcom --early
