@@ -23,10 +23,6 @@ on early-init
 on init
     export LD_PRELOAD "libboringssl-compat.so"
 
-    # Set permissions for persist partition
-    mkdir /persist 0771 system system
-    mkdir /firmware 0771 system system
-
 on fs
     mount_all /vendor/etc/fstab.qcom --early
     restorecon_recursive /persist
