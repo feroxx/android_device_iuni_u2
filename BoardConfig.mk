@@ -142,9 +142,6 @@ ifeq ($(HOST_OS),linux)
   endif
 endif
 
-# Lineage Hardware
-JAVA_SOURCE_OVERLAYS := org.lineageos.hardware|$(PLATFORM_PATH)/lineagehw|**/*.java
-
 # Power
 TARGET_TAP_TO_WAKE_NODE := "/sys/devices/platform/tp_wake_switch/double_wake"
 TARGET_HAS_LEGACY_POWER_STATS := true
