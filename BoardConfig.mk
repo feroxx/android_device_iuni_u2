@@ -87,6 +87,9 @@ BLUETOOTH_HCI_USE_MCT := true
 QCOM_BT_USE_BTNV := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/iuni/u2/bluetooth
 
+# Vendor security patch level
+VENDOR_SECURITY_PATCH := 2016-04-01
+
 # Wifi
 BOARD_HAS_QCOM_WLAN              := true
 BOARD_WLAN_DEVICE                := qcwcn
@@ -153,6 +156,9 @@ TARGET_PROVIDES_LIBLIGHT := true
 
 # Media
 TARGET_USES_MEDIA_EXTENSIONS := true
+
+# Netd
+TARGET_OMIT_NETD_TETHER_FTP_HELPER := true
 
 # keymaster
 TARGET_KEYMASTER_WAIT_FOR_QSEE := true

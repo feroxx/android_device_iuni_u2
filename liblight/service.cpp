@@ -17,7 +17,9 @@
 #define LOG_TAG "android.hardware.light@2.0-service.u2"
 
 #include <hidl/HidlTransportSupport.h>
-
+#ifdef ARCH_ARM_32
+#include <hwbinder/ProcessState.h>
+#endif
 #include "Light.h"
 
 using android::hardware::configureRpcThreadpool;
@@ -31,6 +33,9 @@ using android::sp;
 using android::status_t;
 
 int main() {
+#ifdef ARCH_ARM_32
+    android::hardware::ProcessState::initWithMmapSize((size_t)(32768));
+#endif
     android::sp<ILight> service = new Light();
 
     configureRpcThreadpool(1, true);

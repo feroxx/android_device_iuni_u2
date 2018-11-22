@@ -17,7 +17,7 @@ cc_binary {
     relative_install_path: "hw",
     defaults: ["hidl_defaults"],
     name: "android.hardware.light@2.0-service.u2",
-    proprietary: true,
+    vendor: true,
     init_rc: ["android.hardware.light@2.0-service.u2.rc"],
     srcs: ["service.cpp", "Light.cpp"],
     shared_libs: [
@@ -29,4 +29,11 @@ cc_binary {
         "libutils",
         "android.hardware.light@2.0",
     ],
+    arch: {
+        arm: {
+            cflags: [
+                "-DARCH_ARM_32"
+            ],
+        },
+    },
 }

@@ -57,10 +57,12 @@ on early-boot
 
     chmod 660 /sys/class/leds/rgb/rgb_blink
 
-	chmod 660 /sys/class/leds/kpdbl-pwm-1/brightness
+    chmod 660 /sys/class/leds/kpdbl-pwm-1/brightness
 
-service light-hal-2-0 /vendor/bin/hw/android.hardware.light@2.0-service.u2
+service vendor.light-hal-2-0 /vendor/bin/hw/android.hardware.light@2.0-service.u2
+    interface android.hardware.light@2.0::ILight default
     class hal
     user system
     group system
+    # shutting off lights while powering-off
     shutdown critical
