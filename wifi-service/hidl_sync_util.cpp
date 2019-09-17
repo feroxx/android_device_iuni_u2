@@ -1,10 +1,5 @@
 /*
- *
- *  Copyright (c) 2013, The Linux Foundation. All rights reserved.
- *  Not a Contribution, Apache license notifications and license are retained
- *  for attribution purposes only.
- *
- * Copyright (C) 2012 The Android Open Source Project
+ * Copyright (C) 2016 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +14,26 @@
  * limitations under the License.
  */
 
-#ifndef _BDROID_BUILDCFG_H
-#define _BDROID_BUILDCFG_H
+#include "hidl_sync_util.h"
 
-#define BTM_DEF_LOCAL_NAME        "U2"
+namespace {
+std::recursive_mutex g_mutex;
+}  // namespace
 
-#define BLUETOOTH_QTI_SW          TRUE
-#define BT_CLEAN_TURN_ON_DISABLED TRUE
+namespace android {
+namespace hardware {
+namespace wifi {
+namespace V1_3 {
+namespace implementation {
+namespace hidl_sync_util {
 
-#endif
+std::unique_lock<std::recursive_mutex> acquireGlobalLock() {
+    return std::unique_lock<std::recursive_mutex>{g_mutex};
+}
+
+}  // namespace hidl_sync_util
+}  // namespace implementation
+}  // namespace V1_3
+}  // namespace wifi
+}  // namespace hardware
+}  // namespace android

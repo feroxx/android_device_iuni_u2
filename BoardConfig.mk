@@ -1,5 +1,6 @@
 #
-# Copyright (C) 2013 The Android Open-Source Project
+# Copyright (C) 2016 The CyanogenMod Project
+# Copyright (C) 2017 The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -69,8 +70,6 @@ TARGET_PROCESS_SDK_VERSION_OVERRIDE := \
     /system/bin/mediaserver=22 \
     /system/vendor/bin/mm-qcamera-daemon=22
 
-# RIL
-TARGET_RIL_VARIANT := caf
 
 # Filesystem
 TARGET_FS_CONFIG_GEN := device/iuni/u2/config.fs
@@ -98,11 +97,13 @@ BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_qcwcn
 BOARD_HOSTAPD_DRIVER             := NL80211
 BOARD_HOSTAPD_PRIVATE_LIB        := lib_driver_cmd_qcwcn
 PRODUCT_VENDOR_MOVE_ENABLED      := true
+TARGET_DISABLE_WCNSS_CONFIG_COPY := true
 TARGET_USES_QCOM_WCNSS_QMI       := true
 TARGET_USES_WCNSS_MAC_ADDR_REV   := true
 TARGET_WCNSS_MAC_PREFIX          := e8bba8ea
 WIFI_DRIVER_FW_PATH_STA          := "sta"
 WIFI_DRIVER_FW_PATH_AP           := "ap"
+WIFI_HIDL_FEATURE_DISABLE_AP_MAC_RANDOMIZATION := true
 WPA_SUPPLICANT_VERSION           := VER_0_8_X
 
 # Exclude serif fonts for saving system.img size.
@@ -164,10 +165,12 @@ TARGET_OMIT_NETD_TETHER_FTP_HELPER := true
 TARGET_KEYMASTER_WAIT_FOR_QSEE := true
 
 # selinux
-#include device/qcom/sepolicy/sepolicy.mk
 #include device/qcom/sepolicy/legacy-sepolicy.mk
 #BOARD_SEPOLICY_DIRS += device/iuni/u2/sepolicy
 BOARD_SEPOLICY_M4DEFS += vensys=\(vendor\|system/vendor\)
+
+BOARD_SEPOLICY_DIRS += \
+    $(PLATFORM_PATH)/sepolicy_tmp
 
 #TWRP
 TW_EXCLUDE_SUPERSU := true

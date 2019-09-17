@@ -1,10 +1,5 @@
 /*
- *
- *  Copyright (c) 2013, The Linux Foundation. All rights reserved.
- *  Not a Contribution, Apache license notifications and license are retained
- *  for attribution purposes only.
- *
- * Copyright (C) 2012 The Android Open Source Project
+ * Copyright (C) 2016 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +14,23 @@
  * limitations under the License.
  */
 
-#ifndef _BDROID_BUILDCFG_H
-#define _BDROID_BUILDCFG_H
+#ifndef WIFI_LEGACY_HAL_STUBS_H_
+#define WIFI_LEGACY_HAL_STUBS_H_
 
-#define BTM_DEF_LOCAL_NAME        "U2"
+namespace android {
+namespace hardware {
+namespace wifi {
+namespace V1_3 {
+namespace implementation {
+namespace legacy_hal {
+#include <hardware_legacy/wifi_hal.h>
 
-#define BLUETOOTH_QTI_SW          TRUE
-#define BT_CLEAN_TURN_ON_DISABLED TRUE
+bool initHalFuncTableWithStubs(wifi_hal_fn* hal_fn);
+}  // namespace legacy_hal
+}  // namespace implementation
+}  // namespace V1_3
+}  // namespace wifi
+}  // namespace hardware
+}  // namespace android
 
-#endif
+#endif  // WIFI_LEGACY_HAL_STUBS_H_

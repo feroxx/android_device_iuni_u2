@@ -161,6 +161,9 @@ on boot
 on post-fs
     # Allow writing to the kernel trace log.
     chmod 0222 /sys/kernel/debug/tracing/trace_marker
+    # Avoid USB crash
+    setprop persist.adb.nonblocking_ffs 0
+    setprop ro.adb.nonblocking_ffs 0
 
 on post-fs-data
     # Bluetooth
@@ -228,7 +231,7 @@ service rfs_access /vendor/bin/rfs_access
 # QMUX must be in multiple groups to support external process connections
 service qmuxd /vendor/bin/qmuxd
     class main
-    user radio
+    user root
     group radio audio bluetooth gps oem_2950
 
 service netmgrd /vendor/bin/netmgrd
@@ -285,9 +288,9 @@ on property:vendor.bluetooth.hciattach=false
     setprop vendor.bluetooth.status off
 
 service adsprpcd /vendor/bin/adsprpcd
-   class main
-   user media
-   group media
+    class main
+    user media
+    group media
 
 service set_baseband /vendor/bin/set_baseband.sh
     class late_start
@@ -304,10 +307,11 @@ service qcamerasvr /vendor/bin/mm-qcamera-daemon
     user camera
     group camera system inet input graphics
 
-service charger /charger
+service charger /system/bin/charger
     class charger
+    user system
+    group system graphics input
     critical
-    group system graphics
     seclabel u:r:charger:s0
 
 service time_daemon /vendor/bin/time_daemon
@@ -321,3 +325,6 @@ service wcnss-service /vendor/bin/wcnss_service
     user system
     group system wifi oem_2950 radio
     oneshot
+
+on property:apexd.status=ready
+    mount none /system/etc/swcodec/ld.config.txt /apex/com.android.media.swcodec/etc/ld.config.txt bind
