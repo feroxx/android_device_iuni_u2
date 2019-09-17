@@ -14,8 +14,6 @@
 # limitations under the License.
 #
 
-#$(call inherit-product, device/qcom/common/Android.mk)
-
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += \
 	$(LOCAL_PATH)/overlay \
