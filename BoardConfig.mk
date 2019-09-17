@@ -15,52 +15,56 @@
 # limitations under the License.
 #
 
-TARGET_CPU_ABI := armeabi-v7a
-TARGET_CPU_ABI2 := armeabi
+PLATFORM_PATH := device/iuni/u2
+
+# Include path
+TARGET_SPECIFIC_HEADER_PATH := $(PLATFORM_PATH)/include
+
+# Bootloader
+TARGET_BOOTLOADER_BOARD_NAME := u2
+
+# Platform
+TARGET_BOARD_PLATFORM := msm8974
+
+# Architecture
 TARGET_ARCH := arm
 TARGET_ARCH_VARIANT := armv7-a-neon
+TARGET_CPU_ABI := armeabi-v7a
+TARGET_CPU_ABI2 := armeabi
 TARGET_CPU_VARIANT := krait
 
-TARGET_BOOTLOADER_BOARD_NAME := u2
-TARGET_OTA_ASSERT_DEVICE := iuni,IUNI,u810,U810,U2,u2
-TARGET_BOARD_PLATFORM := msm8974
-TARGET_BOARD_PLATFORM_GPU := qcom-adreno330
+# Binder API version
+TARGET_USES_64_BIT_BINDER := true
 
+# Kernel
 BOARD_KERNEL_BASE := 0x00000000
-BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom androidboot.bootdevice=msm_sdcc.1 ehci-hcd.park=3 androidboot.selinux=permissive
+BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom androidboot.bootdevice=msm_sdcc.1 ehci-hcd.park=3
+BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 BOARD_KERNEL_PAGESIZE := 2048
+BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x02000000 --kernel_offset 0x00008000
 BOARD_KERNEL_IMAGE_NAME := zImage
 BOARD_KERNEL_SEPARATED_DT := true
-BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x02000000 --kernel_offset 0x00008000
 BOARD_DTBTOOL_ARGS := -2
 TARGET_KERNEL_ARCH := arm
 TARGET_KERNEL_CONFIG := e7_defconfig
 TARGET_KERNEL_SOURCE := kernel/gm/e7
 LZMA_RAMDISK_TARGETS := [boot,recovery]
 
-# global
-TARGET_SPECIFIC_HEADER_PATH := device/iuni/u2/include
-BOARD_USES_QCOM_HARDWARE := true
+# Fixes Wifi-Mobile Data toggle issue
+MALLOC_SVELTE := true
 
-# Binder API version
-TARGET_USES_64_BIT_BINDER := true
-
-# Graphics
-USE_OPENGL_RENDERER               := true
-TARGET_CONTINUOUS_SPLASH_ENABLED  := true
-TARGET_BOOTANIMATION_MULTITHREAD_DECODE := true
-TARGET_USES_ION                   := true
-OVERRIDE_RS_DRIVER                := libRSDriver_adreno.so
-SF_START_GRAPHICS_ALLOCATOR_SERVICE := true
-NUM_FRAMEBUFFER_SURFACE_BUFFERS   := 3
-TARGET_ADDITIONAL_GRALLOC_10_USAGE_BITS := 0x02000000U
-MAX_EGL_CACHE_KEY_SIZE := 12*1024
-MAX_EGL_CACHE_SIZE := 2048*1024
+# Assert
+TARGET_OTA_ASSERT_DEVICE := iuni,IUNI,u810,U810,U2,u2
 
 # Audio
 BOARD_USES_ALSA_AUDIO                      := true
 AUDIO_FEATURE_ENABLED_MULTI_VOICE_SESSIONS := true
 TARGET_USE_DEVICE_AUDIO_EFFECTS_CONF := true
+
+# Bluetooth
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(PLATFORM_PATH)/bluetooth
+BOARD_HAVE_BLUETOOTH_QCOM := true
+QCOM_BT_USE_BTNV := true
 
 # Camera
 BOARD_GLOBAL_CFLAGS += -DCAMERA_VENDOR_L_COMPAT
@@ -70,22 +74,82 @@ TARGET_PROCESS_SDK_VERSION_OVERRIDE := \
     /system/bin/mediaserver=22 \
     /system/vendor/bin/mm-qcamera-daemon=22
 
+# Charger
+BOARD_CHARGER_DISABLE_INIT_BLANK := true
+BOARD_CHARGER_ENABLE_SUSPEND := true
+BACKLIGHT_PATH := /sys/class/leds/lcd-backlight/brightness
+BOARD_HEALTHD_CUSTOM_CHARGER_RES := $(PLATFORM_PATH)/charger/images
+
+# Enable dexpreopt to speed boot time
+ifeq ($(HOST_OS),linux)
+  ifeq ($(call match-word-in-list,$(TARGET_BUILD_VARIANT),user),true)
+    ifeq ($(WITH_DEXPREOPT_BOOT_IMG_ONLY),)
+      WITH_DEXPREOPT_BOOT_IMG_ONLY := true
+    endif
+  endif
+endif
+
+# Exclude serif fonts for saving system.img size.
+EXCLUDE_SERIF_FONTS := true
 
 # Filesystem
-TARGET_FS_CONFIG_GEN := device/iuni/u2/config.fs
-TARGET_EXFAT_DRIVER := sdfat
+BOARD_FLASH_BLOCK_SIZE := 131072
+BOARD_BOOTIMAGE_PARTITION_SIZE     := 16777216
+BOARD_ROOT_EXTRA_FOLDERS := firmware persist
+BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_CACHEIMAGE_PARTITION_SIZE    := 536870912
+BOARD_PERSISTIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_PERSISTIMAGE_PARTITION_SIZE  := 33554432
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 22777216
+BOARD_SYSTEMIMAGE_PARTITION_SIZE   := 1073741824
+BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 13747929088
+TARGET_USES_MKE2FS := true
+
+# Filesystem
+TARGET_FS_CONFIG_GEN := $(PLATFORM_PATH)/config.fs
+
+# Graphics
+MAX_EGL_CACHE_KEY_SIZE := 12*1024
+MAX_EGL_CACHE_SIZE := 2048*1024
+NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
+OVERRIDE_RS_DRIVER := libRSDriver_adreno.so
+TARGET_ADDITIONAL_GRALLOC_10_USAGE_BITS := 0x02000000U
+TARGET_BOOTANIMATION_MULTITHREAD_DECODE := true
+TARGET_CONTINUOUS_SPLASH_ENABLED := true
+TARGET_USES_ION := true
+USE_OPENGL_RENDERER := true
 
 # HIDL
-DEVICE_MANIFEST_FILE := device/iuni/u2/manifest.xml
-DEVICE_MATRIX_FILE := device/iuni/u2/compatibility_matrix.xml
+DEVICE_MANIFEST_FILE := $(PLATFORM_PATH)/manifest.xml
+DEVICE_MATRIX_FILE := $(PLATFORM_PATH)/compatibility_matrix.xml
 
-# Bluetooth
-BOARD_HAVE_BLUETOOTH := true
-BOARD_HAVE_BLUETOOTH_QCOM := true
-BLUETOOTH_HCI_USE_MCT := true
-QCOM_BT_USE_BTNV := true
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/iuni/u2/bluetooth
+# Keymaster
+TARGET_PROVIDES_KEYMASTER := true
 
+# Lights
+TARGET_PROVIDES_LIBLIGHT := true
+
+# Power
+TARGET_TAP_TO_WAKE_NODE := "/sys/devices/platform/tp_wake_switch/double_wake"
+TARGET_HAS_LEGACY_POWER_STATS := true
+TARGET_HAS_NO_WLAN_STATS := true
+TARGET_USES_INTERACTION_BOOST := true
+
+# QCOM hardware
+BOARD_USES_QCOM_HARDWARE := true
+
+# Recovery
+TARGET_RECOVERY_FSTAB := $(PLATFORM_PATH)/rootdir/etc/fstab.qcom
+
+# SELinux
+# include device/qcom/sepolicy-legacy/sepolicy.mk
+
+# BOARD_SEPOLICY_DIRS += \
+#     $(PLATFORM_PATH)/sepolicy
+
+BOARD_SEPOLICY_DIRS += \
+    $(PLATFORM_PATH)/sepolicy_tmp
 # Vendor security patch level
 VENDOR_SECURITY_PATCH := 2016-04-01
 
@@ -106,71 +170,7 @@ WIFI_DRIVER_FW_PATH_AP           := "ap"
 WIFI_HIDL_FEATURE_DISABLE_AP_MAC_RANDOMIZATION := true
 WPA_SUPPLICANT_VERSION           := VER_0_8_X
 
-# Exclude serif fonts for saving system.img size.
-EXCLUDE_SERIF_FONTS := true
-
-BOARD_BOOTIMAGE_PARTITION_SIZE     := 16777216
-BOARD_ROOT_EXTRA_FOLDERS := firmware
-BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
-BOARD_CACHEIMAGE_PARTITION_SIZE    := 536870912
-BOARD_PERSISTIMAGE_FILE_SYSTEM_TYPE := ext4
-BOARD_PERSISTIMAGE_PARTITION_SIZE  := 33554432
-BOARD_RECOVERYIMAGE_PARTITION_SIZE := 22777216
-BOARD_SYSTEMIMAGE_PARTITION_SIZE   := 1073741824
-BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := ext4
-BOARD_USERDATAIMAGE_PARTITION_SIZE := 13747929088
-BOARD_FLASH_BLOCK_SIZE := 131072
-
-# Use mke2fs to create ext4 images
-TARGET_USES_MKE2FS := true
-
-TARGET_RECOVERY_FSTAB := device/iuni/u2/rootdir/etc/fstab.qcom
-
-TARGET_RELEASETOOLS_EXTENSIONS := device/iuni/u2
-
-# inherit from the proprietary version
 -include vendor/iuni/u2/BoardConfigVendor.mk
-
-# Offmode Charging
-BOARD_CHARGER_ENABLE_SUSPEND := false
-BOARD_CHARGER_DISABLE_INIT_BLANK := true
-BOARD_HEALTHD_CUSTOM_CHARGER_RES := device/iuni/u2/charger/images
-
-# Dexpreopt
-ifeq ($(HOST_OS),linux)
-  ifneq ($(TARGET_BUILD_VARIANT),eng)
-    ifeq ($(WITH_DEXPREOPT),)
-      WITH_DEXPREOPT := true
-      WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := true
-    endif
-  endif
-endif
-
-# Power
-TARGET_TAP_TO_WAKE_NODE := "/sys/devices/platform/tp_wake_switch/double_wake"
-TARGET_HAS_LEGACY_POWER_STATS := true
-TARGET_HAS_NO_WLAN_STATS := true
-TARGET_USES_INTERACTION_BOOST := true
-
-# Lights
-TARGET_PROVIDES_LIBLIGHT := true
-
-# Media
-TARGET_USES_MEDIA_EXTENSIONS := true
-
-# Netd
-TARGET_OMIT_NETD_TETHER_FTP_HELPER := true
-
-# keymaster
-TARGET_KEYMASTER_WAIT_FOR_QSEE := true
-
-# selinux
-#include device/qcom/sepolicy/legacy-sepolicy.mk
-#BOARD_SEPOLICY_DIRS += device/iuni/u2/sepolicy
-BOARD_SEPOLICY_M4DEFS += vensys=\(vendor\|system/vendor\)
-
-BOARD_SEPOLICY_DIRS += \
-    $(PLATFORM_PATH)/sepolicy_tmp
 
 #TWRP
 TW_EXCLUDE_SUPERSU := true
