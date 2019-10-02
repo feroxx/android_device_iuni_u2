@@ -1,6 +1,7 @@
 cc_library_static {
-    name: "multihal-iuni",
-    vendor: true,
+    name: "sensors.msm8974",
+    proprietary: true,
+	relative_install_path: "hw",
     srcs: [
         "multihal.cpp",
         "SensorEventQueue.cpp"
