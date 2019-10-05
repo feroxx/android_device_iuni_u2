@@ -66,7 +66,7 @@ on charger
     write /sys/module/msm_pm/modes/cpu1/power_collapse/suspend_enabled 1
     write /sys/module/msm_pm/modes/cpu2/power_collapse/suspend_enabled 1
     write /sys/module/msm_pm/modes/cpu3/power_collapse/suspend_enabled 1
-    write /sys/module/msm_pm/modes/cpu0/power_collapse/idle_enabled 
+    write /sys/module/msm_pm/modes/cpu0/power_collapse/idle_enabled 1
     write /sys/module/msm_show_resume_irq/parameters/debug_mask 1
     write /sys/class/input/input0/charger_enable 1
     write /sys/class/leds/lcd-backlight/brightness 100
