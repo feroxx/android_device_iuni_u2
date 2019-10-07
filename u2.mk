@@ -74,8 +74,8 @@ PRODUCT_COPY_FILES += \
 
 # Audio
 PRODUCT_COPY_FILES += \
-    device/iuni/u2/audio/audio_effects.conf:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.conf \
-    device/iuni/u2/audio/audio_policy.conf:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy.conf \
+    device/iuni/u2/audio/audio_effects.conf:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
+    device/iuni/u2/audio/audio_policy.conf:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml\
     device/iuni/u2/audio/mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths.xml \
     device/iuni/u2/audio/mixer_paths_auxpcm.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_auxpcm.xml
 
