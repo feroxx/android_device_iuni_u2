@@ -290,7 +290,7 @@ service set_baseband /vendor/bin/set_baseband.sh
     oneshot
     disabled
   
-on property:sys.boot_completed=1
+on property:gsm.version.baseband=""
     start set_baseband
 
 service qcamerasvr /vendor/bin/mm-qcamera-daemon
