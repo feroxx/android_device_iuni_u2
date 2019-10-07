@@ -20,11 +20,8 @@ import /vendor/etc/init/hw/init.qcom.power.rc
 on early-init
     setprop ro.wcnss.serialno ${ro.boot.serialno}
 
-on init
-    export LD_PRELOAD "libboringssl-compat.so"
-
 on fs
-    mount_all /vendor/etc/fstab.qcom --early
+    mount_all /vendor/etc/fstab.qcom
     restorecon_recursive /persist
     mkdir /persist/data 0700 system system
     mkdir /persist/data/sfs 0700 system system
@@ -35,18 +32,15 @@ on fs
     mount functionfs adb /dev/usb-ffs/adb uid=2000,gid=2000
     write /sys/class/android_usb/android0/f_ffs/aliases adb
     setprop sys.usb.ffs.aio_compat 1
+    
+    # DNM
+service logcat_debug /system/bin/logcat -b all -f /data/logcat.txt -v threadtime
+    class main
+    user root
+    group system
 
-    # Start HW service manager early
-    start hwservicemanager
 
 on late-fs
-    # Start services for bootanim
-    start vendor.configstore-hal
-    start surfaceflinger
-    start bootanim
-    start vendor.gralloc-2-0
-
-    mount_all /vendor/etc/fstab.qcom --late
     setprop ro.boot.btmacaddr 00:00:00:00:00:00
 
 on early-boot
