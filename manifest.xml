@@ -59,7 +59,7 @@
     </hal>
     <hal format="hidl">
         <name>android.hardware.gnss</name>
-        <transport>hwbinder</transport>
+        <transport arch="32">passthrough</transport>
         <version>1.0</version>
         <interface>
             <name>IGnss</name>
@@ -144,7 +144,7 @@
     </hal>
     <hal format="hidl">
         <name>android.hardware.power</name>
-        <transport>hwbinder</transport>
+        <transport arch="32">passthrough</transport>
         <version>1.1</version>
         <interface>
             <name>IPower</name>
@@ -238,7 +238,7 @@
     </hal>
     <hal format="hidl">
         <name>vendor.lineage.power</name>
-        <transport>hwbinder</transport>
+        <transport arch="32">passthrough</transport>
         <version>1.0</version>
         <interface>
             <name>ILineagePower</name>
