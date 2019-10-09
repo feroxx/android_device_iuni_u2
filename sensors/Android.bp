@@ -1,16 +1,12 @@
-cc_library_static {
+cc_library {
     name: "sensors.msm8974",
-    proprietary: true,
-	relative_install_path: "hw",
-    srcs: [
-        "multihal.cpp",
-        "SensorEventQueue.cpp"
-    ],
+    relative_install_path: "hw",
+    srcs: ["multihal.cpp", "SensorEventQueue.cpp"],
     shared_libs: [
         "liblog",
         "libcutils",
         "libutils",
         "libdl"
     ],
-    export_include_dirs: ["."],
+    proprietary: true,
 }
