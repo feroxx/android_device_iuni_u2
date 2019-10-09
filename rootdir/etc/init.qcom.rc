@@ -32,13 +32,6 @@ on fs
     mount functionfs adb /dev/usb-ffs/adb uid=2000,gid=2000
     write /sys/class/android_usb/android0/f_ffs/aliases adb
     setprop sys.usb.ffs.aio_compat 1
-    
-    # DNM
-service logcat_debug /system/bin/logcat -b all -f /data/logcat.txt -v threadtime
-    class main
-    user root
-    group system
-
 
 on late-fs
     setprop ro.boot.btmacaddr 00:00:00:00:00:00
