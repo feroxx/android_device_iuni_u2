@@ -150,8 +150,9 @@ PRODUCT_PACKAGES += \
     android.hardware.gnss@1.0-impl
 
 PRODUCT_COPY_FILES += \
-    device/iuni/u2/gps.conf:$(TARGET_COPY_OUT_SYSTEM)/etc/gps.conf \
-    device/iuni/u2/sensor/sap.conf:$(TARGET_COPY_OUT_SYSTEM)/etc/sap.conf
+    device/iuni/u2/gps/gps.conf:$(TARGET_COPY_OUT_SYSTEM)/etc/gps.conf \
+    device/iuni/u2/gps/izat.conf:$(TARGET_COPY_OUT_SYSTEM)/etc/izat.conf \
+	device/iuni/u2/gps/sap.conf:$(TARGET_COPY_OUT_SYSTEM)/etc/sap.conf
 
 # IPv6
 PRODUCT_PACKAGES += \
