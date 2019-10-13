@@ -1,4 +1,4 @@
-cc_library {
+cc_library_shared {
     name: "sensors.msm8974",
     relative_install_path: "hw",
     srcs: ["multihal.cpp", "SensorEventQueue.cpp"],
