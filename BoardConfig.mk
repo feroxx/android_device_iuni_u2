@@ -152,6 +152,12 @@ TARGET_RECOVERY_FSTAB := $(PLATFORM_PATH)/rootdir/etc/fstab.qcom
 
 BOARD_SEPOLICY_DIRS += \
     $(PLATFORM_PATH)/sepolicy_tmp
+
+# SHIMS
+TARGET_LD_SHIM_LIBS := \
+    /system/lib/libgui.so|libshims_sensors.so \
+    /system/vendor/lib/libqomx_jpegenc.so|libboringssl-compat.so
+
 # Vendor security patch level
 VENDOR_SECURITY_PATCH := 2016-04-01
 
