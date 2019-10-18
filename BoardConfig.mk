@@ -158,6 +158,9 @@ TARGET_LD_SHIM_LIBS := \
     /system/lib/libgui.so|libshims_sensors.so \
     /system/vendor/lib/libqomx_jpegenc.so|libboringssl-compat.so
 
+# Sensors
+USE_SENSOR_MULTI_HAL := true
+
 # Vendor security patch level
 VENDOR_SECURITY_PATCH := 2016-04-01
 
