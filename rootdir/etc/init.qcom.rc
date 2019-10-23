@@ -20,9 +20,6 @@ import /vendor/etc/init/hw/init.qcom.power.rc
 on early-init
     setprop ro.wcnss.serialno ${ro.boot.serialno}
 
-on init
-    export LD_PRELOAD "libboringssl-compat.so"
-
 on fs
     mount_all /vendor/etc/fstab.qcom
     restorecon_recursive /persist
