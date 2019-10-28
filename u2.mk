@@ -232,8 +232,7 @@ PRODUCT_COPY_FILES += \
 # Sensors
 PRODUCT_PACKAGES += \
     android.hardware.sensors@1.0-impl \
-    libshims_sensors \
-    sensors.u2
+    libshims_sensors
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/sensor/sensor_def_qcomdev.conf:$(TARGET_COPY_OUT_SYSTEM)/etc/sensors/sensor_def_qcomdev.conf \
