@@ -298,6 +298,9 @@ service charger /system/bin/charger
     critical
     seclabel u:r:charger:s0
 
+on charger
+    write /sys/class/leds/lcd-backlight/brightness 100
+
 service time_daemon /vendor/bin/time_daemon
    capabilities SYS_TIME
    class late_start
