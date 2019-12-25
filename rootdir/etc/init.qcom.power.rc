@@ -69,12 +69,12 @@ on charger
     write /sys/module/msm_pm/modes/cpu0/power_collapse/idle_enabled 1
     write /sys/module/msm_show_resume_irq/parameters/debug_mask 1
     write /sys/class/input/input0/charger_enable 1
-    write /sys/class/leds/lcd-backlight/brightness 100
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "powersave"
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 300000
     write /sys/devices/system/cpu/cpu1/online 0
     write /sys/devices/system/cpu/cpu2/online 0
     write /sys/devices/system/cpu/cpu3/online 0
+    write /sys/module/lpm_levels/parameters/sleep_disabled 0
 
 on boot
     # Set light thermal restrictions while optimizing apps
