@@ -149,13 +149,11 @@ BOARD_USES_QCOM_HARDWARE := true
 TARGET_RECOVERY_FSTAB := $(PLATFORM_PATH)/rootdir/etc/fstab.qcom
 
 # SELinux
-# include device/qcom/sepolicy-legacy/sepolicy.mk
-
-# BOARD_SEPOLICY_DIRS += \
-#     $(PLATFORM_PATH)/sepolicy
+    include device/qcom/sepolicy-legacy/sepolicy.mk
 
 BOARD_SEPOLICY_DIRS += \
-    $(PLATFORM_PATH)/sepolicy_tmp
+    $(PLATFORM_PATH)/sepolicy
+
 # Vendor security patch level
 VENDOR_SECURITY_PATCH := 2016-04-01
 
