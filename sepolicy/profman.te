@@ -1,1 +1,0 @@
-allow profman sysfs:file { open read getattr };

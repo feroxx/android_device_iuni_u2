@@ -1,10 +1,3 @@
-allow vold persist_file:dir { open read search ioctl };
-allow vold proc_touchpanel:dir { open read };
-allow vold power_wakelock_file:file rw_file_perms;
-allow vold cache_file:dir { create setattr };
-
 # Encryption
-allow vold reserve2_block_device:blk_file rw_file_perms;
-allow vold userdata_block_device:blk_file rw_file_perms;
 allow vold firmware_file:dir search;
 allow vold firmware_file:file r_file_perms;

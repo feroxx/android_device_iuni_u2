@@ -1,3 +1,1 @@
-## Writes to /sys/module/lowmemorykiller/parameters/minfree
-r_dir_file(lmkd, sysfs_type)
-allow lmkd sysfs_lowmemorykiller:file w_file_perms;
+allow lmkd lmkd:capability2 { block_suspend };

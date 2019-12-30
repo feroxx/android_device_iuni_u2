@@ -1,5 +1,0 @@
-allow bluetooth_loader power_wakelock_file:file rw_file_perms;
-allow bluetooth_loader persist_file:dir search;
-allow bluetooth_loader sysfs:file { open read getattr };
-allow bluetooth_loader bluetooth_data_file:file r_file_perms;
-get_prop(bluetooth_loader, wcnss_prop)

@@ -1,12 +1,1 @@
-allow system_app proc_touchpanel:dir search;
-allow system_app proc_touchpanel:file rw_file_perms;
 allow system_app sysfs_leds:file rw_file_perms;
-allow system_app sysfs_vibrator:file rw_file_perms;
-
-allow system_app wificond:binder { call };
-allow system_app time_daemon:unix_stream_socket { connectto };
-
-# allow system_app storaged:binder { call };
-
-dontaudit system_app netd_service:service_manager find;
-dontaudit system_app installd_service:service_manager find;
